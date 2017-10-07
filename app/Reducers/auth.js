@@ -22,6 +22,11 @@ export default (state = {}, action) => {
                 ...state,
                 [action.key]: action.value
             };
+        case 'QUOTE_UPDATE':
+            return {
+                ...state,
+                quoteMeta: action.quoteMeta
+            };
         default:
             return {...state}
     }

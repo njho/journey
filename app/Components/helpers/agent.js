@@ -1,12 +1,13 @@
 import React from 'react';
 
-import superagentPromise from 'superagent-promise';
-import _superagent from 'superagent';
+/*import superagentPromise from 'superagent-promise';
+import _superagent from 'superagent';*/
 
+/*
 import history from './history';
-import flattener from './jsonFlattener';
-import aggregator from './aggregator';
-import { toast } from 'react-toastify';
+*/
+/*import flattener from './jsonFlattener';
+import aggregator from './aggregator';*/
 
 var Firebase = require('firebase');
 
@@ -44,7 +45,9 @@ let token = null;
  				if (user) {
  					resolve(user);
  				} else {
+/*
  					history.push('/');
+*/
  					reject('There was an error bish');
  				}
  			})
@@ -86,7 +89,6 @@ let token = null;
  			linkWatcher.on('value', function (snapshot) {
 
  				if (snapshot.val()) {
- 					toast(<div>{snapshot.val().gifty}</div>);
  				}
  				dispatch({type: 'LINK', link: 'https://gifty.link/' + id});
  			});
@@ -103,156 +105,24 @@ let token = null;
  }
 
  const FirebaseQuery = {
- 	aggregateData: (chartData, stats) => {
- 		console.log('AGGREGATE_DATA_FROM_ALL_CHARTS');
- 		return dispatch => {
- 			var aggregateChartData = aggregator(chartData, stats);
+	 fetchQuote: () => {
 
- 			dispatch({
- 				type: 'AGGREGATE_CHART_DATA',
- 				aggregateChartData: aggregateChartData[0],
- 				gross: aggregateChartData[1],
- 				redeemed: aggregateChartData[2],
- 				newCustomers: aggregateChartData[3],
- 				total: aggregateChartData[4],
- 				percentChange: aggregateChartData[5],
+         /*Fetch the Quote for the Front Page 2017-09-27*/
+         console.log('FETCH_QUOTE');
+         return dispatch => {
 
- 				/*This is used to ensure that the initial <LoadScreen> is shown in HomeDash.js*/
- 				loaderDisplay: false
- 			});
- 		}
+             database.ref('quotes/uid1').once('value', (snapshot) => {
+                 if (snapshot.val() !== null) {
+                     console.log(snapshot.val())
+                     dispatch({
+                         type: 'QUOTE_UPDATE',
+                         quoteMeta: snapshot.val()
+                     })
+                 }
+                 return (snapshot.val());
+             });
 
- 	},
- 	campaignMeta: (campaign) => {
- 		return dispatch => {
- 			console.log('campaignMeta called');
- 			database.ref('campaigns/' + campaign).on('value', (snapshot) => {
- 				if (snapshot.val() !== null) {
- 					dispatch({
- 						type: 'CAMPAIGN_META',
- 						campaign: campaign,
- 						campaignMeta: snapshot.val()
- 					})
- 				}
-
- 				return (snapshot.val());
- 			});
- 		}
- 	},
- 	fetchConsole: (console_id) => {
- 		console.log('FETCH_CONSOLE');
- 		return dispatch => {
- 			database.ref('consoles/' + console_id).on('value', function (snapshot) {
- 				if (snapshot.val()) {
- 					dispatch({type: 'CONSOLE_DATA', consoleData: snapshot.val()});
- 				} else {
- 					dispatch({
- 						type: 'CONSOLE_DATA', consoleData: {
- 							"active_campaigns": {
- 								campaign: null
- 							},
- 							"agreements": {
- 								"-KmMclctWZDKexyM_9Xo": {
- 									"active": true,
- 									"owner": "Default"
- 								}
- 							},
- 							"name": "Default",
- 							"campaigns": {
- 								campaign: null
- 							},
- 							"giftys": {
- 								"": {
- 									"city": "",
- 									"keyword": "",
- 									"lang": {
- 										"gift": "",
- 										"gift_from": "",
- 										"gift_short": "",
- 										"how_to_redeem": ""
- 									},
- 									description: "",
- 									"price": {
- 										"display": "",
- 										"stripe": {
- 											"all_fees_pct": null,
- 											"application_fee": null,
- 											"cents": null,
- 											"currency": null,
- 											"stripe_fee": null
- 										}
- 									},
- 									"console_id": "Default"
- 								}
- 							},
- 							"notifications": {
- 								"uid": {
- 									message: null
- 								}
- 							},
- 							"payment": {
- 								"balance": {
- 									"cad": {
- 										"cents": null
- 									}
- 								}
- 							},
- 							"console_id": "Default"
- 						}
- 					})
-}
-
-})
-}
-},
-updateChartData: (campaign, filter, startDate, endDate) => {
-	console.log('UPDATE_CHART');
-
-	return dispatch => {
-
-		if (endDate == null || startDate == null) {
-			dispatch({
-				type: 'DATE_FILTER',
-				filter: -1,
-				startDate: startDate,
-				endDate: endDate
-			})
-		} else if (filter == null) {
-
-			database.ref('stats/stats_by_campaign/' + campaign).orderByKey().startAt(startDate.unix().toString()).endAt(endDate.unix().toString()).once('value', function (snapshot) {
-				var chartData = flattener(snapshot.val(), startDate.clone(), endDate.clone());
-				dispatch({
-					type: 'CHART_DATA',
-					campaign: campaign,
-					chartData: chartData[0],
-					gross: chartData[1],
-					redeemed: chartData[2],
-					newCustomers: chartData[3],
-					total: chartData[4],
-					percentChange: chartData[5]
-				});
-			})
-		} else {
-			database.ref('stats/stats_by_campaign/' + campaign).orderByKey().startAt(startDate.unix().toString()).endAt(endDate.unix().toString()).once('value', function (snapshot) {
-				var chartData = flattener(snapshot.val(), startDate, endDate)
-
-				dispatch({
-					type: 'UPDATE_CHART_DATA',
-					campaign: campaign,
-					chartData: chartData[0],
-					gross: chartData[1],
-					redeemed: chartData[2],
-					newCustomers: chartData[3],
-					total: chartData[4],
-					percentChange: chartData[5],
-					filter: filter,
-					startDate: startDate.clone(),
-					endDate: endDate.clone()
-				});
-			})
-		}
-
-	}
+	 }
 },
 updateGifty: (key1, dashboard, editGifty) => {
 	return dispatch => {
@@ -408,7 +278,6 @@ consoleEndpoint: (key, type, dashboard, endpoint, bundle) => {
                  		var linkWatcher = database.ref('api/v1/responses/' + dashboard + '/' + id);
                  		linkWatcher.on('value', function (snapshot) {
                  			if (snapshot.val()) {
-                 				toast(<div>{snapshot.val().link}</div>);
 /*
                             dispatch({type: 'LINK', link: 'https://gifty.link/' + snapshot.val().link, key: key});
                             */
