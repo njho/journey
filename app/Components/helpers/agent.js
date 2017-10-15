@@ -12,12 +12,12 @@ import aggregator from './aggregator';*/
 var Firebase = require('firebase');
 
 Firebase.initializeApp({
-	apiKey: "AIzaSyCTZX0lG1JyIBUphH7m5SDoPCpRamPNm24",
-	authDomain: "journeyapp91.firebaseapp.com",
-	databaseURL: "https://journeyapp91.firebaseio.com",
-	projectId: "journeyapp91",
-	storageBucket: "journeyapp91.appspot.com",
-	messagingSenderId: "515548202082"
+    apiKey: "AIzaSyCTZX0lG1JyIBUphH7m5SDoPCpRamPNm24",
+    authDomain: "journeyapp91.firebaseapp.com",
+    databaseURL: "https://journeyapp91.firebaseio.com",
+    projectId: "journeyapp91",
+    storageBucket: "journeyapp91.appspot.com",
+    messagingSenderId: "515548202082"
 });
 
 var authService = Firebase.auth();
@@ -106,19 +106,17 @@ let token = null;
 
  const FirebaseQuery = {
 	 fetchQuote: () => {
-
-         /*Fetch the Quote for the Front Page 2017-09-27*/
-         console.log('FETCH_QUOTE');
          return dispatch => {
-
+             console.log('FETCH_QUOTE');
              database.ref('quotes/uid1').once('value', (snapshot) => {
-                 if (snapshot.val() !== null) {
-                     console.log(snapshot.val())
+
+                     console.log(snapshot.val());
+					 console.log('inside snaphsot');
                      dispatch({
                          type: 'QUOTE_UPDATE',
                          quoteMeta: snapshot.val()
                      })
-                 }
+
                  return (snapshot.val());
              });
 

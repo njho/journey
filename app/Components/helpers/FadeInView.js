@@ -7,6 +7,7 @@ class FadeInView extends React.Component {
         super(props);
         this.state = {
             animationDelay: props.animationDelay,
+            animationDuration: props.animationDuration,
             fadeAnim: new Animated.Value(0)
         };
     }

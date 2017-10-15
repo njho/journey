@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "515548202082",
+    "firebase_url": "https://journeyapp91.firebaseio.com",
+    "project_id": "journeyapp91",
+    "storage_bucket": "journeyapp91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515548202082:android:593dd5309fcdac7a",
+        "android_client_info": {
+          "package_name": "com.journey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515548202082-2995up5ln2r0csqoa8q40upjc94jbmfd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.journey",
+            "certificate_hash": "c2e8f72ec1abf1bbf95740da8099a2c0eca5d390"
+          }
+        },
+        {
+          "client_id": "515548202082-3s29ndt9d1vlk1qgbmoi2ob3n8b0slnb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkiG9aSGXs61UXzrFuUhKwIyLyLCjS8LE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515548202082-3s29ndt9d1vlk1qgbmoi2ob3n8b0slnb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,6 +4,19 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+
+import io.invertase.firebase.RNFirebasePackage;
+
+import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
+import io.invertase.firebase.database.RNFirebaseDatabasePackage; // Firebase Realtime Database
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage; // Firebase Firestore
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; // Firebase Cloud Messaging
+import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Storage
+
+
 import com.wix.interactable.Interactable;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -40,6 +53,10 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LinearGradientPackage(),
+            new VectorIconsPackage(),
+            new LinearGradientPackage(),
+            new RNFirebasePackage(),
             new Interactable(),
             new LottiePackage(),
             new FBSDKPackage(mCallbackManager)
@@ -76,7 +93,14 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             new MainReactPackage(),
 */
             new LottiePackage(),
-            new FBSDKPackage(mCallbackManager)
+            new FBSDKPackage(mCallbackManager),
+            new Interactable(), // Add this line
+            // Add these packages as appropriate
+            new RNFirebaseAuthPackage(),
+            new RNFirebaseDatabasePackage(),
+            new RNFirebaseFirestorePackage(),
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseStoragePackage()
     );
   }
 

@@ -7,13 +7,14 @@ import {
     Image,
     Keyboard
 } from 'react-native';
-import {bootstrap} from './app/Components/config/bootstrap';
+import { Navigation } from 'react-native-navigation';
 
 import {Provider} from 'react-redux';
 import store from './app/store.js';
+
+import {bootstrap} from './app/Components/config/bootstrap';
 import { registerScreens } from './screens';
 
-import { Navigation } from 'react-native-navigation';
 import Login from './app/Components/Login/';
 import QuotePage from './app/Components/QuotePage';
 
@@ -29,7 +30,8 @@ Navigation.startTabBasedApp({
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
-            title: 'Screen One'
+            title: 'Screen One',
+            tabBarHidden: true
         }
     ]
 });

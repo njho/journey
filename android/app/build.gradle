@@ -93,12 +93,18 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.1'
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+
     defaultConfig {
         applicationId "com.journey"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -122,7 +128,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -133,6 +139,28 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-vector-icons')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+
+//    All for react-native-firebase
+    // RNFirebase required dependencies
+    compile "com.google.firebase:firebase-core:11.4.2"
+    compile "com.google.android.gms:play-services-base:11.4.2"
+
+    // RNFirebase optional dependencies
+    compile "com.google.firebase:firebase-ads:11.4.2"
+    compile "com.google.firebase:firebase-auth:11.4.2"
+    compile "com.google.firebase:firebase-config:11.4.2"
+    compile "com.google.firebase:firebase-crash:11.4.2"
+    compile "com.google.firebase:firebase-database:11.4.2"
+    compile "com.google.firebase:firebase-firestore:11.4.2"
+    compile "com.google.firebase:firebase-messaging:11.4.2"
+    compile "com.google.firebase:firebase-perf:11.4.2"
+    compile "com.google.firebase:firebase-storage:11.4.2"
+
     compile project(':react-native-interactable')
     compile project(':lottie-react-native')
     compile project(':react-native-fbsdk')
@@ -150,3 +178,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+//I was told to add this by react-native-firebase
+apply plugin: 'com.google.gms.google-services'
