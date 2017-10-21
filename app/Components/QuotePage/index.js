@@ -9,10 +9,14 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     Button,
-    Easing
+    Easing,
+    ScrollView,
+    TouchableWithoutFeedback
 } from 'react-native';
 import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Interactable from 'react-native-interactable';
@@ -25,6 +29,7 @@ import wrapWords from '../helpers/quoteParser';
 
 const widthFactor = Dimensions.get('window').width / 375;
 const heightFactor = (Dimensions.get('window').height - 75) / 667;
+const height = Dimensions.get('window').height;
 
 const SLIDE_IN_DOWN_KEYFRAMES = {
     from: {translateY: -10},
@@ -61,7 +66,11 @@ class Login extends React.Component {
             fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
             progress: new Animated.Value(0),
             buttonPositions: new Animated.Value(0), //For the button positions
-            animationCompleted: false
+            welcomeAnim: new Animated.Value(0),
+            toAnim: new Animated.Value(0),
+            journeyAnim: new Animated.Value(0),
+            buttonAnimationCompleted: false,
+            quoteAnimationCompleted: false
         }
     }
 
@@ -77,21 +86,28 @@ class Login extends React.Component {
         ).start();                        // Starts the animation
         Animated.timing(this.state.progress, {
             toValue: 1,
-            duration: 5000,
-        }).start();
+            duration: 10,
+        }).start(() => this.quoteAnimationCompleted());
 
         this.props.fetchQuote();
     }
 
-    animationCompleted() {
+    buttonAnimationCompleted() {
         this.setState({
             ...this.state,
-            animationCompleted: true
+            buttonAnimationCompleted: true
+        })
+    }
+
+    quoteAnimationCompleted() {
+        this.setState({
+            ...this.state,
+            quoteAnimationCompleted: true
         })
     }
 
     buttonInfo() {
-        this.animationCompleted();
+        this.buttonAnimationCompleted();
         Animated.timing(this.state.buttonPositions, {
             toValue: 80,
             duration: 250,
@@ -100,148 +116,193 @@ class Login extends React.Component {
         }).start();
     }
 
+    //After Scrolling to the Very Bottom
+    onStopInteraction() {
+        console.log('did this work no');
+        this.loginAnimation();
+
+        this.setState({
+            ...this.state,
+            endPage: true
+        })
+    }
+
+    loginAnimation() {
+        Animated.sequence([
+            Animated.timing(this.state.journeyAnim, {
+                toValue: 1,
+                duration: 2000
+            })
+        ]).start();
+    }
+
+    next() {
+        this.props.navigator.resetTo({
+            screen: 'neighborhoodDetected'
+        })
+    }
+
 
     render() {
-        let {fadeAnim, buttonPositions} = this.state;
+        let {fadeAnim, buttonPositions, welcomeAnim, toAnim, journeyAnim} = this.state;
 
         return (
-            <View style={styles.container}>
-                <View style={{flex: 4, alignItems: 'center', justifyContent: 'center', marginTop: 80}}>
-                    <View style={styles.infoBar}>
-                        <FadeInView animationDuration={2000} animationDelay={5000}>
-                            <View style={{flexDirection: 'row'}}>
-                                <TouchableOpacity style={styles.titleView}>
-                                    <Text style={styles.titleText}>Cleaning the Oceans with Mission Blue</Text>
-                                </TouchableOpacity>
+            <View style={{flex: 1, backgroundColor: '#f0ffff'}}>
+                <Interactable.View
+                    verticalOnly={true}
+                    snapPoints={[{y: -(height * 1.9)}]}
+                    boundaries={{bottom: 0}}
+                    dragEnabled={this.state.quoteAnimationCompleted}
+                    onSnap={()=>this.onStopInteraction()}
+                    animatedValueY={this._deltaY}>
+                    <View style={styles.container}>
+                        <View style={{flex: 4, alignItems: 'center', justifyContent: 'center', marginTop: 80}}>
+                            <View style={styles.infoBar}>
+                                <FadeInView animationDuration={2000} animationDelay={5000}>
+                                    <View style={{flexDirection: 'row'}}>
+                                        <TouchableOpacity style={styles.titleView}>
+                                            <Text style={styles.titleText}>Cleaning the Oceans with Mission Blue</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </FadeInView>
+
                             </View>
+
+                            <View
+                                style={styles.quoteView}>{this.props.quoteMeta ? wrapWords(this.props.quoteMeta.quote, styles.quote) :
+                                null}</View>
+                            <FadeInView animationDuration={2000} animationDelay={3000}>
+                                <Text
+                                    style={styles.author}>{this.props.quoteMeta ? '- ' + this.props.quoteMeta.quote_author : null} </Text>
+                            </FadeInView>
+                        </View>
+
+
+                        <Animated.View style={{
+                            flex: 1,
+                            width: '100%',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            marginBottom: 20
+                        }}>
+
+                            {this.state.buttonAnimationCompleted ? <Animated.View
+                                style={{
+                                    left: buttonPositions,
+                                    position: 'absolute', width: '100%', alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}>
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1,
+                                        borderColor: '#26aabc',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: 30,
+                                        height: 30,
+                                        backgroundColor: '#26aabc',
+                                        borderRadius: 100,
+                                        zIndex: 11
+                                    }}
+                                >
+                                    <Icon name="ios-bookmark" size={20} color="white"/>
+                                </TouchableOpacity>
+                            </Animated.View> : null}
+
+                            {this.state.buttonAnimationCompleted ? <Animated.View
+                                style={{
+                                    right: buttonPositions,
+                                    position: 'absolute', width: '100%', alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                }}>
+                                <TouchableOpacity onPress={() => {
+                                    console.log('hit')
+                                }}
+                                                  style={{
+                                                      borderWidth: 1,
+                                                      borderColor: '#26aabc',
+                                                      alignItems: 'center',
+                                                      justifyContent: 'center',
+                                                      width: 30,
+                                                      height: 30,
+                                                      backgroundColor: '#26aabc',
+                                                      borderRadius: 100,
+                                                      zIndex: 10
+                                                  }}
+                                >
+                                    <Icon name="ios-add" size={20} color="white"/>
+                                </TouchableOpacity>
+                            </Animated.View> : null}
+
+
+                            <FadeInView
+                                style={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                }}
+                                animationDuration={2000}
+                                animationDelay={5000}>
+                                <TouchableHighlight
+                                    onPress={() => this.buttonInfo()}
+                                    activeOpacity={80}
+                                    underlayColor="#1F909E"
+                                    style={{
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: 50,
+                                        height: 50,
+                                        backgroundColor: '#26aabc',
+                                        borderRadius: 100,
+                                        zIndex: 13
+                                    }}>
+                                    <Icon name="ios-flame" size={30} color="white"/>
+                                </TouchableHighlight>
+                            </FadeInView>
+                        </Animated.View>
+
+                        <FadeInView
+                            style={{
+                                bottom: 20
+                            }}
+                            animationDuration={2000}
+                            animationDelay={5000}>
+
+                            <Animatable.Text animation={SLIDE_IN_DOWN_KEYFRAMES} iterationCount="infinite"
+                                             direction="alternate"><Icon name="ios-arrow-down" size={45}
+                                                                         color="white"/>️</Animatable.Text>
                         </FadeInView>
 
                     </View>
+                    <View style={{height: 500}}>
+                        <LinearGradient colors={['#4a4d61', '#f0ffff']} style={{height: 500}}>
+                        </LinearGradient>
+                    </View>
+                    <TouchableWithoutFeedback onPress={()=>this.next()}>
+                    <View style={{
+                        height: height,
+                        backgroundColor: '#f0ffff',
+                        alignItems: 'center',
+                        justifyContent: 'space-around'
+                    }}>
 
-                    <View
-                        style={styles.quoteView}>{this.props.quoteMeta ? wrapWords(this.props.quoteMeta.quote, styles.quote) :
-                        null}</View>
-                    <FadeInView animationDuration={2000} animationDelay={3000}>
-                        <Text
-                            style={styles.author}>{this.props.quoteMeta ? '- ' + this.props.quoteMeta.quote_author : null} </Text>
-                    </FadeInView>
-                </View>
-
-
-                <Animated.View style={{
-                    flex: 1,
-                    width: '100%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'}}>
-
-                    {this.state.animationCompleted ? <Animated.View
-                        style={{
-                            left: buttonPositions,
-                            position: 'absolute', width: '100%', alignItems: 'center',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        <TouchableOpacity
-                            style={{
-                                borderWidth: 1,
-                                borderColor: '#26aabc',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 30,
-                                height: 30,
-                                backgroundColor: '#26aabc',
-                                borderRadius: 100,
-                                zIndex: 11
-                            }}
-                        >
-                            <Icon name="ios-bookmark" size={20} color="white"/>
-                        </TouchableOpacity>
-                    </Animated.View> : null}
-
-                    {this.state.animationCompleted ? <Animated.View
-                        style={{
-                            right: buttonPositions,
-                            position: 'absolute', width: '100%', alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <TouchableOpacity onPress={()=>{console.log('hit')}}
-                            style={{
-                                borderWidth: 1,
-                                borderColor: '#26aabc',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 30,
-                                height: 30,
-                                backgroundColor: '#26aabc',
-                                borderRadius: 100,
-                                zIndex: 10
-                            }}
-                        >
-                            <Icon name="ios-add" size={20} color="white"/>
-                        </TouchableOpacity>
-                    </Animated.View> : null}
-
-
-                    <FadeInView
-                        style={{
-                            position: 'absolute',
-                            width: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                        animationDuration={2000}
-                        animationDelay={5000}>
-                        <TouchableHighlight
-                            onPress={() => this.buttonInfo()}
-                            activeOpacity={80}
-                            underlayColor="#1F909E"
-                            style={{
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 50,
-                                height: 50,
-                                backgroundColor: '#26aabc',
-                                borderRadius: 100,
-                                zIndex:13
-                            }}
-                        >
-                            <Icon name="ios-flame" size={30} color="white"/>
-                        </TouchableHighlight>
-                    </FadeInView>
-                </Animated.View>
-
-                <FadeInView
-                    style={{
-                        bottom: 0
-                    }}
-                    animationDuration={2000}
-                    animationDelay={5000}>
-
-                    <Animatable.Text animation={SLIDE_IN_DOWN_KEYFRAMES} iterationCount="infinite"
-                                     direction="alternate"><Icon name="ios-arrow-down" size={45}
-                                                                 color="white"/>️</Animatable.Text>
-                </FadeInView>
-
+                        <Animatable.Text style={{fontSize: 20, position: 'absolute', top: '40%', opacity: welcomeAnim}}>Welcome</Animatable.Text>
+                        <Animatable.Text style={{fontSize: 20, position: 'absolute', top: '40%', opacity: toAnim}}>To</Animatable.Text>
+                        <Animatable.Text style={{fontSize: 30, opacity: journeyAnim}}>J O U R N E Y</Animatable.Text>
+                    </View>
+                    </TouchableWithoutFeedback>
+                </Interactable.View>
             </View>
         );
-    }
-
-    onStopInteraction(event, scaleValue) {
-        const x = event.nativeEvent.x;
-        const y = event.nativeEvent.y;
-        if (x > -10 && x < 10 && y < 210 * heightFactor && y > 190 * heightFactor) {
-            Animated.timing(scaleValue, {toValue: 0, duration: 300}).start();
-        }
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#4a4d61',
-        height: '100%',
+        height: height,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -296,7 +357,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     image: {
-
         resizeMode: 'contain'
     },
     header: {

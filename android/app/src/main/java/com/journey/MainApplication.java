@@ -94,7 +94,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 */
             new LottiePackage(),
             new FBSDKPackage(mCallbackManager),
-            new Interactable(), // Add this line
+            new LinearGradientPackage(),
+    new Interactable(), // Add this line
             // Add these packages as appropriate
             new RNFirebaseAuthPackage(),
             new RNFirebaseDatabasePackage(),
