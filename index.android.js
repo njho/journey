@@ -23,7 +23,7 @@ registerScreens(store, Provider);
 
 Navigation.startTabBasedApp({
     tabs: [
-/*        {
+   /*     {
             label: 'One',
             screen: 'login', // this is a registered name for a screen
              icon: require('./app/Assets/icons/visaIcon.png'),

@@ -124,7 +124,6 @@ class NeighborhoodDetected extends React.Component {
                 <LinearGradient colors={['#f15d65', '#d379b9']} style={{flex: 1, alignItems: 'center', width: '100%'}}>
                     <View style={{
                         position: 'absolute',
-                        flex: 1,
                         alignItems: 'center',
                         width: '100%',
                         flexDirection: 'row',
@@ -161,79 +160,243 @@ class NeighborhoodDetected extends React.Component {
                         </Animatable.View>
 
                     </View>
-                    <View style={{flex: 2}}>
-                    </View>
+
+                    <View style={{flex: 1, alignItems: 'center',}}>
+                        <View style={{flex: 2}}></View>
+                        <View style={{flex: 9}}>
+                            <ScrollView
+                                horizontal={true}
+                                pagingEnabled={true}
+                                showsHorizontalScrollIndicator={false}
+                                overScrollMode='never'
+                            >
+                                <View style={{flex: 1, flexDirection: 'row',}}>
+                                    <View
+                                        style={{
+                                            width: width,
+                                            flex: 1,
+                                            alignItems: 'center',
+                                            flexDirection: 'column',
+                                            justifyContent: 'space-around'
+                                        }}>
+
+                                        <Animatable.View
+                                            duration={1500}
+                                            style={{
+                                                elevation: 15,
+                                                alignItems: 'center',
+                                                shadowColor: "#000000",
+                                                shadowRadius: 3,
+                                                shadowOffset: {
+                                                    height: 20,
+                                                    width: 1
+                                                },
+                                                borderRadius: width * 0.5,
+                                                backgroundColor: '#b0d9ea'
+                                            }}
+                                            animation={SLIDE_IN_DOWN_KEYFRAMES}
+                                            iterationCount="infinite"
+                                            direction="alternate">
+                                            <TouchableOpacity style={styles.userOpacity}>
+                                                <Animatable.Image
+                                                    style={styles.userPhoto}
+                                                    source={require('../../../app/Assets/images/jane_goodall.jpg')}/>
+                                            </TouchableOpacity>
+
+                                            <View style={styles.titleView}>
+                                                <Text style={styles.titleText}>Jane Goodall</Text>
+                                                <Text style={styles.subText}>Saving wildlife for the world</Text>
+                                                <Text style={styles.subText}>Tanzania, Africa</Text>
+                                                <Text style={styles.miniText}>Created: Just now</Text>
+                                            </View>
+                                            <View style={{height: width * 0.15}}></View>
+                                        </Animatable.View>
+                                    </View>
+
+                                    <View
+                                        style={{
+                                            width: width,
+                                            flex: 1,
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-around'
+                                        }}>
 
 
-                    <View
-                        style={{alignItems: 'center', flexDirection: 'column', justifyContent: 'flex-start'}}>
+                                        <Animatable.View
+                                            style={{
+                                                width: width,
+                                                alignItems: 'center',
+                                            }}
+                                            duration={1500}
+                                            animation={SLIDE_IN_DOWN_KEYFRAMES}
+                                            iterationCount="infinite"
+                                            direction="alternate">
+                                            <View style={{
+                                                flex: 1,
+                                                flexDirection: 'row',
+                                                width: width,
+                                                alignItems: 'center',
+                                            }}>
+                                                <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+                                                    <View
+                                                        style={{
+                                                            flex: 0,
+                                                            zIndex: 1,
+                                                            flexDirection: 'column',
+                                                            width: width * 0.62,
+                                                            elevation: 15,
+                                                            alignItems: 'center',
+                                                            shadowColor: "#000000",
+                                                            shadowRadius: 3,
+                                                            shadowOffset: {
+                                                                height: 20,
+                                                                width: 1
+                                                            },
+                                                            borderRadius: width * 0.5,
+                                                            backgroundColor: '#b0d9ea'
+                                                        }}
+                                                    >
+                                                        <View style={{flex: 0, height: width * 0.5, marginBottom: 40}}>
+                                                            <TouchableOpacity style={styles.userOpacity}>
+                                                                <Animatable.Image
+                                                                    style={styles.userPhoto}
+                                                                    source={require('../../../app/Assets/images/elon_musk.jpeg')}/>
+                                                            </TouchableOpacity>
 
-                            <Animatable.View
-                                duration={1500}
-                                style={{
-                                    elevation: 20,
-                                    alignItems: 'center',
-                                    shadowColor: "#000000",
-                                    shadowRadius: 3,
-                                    shadowOffset: {
-                                        height: 20,
-                                        width: 1
-                                    },
-                                    borderRadius: width * 0.5,
-                                    backgroundColor: '#b0d9ea'
-                                }}
-                                animation={SLIDE_IN_DOWN_KEYFRAMES}
-                                iterationCount="infinite"
-                                direction="alternate">
-                                <TouchableOpacity style={styles.userOpacity}>
-                                    <Animatable.Image
-                                        style={styles.userPhoto}
-                                        source={require('../../../app/Assets/images/jane_goodall.jpg')}/>
-                                </TouchableOpacity>
+                                                            <TouchableOpacity style={styles.hello}>
+                                                                <Icon name="md-hand" size={20}/>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                        <View style={[styles.titleView, {flex: 1}]}>
+                                                            <Text style={styles.titleText}>Elon Musk</Text>
+                                                            <Text style={styles.subText}>Revolutionizing Banking</Text>
+                                                            <Text style={styles.subText}>San Francisco,
+                                                                California</Text>
+                                                            <Text style={styles.miniText}>Created: 10 minutes ago</Text>
+                                                        </View>
+                                                        <View style={{ flex: 0, height: width * 0.25}}/>
 
-                                <View style={styles.titleView}>
-                                    <Text style={styles.titleText}>Jane Goodall</Text>
-                                    <Text style={styles.subText}>Saving wildlife for the world</Text>
-                                    <Text style={styles.subText}>Tanzania, Africa</Text>
-                                    <Text style={styles.miniText}>Created: Just now</Text>
+
+                                                    </View>
+                                                </View>
+                                            </View>
+
+                                        </Animatable.View>
+                                    </View>
+                                    <View
+                                        style={{
+                                            width: width,
+                                            flex: 1,
+                                            alignItems: 'center',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-around'
+                                        }}>
+
+
+                                        <Animatable.View
+                                            style={{
+                                                width: width,
+                                                alignItems: 'center',
+                                            }}
+                                            duration={1500}
+                                            animation={SLIDE_IN_DOWN_KEYFRAMES}
+                                            iterationCount="infinite"
+                                            direction="alternate">
+                                            <View style={{
+                                                flex: 1,
+                                                flexDirection: 'row',
+                                                width: width,
+                                                alignItems: 'center',
+                                            }}>
+                                                <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+                                                    <View
+                                                        style={{
+                                                            flex: 0,
+                                                            zIndex: 1,
+                                                            flexDirection: 'column',
+                                                            width: width * 0.62,
+                                                            elevation: 15,
+                                                            alignItems: 'center',
+                                                            shadowColor: "#000000",
+                                                            shadowRadius: 3,
+                                                            shadowOffset: {
+                                                                height: 20,
+                                                                width: 1
+                                                            },
+                                                            borderRadius: width * 0.5,
+                                                            backgroundColor: '#b0d9ea'
+                                                        }}
+                                                    >
+                                                        <View style={{flex: 0, height: width * 0.5, marginBottom: 40}}>
+                                                            <TouchableOpacity style={styles.userOpacity}>
+                                                                <Animatable.Image
+                                                                    style={styles.userPhoto}
+                                                                    source={require('../../../app/Assets/images/whitney_wolf.jpg')}/>
+                                                            </TouchableOpacity>
+
+                                                            <TouchableOpacity style={styles.hello}>
+                                                                <Icon name="md-hand" size={20}/>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                        <View style={[styles.titleView, {flex: 1}]}>
+                                                            <Text style={styles.titleText}>Whitney Wolf</Text>
+                                                            <Text style={styles.subText}>Marketing Guru</Text>
+                                                            <Text style={styles.subText}>San Francisco,
+                                                                California</Text>
+                                                            <Text style={styles.miniText}>Created: 20 minutes ago</Text>
+                                                        </View>
+                                                        <View style={{ flex: 0, height: width * 0.25}}/>
+
+
+                                                    </View>
+                                                </View>
+                                            </View>
+
+                                        </Animatable.View>
+                                    </View>
+
                                 </View>
-                                <View style={{height: width * 0.15}}></View>
-                            </Animatable.View>
+                            </ScrollView>
+                        </View>
+                        <View style={{
+                            flex: 3,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                        }}>
+                            <TouchableWithoutFeedback onPress={() => this.next()}>
+                                <View style={{marginHorizontal: 10}}>
+                                    {this.state.slide === 1 ?
+                                        <FadeInView animationDuration={20} animationDelay={0}><Text
+                                            style={styles.titleText}>Say Hello to your neighbors!</Text>
+                                        </FadeInView> : null}
+                                    {this.state.slide === 2 ?
+                                        <FadeInView animationDuration={20} animationDelay={0}><Text
+                                            style={styles.titleText}>Their Journey's started around
+                                            the same time as yours!</Text></FadeInView> : null}
+                                    {this.state.slide === 3 ?
+                                        <FadeInView animationDuration={20} animationDelay={0}>
+                                            <Text style={styles.titleText}>As time passes, your community will
+                                                grow.</Text></FadeInView> : null}
+                                    {this.state.slide === 4 ?
+                                        <FadeInView animationDuration={20} animationDelay={0}>
+                                            <Text style={styles.titleText}>For now, just make sure you say hi!</Text>
+                                        </FadeInView> : null}
+                                    {this.state.slide === 5 ?
+                                        <FadeInView animationDuration={20} animationDelay={0}>
+                                            <Text style={[styles.subText, {marginHorizontal: 40}]}>And that you come
+                                                back some day to make
+                                                something beautiful with them!</Text>
+                                        </FadeInView> : null}
+
+                                </View>
+                            </TouchableWithoutFeedback>
+
+                        </View>
                     </View>
 
-                    <View style={{
-                        flex: 4,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-around'
-                    }}>
-                        <TouchableWithoutFeedback onPress={() => this.next()}>
-                            <View style={{marginHorizontal: 30}}>
-                                {this.state.slide === 1 ?
-                                    <FadeInView animationDuration={20} animationDelay={0}><Text
-                                        style={styles.titleText}>Say Hello to your neighbors!</Text>
-                                    </FadeInView> : null}
-                                {this.state.slide === 2 ?
-                                    <FadeInView animationDuration={20} animationDelay={0}><Text
-                                        style={styles.titleText}>Their Journey's started around
-                                        the same time as yours!</Text></FadeInView> : null}
-                                {this.state.slide === 3 ?
-                                    <FadeInView animationDuration={20} animationDelay={0}>
-                                        <Text style={styles.titleText}>As time passes, your community will grow.</Text></FadeInView> : null}
-                                {this.state.slide === 4 ?
-                                    <FadeInView animationDuration={20} animationDelay={0}>
-                                        <Text style={styles.titleText}>For now, just make sure you say hi!</Text>
-                                    </FadeInView> : null}
-                                {this.state.slide === 5 ?
-                                    <FadeInView animationDuration={20} animationDelay={0}>
-                                        <Text style={styles.subText}>And that you come back to make
-                                            something beautiful with them some day</Text>
-                                    </FadeInView> : null}
 
-                            </View>
-                        </TouchableWithoutFeedback>
-
-                    </View>
                 </LinearGradient>
             </View>
         );
@@ -249,7 +412,6 @@ const styles = StyleSheet.create({
     titleView: {
         justifyContent: 'center',
         alignContent: 'center',
-        flexWrap: 'wrap',
     },
     titleText: {
         marginHorizontal: 40,
@@ -268,6 +430,7 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     userOpacity: {
+        flex: 0,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -312,7 +475,17 @@ const styles = StyleSheet.create({
         height: width * 0.15,
         borderRadius: width * 0.15,
     },
-
+    hello: {
+        top: width * 0.3,
+        right: -15,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        backgroundColor: 'white',
+        borderRadius: 50,
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NeighborhoodDetected);
