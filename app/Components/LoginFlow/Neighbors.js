@@ -167,7 +167,7 @@ class NeighborhoodDetected extends React.Component {
 
                     <View
                         style={{alignItems: 'center', flexDirection: 'column', justifyContent: 'flex-start'}}>
-                        <Animated.View style={{transform: [{translateX: this.state.slideAnim}]}}>
+
                             <Animatable.View
                                 duration={1500}
                                 style={{
@@ -199,7 +199,6 @@ class NeighborhoodDetected extends React.Component {
                                 </View>
                                 <View style={{height: width * 0.15}}></View>
                             </Animatable.View>
-                        </Animated.View>
                     </View>
 
                     <View style={{
@@ -209,7 +208,6 @@ class NeighborhoodDetected extends React.Component {
                         justifyContent: 'space-around'
                     }}>
                         <TouchableWithoutFeedback onPress={() => this.next()}>
-
                             <View style={{marginHorizontal: 30}}>
                                 {this.state.slide === 1 ?
                                     <FadeInView animationDuration={20} animationDelay={0}><Text
@@ -336,3 +334,40 @@ export default connect(mapStateToProps, mapDispatchToProps)(NeighborhoodDetected
                                           source={require('../../../app/Assets/images/Untitled-1.png')}/>
                     </TouchableOpacity>
                 </View>*/
+
+/*<View
+                        style={{alignItems: 'center', flexDirection: 'column', justifyContent: 'flex-start'}}>
+                        <Animated.View style={{transform: [{translateX: this.state.slideAnim}]}}>
+                            <Animatable.View
+                                duration={1500}
+                                style={{
+                                    elevation: 20,
+                                    alignItems: 'center',
+                                    shadowColor: "#000000",
+                                    shadowRadius: 3,
+                                    shadowOffset: {
+                                        height: 20,
+                                        width: 1
+                                    },
+                                    borderRadius: width * 0.5,
+                                    backgroundColor: '#b0d9ea'
+                                }}
+                                animation={SLIDE_IN_DOWN_KEYFRAMES}
+                                iterationCount="infinite"
+                                direction="alternate">
+                                <TouchableOpacity style={styles.userOpacity}>
+                                    <Animatable.Image
+                                        style={styles.userPhoto}
+                                        source={require('../../../app/Assets/images/jane_goodall.jpg')}/>
+                                </TouchableOpacity>
+
+                                <View style={styles.titleView}>
+                                    <Text style={styles.titleText}>Jane Goodall</Text>
+                                    <Text style={styles.subText}>Saving wildlife for the world</Text>
+                                    <Text style={styles.subText}>Tanzania, Africa</Text>
+                                    <Text style={styles.miniText}>Created: Just now</Text>
+                                </View>
+                                <View style={{height: width * 0.15}}></View>
+                            </Animatable.View>
+                        </Animated.View>
+                    </View>*/
