@@ -11,11 +11,14 @@ import {
     Button,
     Easing,
     ScrollView,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ToastAndroid
 } from 'react-native';
 import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
+import Animation from 'lottie-react-native';
+
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -70,13 +73,15 @@ class NeighborhoodDetected extends React.Component {
 
     constructor(props) {
         super(props);
-        this._deltaX = new Animated.Value(0);
-        this._deltaY = new Animated.Value(0);
-        this._face1Scale = new Animated.Value(1);
 
         this.state = {
-            slideAnim: new Animated.Value(0),
-            slide: 1
+            closeNeighborSelected: false,
+            farNeighborSelected: false,
+            slide: 1,
+            transform: new Animated.Value(-0.1),
+            translate: new Animated.Value(0),
+            closeNeighborGreeted: false,
+            farNeighborGreeted: false
         }
     }
 
@@ -90,34 +95,134 @@ class NeighborhoodDetected extends React.Component {
         }
     }
 
-    neighborClicked() {
+    neighborClicked(value) {
+        switch (value) {
+            case 1:
+                this.scrollView.scrollTo({x: width, y: 0, animated: true});
+                break;
+            case 2:
+                this.scrollView.scrollToEnd();
+                break;
+        }
 
-        Animated.sequence([
-            Animated.timing(                  // Animate over time
-                this.state.slideAnim,            // The animated value to drive
-                {
-                    toValue: width,                   // Animate to opacity: 1 (opaque)
-                    duration: 300,
-                }),
-            Animated.timing(                  // Animate over time
-                this.state.slideAnim,            // The animated value to drive
-                {
-                    toValue: -width,                   // Animate to opacity: 1 (opaque)
-                    duration: 0,
-                }),
-            Animated.timing(                  // Animate over time
-                this.state.slideAnim,            // The animated value to drive
-                {
-                    toValue: 1,                   // Animate to opacity: 1 (opaque)
-                    duration: 300,
-                })
-        ]).start();
+    }
+
+    handleScroll(event) {
+        console.log(width);
+        console.log(event.nativeEvent.contentOffset.x);
+        if (event.nativeEvent.contentOffset.x < width * 0.75) {
+            this.setState({...this.state, closeNeighborSelected: false, farNeighborSelected: false})
+        } else if (event.nativeEvent.contentOffset.x > width * 0.75 && event.nativeEvent.contentOffset.x < width * 1.75) {
+            //Second page
+            this.setState({...this.state, closeNeighborSelected: true, farNeighborSelected: false});
+
+        } else if (event.nativeEvent.contentOffset.x > width * 1.75) {
+            this.setState({...this.state, closeNeighborSelected: false, farNeighborSelected: true});
+        }
+    }
+
+    sayHello(neighbor) {
+        // First set up animation
+
+        Animated.parallel([
+            Animated.sequence([
+                Animated.timing(
+                    this.state.transform,
+                    {
+                        toValue: -0.15,
+                        duration: 250,
+                    }
+                ),
+                Animated.timing(
+                    this.state.transform,
+                    {
+                        toValue: 0.07,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.transform,
+                    {
+                        toValue: -0.1,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.transform,
+                    {
+                        toValue: 0.08,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.transform,
+                    {
+                        toValue: -0.1,
+                        duration: 400,
+                    }
+                ),
+            ]),
+            Animated.sequence([
+                Animated.timing(
+                    this.state.translate,
+                    {
+                        toValue: -3,
+                        duration: 250,
+                    }
+                ),
+                Animated.timing(
+                    this.state.translate,
+                    {
+                        toValue: 3.8,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.translate,
+                    {
+                        toValue: -3,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.translate,
+                    {
+                        toValue: 4,
+                        duration: 300,
+                    }
+                ),
+                Animated.timing(
+                    this.state.translate,
+                    {
+                        toValue: -2,
+                        duration: 400,
+                    }
+                ),
+            ])
+        ]).start(() => {
+            if (neighbor === 1) {
+                this.refs.closeNeighbor.bounce(1500).then(this.setState({...this.state, closeNeighborGreeted: true}));
+                this.closeNeighborHeart.play();
+                ToastAndroid.show("You've received 50 Hearts!", ToastAndroid.SHORT);
+
+            } else {
+                this.refs.farNeighbor.bounce(1500).then(this.setState({...this.state, farNeighborGreeted: true}));
+                this.farNeighborHeart.play();
+                ToastAndroid.show("You've received 50 Hearts!", ToastAndroid.SHORT);
+
+            }
+
+        });
 
     }
 
 
     render() {
         let {slideAnim} = this.state;
+        const spin = this.state.transform.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '360deg']
+        })
 
         return (
             <View style={styles.container}>
@@ -136,27 +241,35 @@ class NeighborhoodDetected extends React.Component {
                             duration={1500}
                             delay={200}
                             direction="alternate">
-                            <TouchableOpacity style={styles.closeNeighborOpacity}
-                                              onPress={() => this.neighborClicked(1)}>
-                                <Image
-                                    style={styles.closeNeighborPhoto}
-                                    source={require('../../../app/Assets/images/elon_musk.jpeg')}/>
+                            <Animatable.View ref="closeNeighbor">
 
-                            </TouchableOpacity>
+                                <TouchableOpacity style={[styles.closeNeighborOpacity,]}
+                                                  onPress={() => this.neighborClicked(1)}>
+                                    <Image
+                                        style={styles.closeNeighborPhoto}
+                                        source={require('../../../app/Assets/images/elon_musk.jpeg')}/>
+
+                                </TouchableOpacity>
+                            </Animatable.View>
                         </Animatable.View>
                         <View style={{flex: 1}}></View>
                         <Animatable.View
-                            style={{position: 'absolute', left: width * 0.4, top: -5}}
+                            style={{position: 'absolute', left: width * 0.4, top: -5,}}
                             animation={SLIDE_IN_DOWN_KEYFRAMES_2}
                             iterationCount="infinite"
                             duration={1500}
                             delay={400}
                             direction="alternate">
-                            <TouchableOpacity style={styles.farNeighborOpacity}>
-                                <Image
-                                    style={styles.farNeighborPhoto}
-                                    source={require('../../../app/Assets/images/whitney_wolf.jpg')}/>
-                            </TouchableOpacity>
+                            <Animatable.View
+                                ref="farNeighbor">
+                                <TouchableOpacity
+                                    style={[styles.farNeighborOpacity]}
+                                    onPress={() => this.neighborClicked(2)}>
+                                    <Image
+                                        style={styles.farNeighborPhoto}
+                                        source={require('../../../app/Assets/images/whitney_wolf.jpg')}/>
+                                </TouchableOpacity>
+                            </Animatable.View>
                         </Animatable.View>
 
                     </View>
@@ -169,6 +282,10 @@ class NeighborhoodDetected extends React.Component {
                                 pagingEnabled={true}
                                 showsHorizontalScrollIndicator={false}
                                 overScrollMode='never'
+                                ref={(scrollView) => {
+                                    this.scrollView = scrollView;
+                                }}
+                                onScroll={(e) => this.handleScroll(e)}
                             >
                                 <View style={{flex: 1, flexDirection: 'row',}}>
                                     <View
@@ -253,20 +370,41 @@ class NeighborhoodDetected extends React.Component {
                                                                 height: 20,
                                                                 width: 1
                                                             },
-                                                            borderRadius: width * 0.5,
-                                                            backgroundColor: '#b0d9ea'
+                                                            borderRadius: width * 0.48,
+                                                            backgroundColor: '#acd4e5'
                                                         }}
                                                     >
                                                         <View style={{flex: 0, height: width * 0.5, marginBottom: 40}}>
-                                                            <TouchableOpacity style={styles.userOpacity}>
+                                                            <TouchableOpacity style={styles.neighborOpacity}>
                                                                 <Animatable.Image
                                                                     style={styles.userPhoto}
                                                                     source={require('../../../app/Assets/images/elon_musk.jpeg')}/>
                                                             </TouchableOpacity>
 
-                                                            <TouchableOpacity style={styles.hello}>
-                                                                <Icon name="md-hand" size={20}/>
+                                                            <TouchableOpacity onPress={() => this.sayHello(1)}
+                                                                              style={styles.hello}
+                                                            disabled={this.state.closeNeighborGreeted}>
+                                                                <Animated.View style={{
+                                                                    left: this.state.translate,
+                                                                    transform: [{rotate: spin}]
+                                                                }}>
+                                                                    {this.state.closeNeighborGreeted ?
+                                                                        <Text>+50</Text> :
+                                                                        <Icon name="md-hand" size={20}/>}
+                                                                </Animated.View>
                                                             </TouchableOpacity>
+                                                            <Animation
+                                                                ref={animation => { this.closeNeighborHeart = animation; }}
+                                                                style={{
+                                                                    transform: [{rotate: '-21deg'}],
+                                                                    position: 'absolute',
+                                                                    top: width * 0.28,
+                                                                    right: -27,
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                }}
+                                                                source={require('../../Assets/lottie/like.json')}
+                                                            />
                                                         </View>
                                                         <View style={[styles.titleView, {flex: 1}]}>
                                                             <Text style={styles.titleText}>Elon Musk</Text>
@@ -275,7 +413,7 @@ class NeighborhoodDetected extends React.Component {
                                                                 California</Text>
                                                             <Text style={styles.miniText}>Created: 10 minutes ago</Text>
                                                         </View>
-                                                        <View style={{ flex: 0, height: width * 0.25}}/>
+                                                        <View style={{flex: 0, height: width * 0.27}}/>
 
 
                                                     </View>
@@ -324,20 +462,47 @@ class NeighborhoodDetected extends React.Component {
                                                                 height: 20,
                                                                 width: 1
                                                             },
-                                                            borderRadius: width * 0.5,
-                                                            backgroundColor: '#b0d9ea'
+                                                            borderRadius: width * 0.48,
+                                                            backgroundColor: '#acd4e5'
                                                         }}
                                                     >
                                                         <View style={{flex: 0, height: width * 0.5, marginBottom: 40}}>
-                                                            <TouchableOpacity style={styles.userOpacity}>
+                                                            <TouchableOpacity style={styles.neighborOpacity}>
                                                                 <Animatable.Image
                                                                     style={styles.userPhoto}
                                                                     source={require('../../../app/Assets/images/whitney_wolf.jpg')}/>
                                                             </TouchableOpacity>
 
-                                                            <TouchableOpacity style={styles.hello}>
-                                                                <Icon name="md-hand" size={20}/>
+                                                            <TouchableOpacity
+                                                                onPress={() => this.sayHello(2)}
+                                                                style={styles.hello}
+                                                                disabled={this.state.farNeighborGreeted}>
+
+                                                                <Animated.View>
+                                                                    <Animated.View
+                                                                        style={{
+                                                                            left: this.state.translate,
+                                                                            transform: [{rotate: spin}]
+
+                                                                        }}>
+                                                                        {this.state.farNeighborGreeted ?
+                                                                            <Text>+50</Text> :
+                                                                            <Icon name="md-hand" size={20}/>}
+                                                                    </Animated.View>
+                                                                </Animated.View>
                                                             </TouchableOpacity>
+                                                            <Animation
+                                                                ref={animation => { this.farNeighborHeart = animation; }}
+                                                                style={{
+                                                                    transform: [{rotate: '-21deg'}],
+                                                                    position: 'absolute',
+                                                                    top: width * 0.28,
+                                                                    right: -27,
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                }}
+                                                                source={require('../../Assets/lottie/like.json')}
+                                                            />
                                                         </View>
                                                         <View style={[styles.titleView, {flex: 1}]}>
                                                             <Text style={styles.titleText}>Whitney Wolf</Text>
@@ -346,7 +511,7 @@ class NeighborhoodDetected extends React.Component {
                                                                 California</Text>
                                                             <Text style={styles.miniText}>Created: 20 minutes ago</Text>
                                                         </View>
-                                                        <View style={{ flex: 0, height: width * 0.25}}/>
+                                                        <View style={{flex: 0, height: width * 0.27}}/>
 
 
                                                     </View>
@@ -439,6 +604,16 @@ const styles = StyleSheet.create({
         borderRadius: width * 0.5,
         backgroundColor: '#b0d9ea',
     },
+    neighborOpacity: {
+        flex: 0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        height: width * 0.5,
+        width: width * 0.5,
+        borderRadius: width * 0.5,
+        backgroundColor: '#acd4e5',
+    },
     userPhoto: {
         height: width * 0.4,
         width: width * 0.4,
@@ -453,7 +628,7 @@ const styles = StyleSheet.create({
         height: width * 0.3,
         width: width * 0.3,
         borderRadius: width * 0.3,
-        backgroundColor: '#b6e0f1',
+        backgroundColor: '#b6e0f1'
     },
     closeNeighborPhoto: {
         height: width * 0.25,
@@ -468,7 +643,8 @@ const styles = StyleSheet.create({
         height: width * 0.18,
         width: width * 0.18,
         borderRadius: width * 0.18,
-        backgroundColor: '#c3eeff',
+        backgroundColor: '#b6e0f1'
+
     },
     farNeighborPhoto: {
         width: width * 0.15,
