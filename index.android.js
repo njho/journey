@@ -17,19 +17,20 @@ import { registerScreens } from './screens';
 
 import Login from './app/Components/Login/';
 import QuotePage from './app/Components/QuotePage';
+import LocationCommunity from './app/Components/Community/LocationCommunity';
 
 bootstrap();
 registerScreens(store, Provider);
 
 Navigation.startTabBasedApp({
     tabs: [
-   /*     {
+        {
             label: 'One',
             screen: 'login', // this is a registered name for a screen
              icon: require('./app/Assets/icons/visaIcon.png'),
-            /!*
+            /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
-             *!/
+             */
             title: 'Screen One',
             tabBarHidden: true
         },
@@ -37,13 +38,13 @@ Navigation.startTabBasedApp({
             label: 'two',
             screen: 'neighborhoodDetected', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
-            /!*
+            /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
-             *!/
+             */
             title: 'neighborhood Detected',
             tabBarHidden: true,
             overrideBackPress: true
-        },*/
+        },
         {
             label: 'two',
             screen: 'neighbors', // this is a registered name for a screen
@@ -52,6 +53,18 @@ Navigation.startTabBasedApp({
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
             title: 'neighborhood Detected',
+            tabBarHidden: true,
+            overrideBackPress: true
+        },
+
+        {
+            label: 'three',
+            screen: 'locationCommunity', // this is a registered name for a screen
+            icon: require('./app/Assets/icons/visaIcon.png'),
+            /*
+             selectedIcon: require('../img/one_selected.png'), // iOS only
+             */
+            title: 'location',
             tabBarHidden: true,
             overrideBackPress: true
         },

@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-maps')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-vector-icons')
     compile(project(':react-native-firebase')) {
@@ -148,7 +149,13 @@ dependencies {
 //    All for react-native-firebase
     // RNFirebase required dependencies
     compile "com.google.firebase:firebase-core:11.4.2"
-    compile "com.google.android.gms:play-services-base:11.4.2"
+    compile(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+    compile 'com.google.android.gms:play-services-base:11.4.2'
+    compile 'com.google.android.gms:play-services-maps:11.4.2'
+
 
     // RNFirebase optional dependencies
     compile "com.google.firebase:firebase-ads:11.4.2"

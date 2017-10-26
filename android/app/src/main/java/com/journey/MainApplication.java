@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -53,6 +54,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new MapsPackage(),
             new LinearGradientPackage(),
             new VectorIconsPackage(),
             new LinearGradientPackage(),
@@ -101,7 +103,9 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             new RNFirebaseDatabasePackage(),
             new RNFirebaseFirestorePackage(),
             new RNFirebaseMessagingPackage(),
-            new RNFirebaseStoragePackage()
+            new RNFirebaseStoragePackage(),
+            new MapsPackage()
+
     );
   }
 

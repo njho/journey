@@ -20,7 +20,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import Animation from 'lottie-react-native';
 
 
-
 import Icon from 'react-native-vector-icons/Ionicons';
 import Interactable from 'react-native-interactable';
 import {scale, scaleModerate, scaleVertical} from '../../Utils/scale.js';
@@ -87,6 +86,9 @@ class NeighborhoodDetected extends React.Component {
 
     next() {
         if (this.state.slide === 5) {
+            this.props.navigator.push({
+                screen: 'locationCommunity'
+            })
         } else {
             this.setState({
                 ...this.state,
@@ -168,6 +170,7 @@ class NeighborhoodDetected extends React.Component {
                     {
                         toValue: -3,
                         duration: 250,
+
                     }
                 ),
                 Animated.timing(
@@ -240,7 +243,8 @@ class NeighborhoodDetected extends React.Component {
                             iterationCount="infinite"
                             duration={1500}
                             delay={200}
-                            direction="alternate">
+                            direction="alternate"
+                            useNativeDriver={true}>
                             <Animatable.View ref="closeNeighbor">
 
                                 <TouchableOpacity style={[styles.closeNeighborOpacity,]}
@@ -259,7 +263,8 @@ class NeighborhoodDetected extends React.Component {
                             iterationCount="infinite"
                             duration={1500}
                             delay={400}
-                            direction="alternate">
+                            direction="alternate"
+                            useNativeDriver={true}>
                             <Animatable.View
                                 ref="farNeighbor">
                                 <TouchableOpacity
@@ -313,7 +318,9 @@ class NeighborhoodDetected extends React.Component {
                                             }}
                                             animation={SLIDE_IN_DOWN_KEYFRAMES}
                                             iterationCount="infinite"
-                                            direction="alternate">
+                                            direction="alternate"
+                                            useNativeDriver={true}>
+
                                             <TouchableOpacity style={styles.userOpacity}>
                                                 <Animatable.Image
                                                     style={styles.userPhoto}
@@ -348,8 +355,10 @@ class NeighborhoodDetected extends React.Component {
                                             duration={1500}
                                             animation={SLIDE_IN_DOWN_KEYFRAMES}
                                             iterationCount="infinite"
-                                            direction="alternate">
-                                            <View style={{
+                                            direction="alternate"
+                                            useNativeDriver={true}>
+
+                                        <View style={{
                                                 flex: 1,
                                                 flexDirection: 'row',
                                                 width: width,
@@ -383,7 +392,7 @@ class NeighborhoodDetected extends React.Component {
 
                                                             <TouchableOpacity onPress={() => this.sayHello(1)}
                                                                               style={styles.hello}
-                                                            disabled={this.state.closeNeighborGreeted}>
+                                                                              disabled={this.state.closeNeighborGreeted}>
                                                                 <Animated.View style={{
                                                                     left: this.state.translate,
                                                                     transform: [{rotate: spin}]
@@ -394,7 +403,9 @@ class NeighborhoodDetected extends React.Component {
                                                                 </Animated.View>
                                                             </TouchableOpacity>
                                                             <Animation
-                                                                ref={animation => { this.closeNeighborHeart = animation; }}
+                                                                ref={animation => {
+                                                                    this.closeNeighborHeart = animation;
+                                                                }}
                                                                 style={{
                                                                     transform: [{rotate: '-21deg'}],
                                                                     position: 'absolute',
@@ -440,7 +451,9 @@ class NeighborhoodDetected extends React.Component {
                                             duration={1500}
                                             animation={SLIDE_IN_DOWN_KEYFRAMES}
                                             iterationCount="infinite"
-                                            direction="alternate">
+                                            direction="alternate"
+                                            useNativeDriver={true}>
+
                                             <View style={{
                                                 flex: 1,
                                                 flexDirection: 'row',
@@ -492,7 +505,9 @@ class NeighborhoodDetected extends React.Component {
                                                                 </Animated.View>
                                                             </TouchableOpacity>
                                                             <Animation
-                                                                ref={animation => { this.farNeighborHeart = animation; }}
+                                                                ref={animation => {
+                                                                    this.farNeighborHeart = animation;
+                                                                }}
                                                                 style={{
                                                                     transform: [{rotate: '-21deg'}],
                                                                     position: 'absolute',

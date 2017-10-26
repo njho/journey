@@ -380,9 +380,7 @@ const styles = StyleSheet.create({
     textRow: {
         flexDirection: 'row',
         justifyContent: 'center'
-    },
-    footer: {},
-    marker: {},
+    }
 });
 
 // You can then use your `FadeInView` in place of a `View` in your components:

@@ -4640,6 +4640,10 @@ react-native-linear-gradient@^2.3.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-maps@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.17.1.tgz#ab2236341fd984dac8864202ae55331bc262f60c"
+
 react-native-navigation@^1.1.231:
   version "1.1.231"
   resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.231.tgz#2a8b269444a3ccde6280eb59d49ed680a8b070d4"

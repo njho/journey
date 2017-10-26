@@ -136,6 +136,12 @@ class NeighborhoodDetected extends React.Component {
         ]).start();
     }
 
+    next() {
+        this.props.navigator.resetTo({
+            screen: 'neighbors'
+        })
+    }
+
 
     render() {
         let {fadeAnim, buttonPositions, welcomeAnim, toAnim, journeyAnim} = this.state;
@@ -174,7 +180,7 @@ class NeighborhoodDetected extends React.Component {
                                                   &emsp;San Francisco Dev Con</Text>
                                         </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{marginVertical: 5}}>
+                                <TouchableOpacity style={{marginVertical: 5}} onPress={()=>this.next()}>
                                     <View style={styles.locationBackground}>
                                     </View>
                                     <View style={styles.locationView}>
@@ -185,7 +191,7 @@ class NeighborhoodDetected extends React.Component {
 
                             </ScrollView>
                         </View>
-                    <View style={styles.footer}>
+                    <View style={styles.footer} onPress={()=>this.next()}>
                         <Text style={styles.miniText}>I'll do this later</Text>
                     </View>
 
