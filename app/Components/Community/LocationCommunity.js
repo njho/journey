@@ -19,11 +19,10 @@ import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Animation from 'lottie-react-native';
-
 import MapView from 'react-native-maps';
+
+
 import PriceMarker from '../helpers/PriceMarkers'
-
-
 import Icon from 'react-native-vector-icons/Ionicons';
 import Interactable from 'react-native-interactable';
 import {scale, scaleModerate, scaleVertical} from '../../Utils/scale.js';
@@ -31,6 +30,7 @@ import FadeInView from "../helpers/FadeInView";
 
 
 import agent from '../helpers/agent.js';
+import {daytimeMap, nighttimeMap} from "../helpers/constants";
 import wrapWords from '../helpers/quoteParser';
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -72,6 +72,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
+
 class LocationCommunity extends React.Component {
     static navigatorStyle = {
         tabBarHidden: true,
@@ -98,7 +99,8 @@ class LocationCommunity extends React.Component {
                 longitudeDelta: LONGITUDE_DELTA,
             },
             formStatus: 0,
-            farthestBeen: 0
+            farthestBeen: 0,
+            radius: 300
 
         };
     }
@@ -323,25 +325,8 @@ class LocationCommunity extends React.Component {
         return (
             <View style={styles.container}>
                 <LinearGradient colors={['#F3766F', '#F3766F']} style={{flex: 1, alignItems: 'center', width: '100%'}}>
-                    {
-                        this.state.formStatus === 5 ?
-                            <MapView
-                                style={{width: width, height: height, position: 'absolute', bottom: 0 }}
-                                initialRegion={this.state.region}>
-                                <MapView.Circle
-                                    center={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
-                                    radius={500}
-                                    fillColor="rgba(225, 26, 239, 0.6)"
-                                    strokeColor="rgba(0,0,0,0)"
-                                    zIndex={2}
-                                    strokeWidth={2}/>
-                                <MapView.Marker coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}>
-                                    <PriceMarker amount={this.state.description} />
-                                </MapView.Marker>
 
-                            </MapView> : null
-                    }
-                    {this.state.formStatus === 5 ? null :
+
                     <View style={styles.section1}>
 
                         <Animation
@@ -365,13 +350,15 @@ class LocationCommunity extends React.Component {
                             alignItems: 'center',
                         }}>
 
+
                             {this.state.formStatus >= 3 ?
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setFormStatus(2, this.state.farthestBeen)}>
                                     <View style={styles.communityView}>
                                         <Animatable.Text
                                             animation="slideInUp"
-                                            style={[styles.communityText]}>{this.state.community}
+                                            style={[styles.communityText]}
+                                            useNativeDriver={true}>{this.state.community}
                                         </Animatable.Text>
                                     </View>
 
@@ -480,6 +467,7 @@ class LocationCommunity extends React.Component {
                                             onSubmitEditing={() => this.setFormStatus(5, this.state.farthestBeen)}
                                             multiline={true}
                                             numberOfLines={3}
+                                            autoCapitalize="sentences"
                                             onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
                                         />
                                         : null}
@@ -491,11 +479,21 @@ class LocationCommunity extends React.Component {
                         </TouchableOpacity>
 
 
-                    </View>}
+                    </View>
                     <View style={styles.section2}>
+                        {
+                            this.state.formStatus === 5 ?
+                                <MapView
+                                    style={{width: width, height: height, position: 'absolute', bottom: 0}}
+                                    initialRegion={this.state.region}
+                                    customMapStyle={daytimeMap}
+                                >
+
+
+                                </MapView> : null
+                        }
 
                     </View>
-
 
 
                 </LinearGradient>
