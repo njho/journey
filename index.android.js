@@ -34,17 +34,7 @@ Navigation.startTabBasedApp({
         //     title: 'Screen One',
         //     tabBarHidden: true
         // },
-        // {
-        //     label: 'two',
-        //     screen: 'neighborhoodDetected', // this is a registered name for a screen
-        //     icon: require('./app/Assets/icons/visaIcon.png'),
-        //     /*
-        //      selectedIcon: require('../img/one_selected.png'), // iOS only
-        //      */
-        //     title: 'neighborhood Detected',
-        //     tabBarHidden: true,
-        //     overrideBackPress: true
-        // },
+
         // {
         //     label: 'two',
         //     screen: 'neighbors', // this is a registered name for a screen
@@ -68,6 +58,17 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: true,
         //     overrideBackPress: true
         // },
+        {
+            label: 'two',
+            screen: 'neighborhoodDetected', // this is a registered name for a screen
+            icon: require('./app/Assets/icons/visaIcon.png'),
+            /*
+             selectedIcon: require('../img/one_selected.png'), // iOS only
+             */
+            title: 'neighborhood Detected',
+            tabBarHidden: true,
+            overrideBackPress: true
+        },
 
         {
             label: 'four',
@@ -80,7 +81,9 @@ Navigation.startTabBasedApp({
             tabBarHidden: true,
             overrideBackPress: true
         },
+
     ]
+
 });
 /*
 export default class Journey extends Component {

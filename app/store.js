@@ -3,10 +3,14 @@ import thunk from 'redux-thunk';
 
 import common from './Reducers/common.js';
 import auth from './Reducers/auth.js';
+import communityReducer from './Reducers/communityReducer';
+import locationReducer from './Reducers/locationReducer';
 
 const reducer = combineReducers({
     common,
-    auth
+    auth,
+    communityReducer,
+    locationReducer
 });
 
 const middleware = applyMiddleware(thunk);

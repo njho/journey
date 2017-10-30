@@ -38,37 +38,34 @@ const heightFactor = (Dimensions.get('window').height - 75) / 667;
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-const SLIDE_IN_DOWN_KEYFRAMES = {
-    from: {translateY: -10},
-    to: {translateY: 0}
-};
 
-const SLIDE_IN_DOWN_KEYFRAMES_2 = {
-    from: {translateY: -5},
-    to: {translateY: 0},
-};
-
-const SLIDE_IN_DOWN_KEYFRAMES_3 = {
-    from: {translateY: -10},
-    to: {translateY: 0},
-
-};
-
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = 0.0421;
+const LATITUDE_DELTA = 0.0062;
+const LONGITUDE_DELTA = 0.0021;
 
 
 const mapStateToProps = state => ({
-    redirectTo: state.common.redirectTo,
-    quoteMeta: state.auth.quoteMeta
+    communityName: state.communityReducer.communityName,
+    description: state.communityReducer.description,
+    farthestBeen: state.communityReducer.farthestBeen,
+    formStatus: state.communityReducer.formStatus
+
 });
 
 const mapDispatchToProps = dispatch => ({
-    onRedirect: () => {
-        dispatch({type: 'REDIRECT'});
+    setCommunityName: (value) => {
+        dispatch({type: 'SET_COMMUNITY_NAME', value: value});
     },
-    fetchQuote: () => {
-        dispatch(agent.FirebaseQuery.fetchQuote());
+    setDescription: (value) => {
+        dispatch({type: 'SET_DESCRIPTION', value: value});
+    },
+    setFarthestBeen: (value) => {
+        dispatch({type: 'SET_FARTHEST_BEEN', value: value})
+    },
+    setFormStatus: (value) => {
+        dispatch({type: 'SET_FORM_STATUS', value: value})
+    },
+    setRegion: (value) => {
+        dispatch({type: 'SET_REGION', value: value})
     }
 });
 
@@ -81,6 +78,33 @@ class LocationCommunity extends React.Component {
 
     constructor(props) {
         super(props);
+
+        let indicatorPositionCalc = () => {
+            let textEntryWidth = 0;
+            let textEntryHeight = 0;
+            let textEntryRadius = 0;
+            switch (props.formStatus) {
+                case 2:
+                    textEntryWidth = width * 0.75;
+                    textEntryHeight = 40;
+                    textEntryRadius = 10;
+
+                    break;
+                case 4:
+                    textEntryWidth = width * 0.8;
+                    textEntryHeight = 80;
+                    textEntryRadius = 10;
+
+                    break;
+                default:
+                    textEntryWidth = 30;
+                    textEntryHeight = 30;
+                    textEntryRadius = 30;
+            }
+            return {textEntryHeight, textEntryWidth, textEntryRadius};
+
+        }
+
         this.state = {
             latitude: null,
             longitude: null,
@@ -88,17 +112,17 @@ class LocationCommunity extends React.Component {
             community: '',
             description: '',
             playing: false,
-            loop: true,
-            textEntryWidth: new Animated.Value(30),
-            textEntryHeight: new Animated.Value(30),
-            textEntryRadius: new Animated.Value(30),
+            loop: props.formStatus === 0,
+            textEntryWidth: new Animated.Value(indicatorPositionCalc().textEntryWidth),
+            textEntryHeight: new Animated.Value(indicatorPositionCalc().textEntryHeight),
+            textEntryRadius: new Animated.Value(indicatorPositionCalc().textEntryRadius),
             region: {
                 latitude: 37.78875,
                 longitude: -122.4324,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
-            formStatus: 0,
+            formStatus: props.formStatus,
             farthestBeen: 0,
             radius: 300
 
@@ -108,20 +132,20 @@ class LocationCommunity extends React.Component {
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                this.setState({
-                    ...this.state,
-                    region: {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        latitudeDelta: LATITUDE_DELTA,
-                        longitudeDelta: LONGITUDE_DELTA
-                    }
-                });
+                this.props.setRegion({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                })
             },
             (error) => this.setState({error: error.message}),
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
-        this.ripple.play();
+        if (this.props.formStatus === 0) {
+            this.ripple.play();
+        } else {
+        }
 
 
     }
@@ -140,8 +164,6 @@ class LocationCommunity extends React.Component {
         } else {
             farthestBeen = value;
         }
-
-        console.log(value, farthestBeen);
 
         switch (value) {
             case 1: {
@@ -289,24 +311,23 @@ class LocationCommunity extends React.Component {
                             toValue: 0,
                             duration: 250,
                         }
-                    )]).start()
+                    )]).start(
+                    () => {
+                        this.props.navigator.resetTo({
+                            screen: 'locationConfirmation'
+                        })
+                    })
         }
     }
 
     textHandler(value, text) {
         switch (value) {
             case 2:
-                this.setState({
-                    ...this.state,
-                    community: text
-                })
+                this.props.setCommunityName(text);
                 break;
 
             case 4:
-                this.setState({
-                    ...this.state,
-                    description: text
-                });
+                this.props.setDescription(text);
                 break;
         }
     }
@@ -355,11 +376,10 @@ class LocationCommunity extends React.Component {
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setFormStatus(2, this.state.farthestBeen)}>
                                     <View style={styles.communityView}>
-                                        <Animatable.Text
-                                            animation="slideInUp"
+                                        <Text
                                             style={[styles.communityText]}
-                                            useNativeDriver={true}>{this.state.community}
-                                        </Animatable.Text>
+                                            useNativeDriver={true}>{this.props.communityName}
+                                        </Text>
                                     </View>
 
                                 </TouchableWithoutFeedback>
@@ -367,10 +387,9 @@ class LocationCommunity extends React.Component {
                             {this.state.formStatus >= 5 ?
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setFormStatus(4, this.state.farthestBeen)}>
-                                    <Animatable.Text
-                                        animation="slideInUp"
-                                        style={[styles.descriptionText]}>{this.state.description}
-                                    </Animatable.Text>
+                                    <Text
+                                        style={[styles.descriptionText]}>{this.props.description}
+                                    </Text>
                                 </TouchableWithoutFeedback>
                                 : null}
                         </View>
@@ -417,7 +436,7 @@ class LocationCommunity extends React.Component {
                                             }}
                                             autoCapitalize="words"
                                             onChangeText={(text) => this.textHandler(2, text)}
-                                            value={this.state.community}
+                                            value={this.props.communityName}
                                             underlineColorAndroid='transparent'
                                             autoFocus={true}
                                             onSubmitEditing={() => this.setFormStatus(3, this.state.farthestBeen)}
@@ -461,7 +480,7 @@ class LocationCommunity extends React.Component {
                                                 color: '#F3766F',
                                             }}
                                             onChangeText={(text) => this.textHandler(4, text)}
-                                            value={this.state.description}
+                                            value={this.props.description}
                                             underlineColorAndroid='transparent'
                                             autoFocus={true}
                                             onSubmitEditing={() => this.setFormStatus(5, this.state.farthestBeen)}
@@ -481,17 +500,6 @@ class LocationCommunity extends React.Component {
 
                     </View>
                     <View style={styles.section2}>
-                        {
-                            this.state.formStatus === 5 ?
-                                <MapView
-                                    style={{width: width, height: height, position: 'absolute', bottom: 0}}
-                                    initialRegion={this.state.region}
-                                    customMapStyle={daytimeMap}
-                                >
-
-
-                                </MapView> : null
-                        }
 
                     </View>
 
@@ -555,6 +563,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
     },
     descriptionText: {
+        textAlign: 'center',
         marginHorizontal: 30,
         color: 'white',
         fontFamily: 'Roboto',

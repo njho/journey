@@ -2189,6 +2189,10 @@ genfun@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/genfun/-/genfun-4.0.1.tgz#ed10041f2e4a7f1b0a38466d17a5c3e27df1dfc1"
 
+geofire@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/geofire/-/geofire-4.1.2.tgz#031632e757605e9b885bd6e8febaef7a0e85869f"
+
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"

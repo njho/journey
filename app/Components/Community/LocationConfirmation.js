@@ -31,38 +31,41 @@ const heightFactor = (Dimensions.get('window').height - 75) / 667;
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-const SLIDE_IN_DOWN_KEYFRAMES = {
-    from: {translateY: -10},
-    to: {translateY: 0}
-};
 
-const SLIDE_IN_DOWN_KEYFRAMES_2 = {
-    from: {translateY: -5},
-    to: {translateY: 0},
-};
-
-const SLIDE_IN_DOWN_KEYFRAMES_3 = {
-    from: {translateY: -10},
-    to: {translateY: 0},
-
-};
-
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = 0.0421;
+const LATITUDE_DELTA = 0.0062;
+const LONGITUDE_DELTA = 0.0021;
 
 
 const mapStateToProps = state => ({
-    redirectTo: state.common.redirectTo,
-    quoteMeta: state.auth.quoteMeta
+    locationMeta: state.communityReducer,
+    isRadiusInput: state.communityReducer.isRadiusInput,
+    duration: state.communityReducer.duration,
+    radius: state.communityReducer.radius,
+    communityName: state.communityReducer.communityName,
+    description: state.communityReducer.description,
+    region: state.communityReducer.region,
 });
 
 const mapDispatchToProps = dispatch => ({
-    onRedirect: () => {
-        dispatch({type: 'REDIRECT'});
+    timeToggle: (value) => {
+        dispatch({type: 'TIME_TOGGLE', isTimeInput: value});
     },
-    fetchQuote: () => {
-        dispatch(agent.FirebaseQuery.fetchQuote());
+    radiusToggle: (value) => {
+        dispatch({type: 'RADIUS_TOGGLE', isRadiusInput: value});
+    },
+    setRadius: (value) => {
+        dispatch({type: 'SET_RADIUS', radius: value});
+    },
+    setRegion: (value) => {
+        dispatch({type: 'SET_REGION', value: value})
+    },
+    setFormStatus: (value) => {
+        dispatch({type: 'SET_FORM_STATUS', value: value})
+    },
+    confirmCommunity: (value) => {
+        agent.locationService.addCommunity(value);
     }
+
 });
 
 
@@ -78,8 +81,7 @@ class LocationCommunity extends React.Component {
             latitude: null,
             longitude: null,
             error: null,
-            community: 'Yoga',
-            description: "Yogi's come join us here to celebrate our wonderful body",
+
             region: {
                 latitude: 37.78875,
                 longitude: -122.4324,
@@ -88,24 +90,23 @@ class LocationCommunity extends React.Component {
             },
             isRadiusInput: false,
             isTimeInput: false,
-            radius: 300,
-            expiryTime: '1D'
-        };
+            radius: 70,
+            expiryTime: '1D',
+            indicatorPosition:  new Animated.Value(0)
+
+    };
 
     }
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                this.setState({
-                    ...this.state,
-                    region: {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        latitudeDelta: LATITUDE_DELTA,
-                        longitudeDelta: LONGITUDE_DELTA
-                    }
-                });
+                this.props.setRegion({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                })
             },
             (error) => this.setState({error: error.message}),
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
@@ -113,63 +114,93 @@ class LocationCommunity extends React.Component {
 
     }
 
-    updateSize = (height) => {
-        this.setState({
-            height
-        });
-    }
     radiusToggle = (isRadiusInput) => {
+        console.log(isRadiusInput);
         if (isRadiusInput) {
             this.scrollView.scrollTo({x: 0, y: 0, animated: true});
-            this.setState({
-                ...this.state,
-                isRadiusInput: false
-            })
+            this.props.radiusToggle(false);
+            this.props.timeToggle(false);
         } else {
             this.scrollView.scrollTo({x: width, y: 0, animated: true});
-            this.setState({
-                ...this.state,
-                isRadiusInput: true
-            })
+            this.props.radiusToggle(true);
+            this.props.timeToggle(false);
         }
     }
 
     timeToggle = (isTimeInput) => {
         if (isTimeInput) {
-            this.setState({
-                ...this.state,
-                isTimeInput: false
-            })
+            this.props.timeToggle(false);
         } else {
-            this.setState({
-                ...this.state,
-                isTimeInput: true
-            })
+            this.props.timeToggle(true);
         }
     }
 
+    getCurrentPosition = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                this.props.setRegion({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                })
+            },
+            (error) => this.setState({error: error.message}),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+        );
+    }
+
+    editInformation = (value) => {
+        this.props.setFormStatus(value);
+        this.props.navigator.resetTo({
+            screen: 'locationCommunity'
+        })
+    }
+
+    confirmCommunity = () => {
+
+        Animated.timing(
+            this.state.indicatorPosition,
+            {
+                toValue: 100,
+                duration: 250,
+            }
+        ).start();
+        // this.props.confirmCommunity(this.props.locationMeta);
+        // this.props.navigator.resetTo({
+        //     screen: 'neighborhoodDetected'
+        // })
+    }
 
     render() {
-        console.log(this.state.formStatus);
-
-
         return (
             <View style={styles.container}>
                 <View style={styles.section1}>
                     <View style={styles.subsection1}>
-
-                        <View style={{alignItems: 'center'}}>
+                        <Animated.View style={[{alignItems: 'center'},{transform: [
+                            {
+                                translateX: this.state.indicatorPosition
+                            }
+                        ]}]}>
                             <TouchableOpacity style={styles.photoOpacity}>
                                 <Image
-                                    style={styles.photo}
+                                    style={[styles.photo, ]}
                                     source={require('../../../app/Assets/images/yoga-teal-on-lake.jpg')}/>
                             </TouchableOpacity>
-                            <Text style={styles.communityText}>{this.state.community}</Text>
-                            <Text style={styles.descriptionText}>{this.state.description}</Text>
-                        </View>
+                            <TouchableWithoutFeedback onPress={() => this.editInformation(2)}>
+                                <View>
+                                    <Text style={styles.communityText}>{this.props.communityName}</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                            <TouchableWithoutFeedback onPress={() => this.editInformation(4)}>
+                                <View>
+                                    <Text style={styles.descriptionText}>{this.props.description}</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </Animated.View>
                     </View>
 
-                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <View style={{display: 'flex', position: 'absolute', bottom: 0, flexDirection: 'row'}}>
                         <ScrollView
                             horizontal={true}
                             pagingEnabled={true}
@@ -183,28 +214,29 @@ class LocationCommunity extends React.Component {
                         >
 
                             <View style={{width: width, justifyContent: 'center', flexDirection: 'row'}}>
-                                {!this.state.isTimeInput ?
-
+                                {this.props.locationMeta.isTimeInput ?
                                     <TimePicker></TimePicker>
                                     :
 
                                     <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                                        <TouchableOpacity style={{
-                                            borderColor: '#F0FFFF',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            width: 100,
+                                        <TouchableOpacity
+                                            onPress={() => this.confirmCommunity()}
+                                            style={{
+                                                borderColor: '#F0FFFF',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: 100,
 
-                                            borderBottomLeftRadius: 100,
-                                            borderTopLeftRadius: 100,
-                                            borderWidth: 2,
-                                            zIndex: 11,
-                                            marginVertical: 30
-                                        }}>
+                                                borderBottomLeftRadius: 100,
+                                                borderTopLeftRadius: 100,
+                                                borderWidth: 2,
+                                                zIndex: 11,
+                                                marginVertical: 30
+                                            }}>
                                             <Text style={{color: '#F0FFFF'}}>Confirm</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            onPress={() => this.timeToggle(this.state.isTimeInput)}
+                                            onPress={() => this.timeToggle(this.props.isTimeInput)}
                                             style={{
                                                 borderColor: '#F0FFFF',
                                                 backgroundColor: '#f0FFFF',
@@ -218,21 +250,32 @@ class LocationCommunity extends React.Component {
                                                 zIndex: 11,
                                                 marginVertical: 30
                                             }}>
-                                            <Text>{this.state.expiryTime}</Text>
+                                            <Text>{this.props.duration}</Text>
                                         </TouchableOpacity>
                                     </View>}
                             </View>
-                            <View style={{width: width, alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-                                <Text style={{color: '#F0FFFF'}}>20 m </Text>
-                                <Slider
-                                    style={{width: width * 0.6}}
-                                    maximumValue={500}
-                                    minimumValue={20}
-                                    step={10}
-                                    value={this.state.radius}
-                                    onValueChange={(value) => this.setState({...this.state, radius: value})}
-                                />
-                                <Text style={{color: '#F0FFFF'}}>{this.state.radius} m </Text>
+                            <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                                <Text style={{color: '#F0FFFF'}}> Set Activation Radius</Text>
+                                <View style={{
+                                    width: width,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'row'
+                                }}>
+                                    <TouchableOpacity style={{flexDirection: 'row', marginRight: 10}}
+                                                      onPress={() => this.radiusToggle(this.props.isRadiusInput)}>
+                                        <Icon name="ios-checkmark" size={40} color="#F0FFFF"/>
+                                    </TouchableOpacity>
+                                    <Slider
+                                        style={{width: width * 0.6}}
+                                        maximumValue={500}
+                                        minimumValue={20}
+                                        step={10}
+                                        value={this.props.radius}
+                                        onValueChange={(value) => this.props.setRadius(value)}
+                                    />
+                                    <Text style={{color: '#F0FFFF'}}>{this.state.radius} m </Text>
+                                </View>
                             </View>
                         </ScrollView>
                     </View>
@@ -241,37 +284,45 @@ class LocationCommunity extends React.Component {
                 <View style={styles.section2}>
                     <MapView
                         style={{flex: 1, bottom: 0}}
-                        initialRegion={this.state.region}
-                        customMapStyle={nighttimeMap}>
+                        initialRegion={this.props.region}
+                        region={this.props.region}
+                        customMapStyle={nighttimeMap}
+                    >
                         <MapView.Circle
                             center={{
-                                latitude: 37.78875,
-                                longitude: -122.4324,
+                                latitude: this.props.region.latitude,
+                                longitude: this.props.region.longitude
                             }}
-                            radius={this.state.radius}
+                            radius={this.props.radius}
                             fillColor="rgba(255, 109, 105, 0.6)"
                             zIndex={2}
                         />
                     </MapView>
-                    <TouchableOpacity
-                        style={{
-                            position: 'absolute',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginHorizontal: 15,
-                            marginBottom: 15,
-                            left: 0,
-                            bottom: 0
-                        }}
-                        onPress={() => this.radiusToggle(this.state.isRadiusInput)
-                        }>
-                        <Icon name="ios-disc" size={30} color="#F0FFFF"/><Text
-                        style={{color: "#F0FFFF"}}> {this.state.isRadiusInput ? 'Back' : 'Radius'}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{position: 'absolute', marginHorizontal: 15, marginBottom: 15, right: 0, bottom: 0}}>
-                        <Icon name="ios-locate-outline" size={30} color="#F0FFFF"/>
-                    </TouchableOpacity>
+                    <View style={{position: 'absolute', flexDirection: 'column', bottom: 0, right: 0}}>
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginHorizontal: 15,
+                                marginBottom: 15,
+                                left: 0,
+                                bottom: 0
+                            }}
+                            onPress={() => this.radiusToggle(this.props.isRadiusInput)
+                            }>
+                            <Text
+                                style={{color: "#F0FFFF"}}> {this.props.isRadiusInput ? 'Back ' : 'Radius'} </Text>
+
+                            <Icon name="ios-disc" size={30} color="#F0FFFF"/>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{alignSelf: 'flex-end', marginHorizontal: 15, marginBottom: 15}}
+                            onPress={() => this.getCurrentPosition()}
+
+                        >
+                            <Icon name="ios-locate-outline" size={30} color="#F0FFFF"/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
@@ -290,7 +341,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         flex: 4,
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-start'
     },
     section2: {
         display: 'flex',
@@ -303,7 +354,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'flex-start'
     },
     textInput: {
         flex: 1,

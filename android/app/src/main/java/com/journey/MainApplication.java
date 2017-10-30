@@ -36,9 +36,9 @@ import com.reactnativenavigation.NavigationApplication;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends NavigationApplication /*implements ReactApplication */{
+public class MainApplication extends NavigationApplication /*implements ReactApplication */ {
 
-  private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
+    private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
 /*  protected static CallbackManager getCallbackManager() {
     return mCallbackManager;
@@ -81,38 +81,39 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     SoLoader.init(this, *//* native exopackage *//* false);
   }*/
 
-  @Override
-  public boolean isDebug() {
-    // Make sure you are using BuildConfig from your own application
-    return BuildConfig.DEBUG;
-  }
+    @Override
+    public boolean isDebug() {
+        // Make sure you are using BuildConfig from your own application
+        return BuildConfig.DEBUG;
+    }
 
-  protected List<ReactPackage> getPackages() {
-    // Add additional packages you require here
-    // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(
+    protected List<ReactPackage> getPackages() {
+        // Add additional packages you require here
+        // No need to add RnnPackage and MainReactPackage
+        return Arrays.<ReactPackage>asList(
 /*
             new MainReactPackage(),
 */
-            new LottiePackage(),
-            new FBSDKPackage(mCallbackManager),
-            new LinearGradientPackage(),
-    new Interactable(), // Add this line
-            // Add these packages as appropriate
-            new RNFirebaseAuthPackage(),
-            new RNFirebaseDatabasePackage(),
-            new RNFirebaseFirestorePackage(),
-            new RNFirebaseMessagingPackage(),
-            new RNFirebaseStoragePackage(),
-            new MapsPackage()
+                new LottiePackage(),
+                new FBSDKPackage(mCallbackManager),
+                new LinearGradientPackage(),
+                new Interactable(), // Add this line
+                // Add these packages as appropriate
+                new RNFirebasePackage(),
+                new RNFirebaseAuthPackage(),
+                new RNFirebaseDatabasePackage(),
+                new RNFirebaseFirestorePackage(),
+                new RNFirebaseMessagingPackage(),
+                new RNFirebaseStoragePackage(),
+                new MapsPackage()
 
-    );
-  }
+        );
+    }
 
-  @Override
-  public List<ReactPackage> createAdditionalReactPackages() {
-    return getPackages();
-  }
+    @Override
+    public List<ReactPackage> createAdditionalReactPackages() {
+        return getPackages();
+    }
 
 
 }

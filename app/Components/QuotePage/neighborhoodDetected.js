@@ -37,11 +37,12 @@ const SLIDE_IN_DOWN_KEYFRAMES = {
 };
 
 const mapStateToProps = state => ({
-    redirectTo: state.common.redirectTo,
-    quoteMeta: state.auth.quoteMeta
+    latitude: state.communityReducer.region.latitude,
+    longitude: state.communityReducer.region.longitude
 });
 
 const mapDispatchToProps = dispatch => ({
+    queryCommunities: (latitude, longitude) => dispatch(agent.locationService.queryCommunities(latitude, longitude)),
     onRedirect: () => {
         dispatch({type: 'REDIRECT'});
     },
@@ -89,7 +90,7 @@ class NeighborhoodDetected extends React.Component {
             duration: 10,
         }).start(() => this.quoteAnimationCompleted());
 
-        this.props.fetchQuote();
+
     }
 
     buttonAnimationCompleted() {
@@ -138,7 +139,7 @@ class NeighborhoodDetected extends React.Component {
 
     next() {
         this.props.navigator.resetTo({
-            screen: 'neighbors'
+            screen: 'locationConfirmation'
         })
     }
 
@@ -172,7 +173,7 @@ class NeighborhoodDetected extends React.Component {
                         <Text style={styles.titleText}>Hey, I noticed there's a beautiful community nearby!</Text>
                         <Text style={styles.subText}>Recognize any neighbors?</Text>
                             <ScrollView style={{flex: 1, marginVertical: 10}} overScrollMode='never' contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-                                <TouchableOpacity style={{marginVertical: 5}}>
+                                <TouchableOpacity style={{marginVertical: 5}} onPress={()=>this.props.queryCommunities(this.props.latitude, this.props.longitude)}>
                                         <View style={styles.locationBackground}>
                                         </View>
                                         <View style={styles.locationView}>
