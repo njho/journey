@@ -23,7 +23,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MapView from 'react-native-maps';
 
 import agent from '../helpers/agent.js';
-import {daytimeMap, nighttimeMap} from "../helpers/constants";
+import {theme} from "../helpers/constants";
 import TimePicker from './timePicker'
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -92,9 +92,9 @@ class LocationCommunity extends React.Component {
             isTimeInput: false,
             radius: 70,
             expiryTime: '1D',
-            indicatorPosition:  new Animated.Value(0)
+            indicatorPosition: new Animated.Value(0)
 
-    };
+        };
 
     }
 
@@ -159,17 +159,10 @@ class LocationCommunity extends React.Component {
 
     confirmCommunity = () => {
 
-        Animated.timing(
-            this.state.indicatorPosition,
-            {
-                toValue: 100,
-                duration: 250,
-            }
-        ).start();
-        // this.props.confirmCommunity(this.props.locationMeta);
-        // this.props.navigator.resetTo({
-        //     screen: 'neighborhoodDetected'
-        // })
+        this.props.confirmCommunity(this.props.locationMeta);
+        this.props.navigator.resetTo({
+            screen: 'neighborhoodDetected'
+        })
     }
 
     render() {
@@ -177,26 +170,26 @@ class LocationCommunity extends React.Component {
             <View style={styles.container}>
                 <View style={styles.section1}>
                     <View style={styles.subsection1}>
-                        <Animated.View style={[{alignItems: 'center'},{transform: [
-                            {
-                                translateX: this.state.indicatorPosition
-                            }
-                        ]}]}>
-                            <TouchableOpacity style={styles.photoOpacity}>
-                                <Image
-                                    style={[styles.photo, ]}
-                                    source={require('../../../app/Assets/images/yoga-teal-on-lake.jpg')}/>
-                            </TouchableOpacity>
-                            <TouchableWithoutFeedback onPress={() => this.editInformation(2)}>
-                                <View>
-                                    <Text style={styles.communityText}>{this.props.communityName}</Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback onPress={() => this.editInformation(4)}>
-                                <View>
-                                    <Text style={styles.descriptionText}>{this.props.description}</Text>
-                                </View>
-                            </TouchableWithoutFeedback>
+                        <Animated.View style={[{alignItems: 'center'},]}>
+                            <View style={{flex: 0}}>
+                                <TouchableOpacity style={styles.photoOpacity}>
+                                    <Image
+                                        style={[styles.photo]}
+                                        source={require('../../../app/Assets/images/yoga-teal-on-lake.jpg')}/>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{flex: 2}}>
+                                <TouchableOpacity onPress={() => this.editInformation(2)}>
+                                    <View>
+                                        <Text style={styles.communityText}>{this.props.communityName}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.editInformation(4)}>
+                                    <View>
+                                        <Text style={styles.descriptionText}>{this.props.description}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </Animated.View>
                     </View>
 
@@ -222,7 +215,7 @@ class LocationCommunity extends React.Component {
                                         <TouchableOpacity
                                             onPress={() => this.confirmCommunity()}
                                             style={{
-                                                borderColor: '#F0FFFF',
+                                                borderColor: theme.colorMap.locationConfirmation.mapOutlines,
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 width: 100,
@@ -233,13 +226,13 @@ class LocationCommunity extends React.Component {
                                                 zIndex: 11,
                                                 marginVertical: 30
                                             }}>
-                                            <Text style={{color: '#F0FFFF'}}>Confirm</Text>
+                                            <Text style={{color: theme.colorMap.locationConfirmation.mapOutlines}}>Confirm</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             onPress={() => this.timeToggle(this.props.isTimeInput)}
                                             style={{
-                                                borderColor: '#F0FFFF',
-                                                backgroundColor: '#f0FFFF',
+                                                borderColor: theme.colorMap.locationConfirmation.mapOutlines,
+                                                backgroundColor: theme.colorMap.locationConfirmation.mapOutlines,
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 width: 40,
@@ -250,12 +243,12 @@ class LocationCommunity extends React.Component {
                                                 zIndex: 11,
                                                 marginVertical: 30
                                             }}>
-                                            <Text>{this.props.duration}</Text>
+                                            <Text style={{color: theme.colorMap.locationConfirmation.fontColorOpposite}}>{this.props.duration}</Text>
                                         </TouchableOpacity>
                                     </View>}
                             </View>
                             <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                                <Text style={{color: '#F0FFFF'}}> Set Activation Radius</Text>
+                                <Text style={{color: theme.colorMap.locationConfirmation.mapOutlines}}> Set Activation Radius</Text>
                                 <View style={{
                                     width: width,
                                     alignItems: 'center',
@@ -264,7 +257,7 @@ class LocationCommunity extends React.Component {
                                 }}>
                                     <TouchableOpacity style={{flexDirection: 'row', marginRight: 10}}
                                                       onPress={() => this.radiusToggle(this.props.isRadiusInput)}>
-                                        <Icon name="ios-checkmark" size={40} color="#F0FFFF"/>
+                                        <Icon name="ios-checkmark" size={40} color={theme.colorMap.locationConfirmation.mapOutlines}/>
                                     </TouchableOpacity>
                                     <Slider
                                         style={{width: width * 0.6}}
@@ -272,9 +265,9 @@ class LocationCommunity extends React.Component {
                                         minimumValue={20}
                                         step={10}
                                         value={this.props.radius}
-                                        onValueChange={(value) => this.props.setRadius(value)}
+                                        onValueChange={(value) => this.setState({...this.state, radius: value})}
                                     />
-                                    <Text style={{color: '#F0FFFF'}}>{this.state.radius} m </Text>
+                                    <Text style={{color: theme.colorMap.locationConfirmation.mapOutlines}}>{this.state.radius} m </Text>
                                 </View>
                             </View>
                         </ScrollView>
@@ -286,19 +279,31 @@ class LocationCommunity extends React.Component {
                         style={{flex: 1, bottom: 0}}
                         initialRegion={this.props.region}
                         region={this.props.region}
-                        customMapStyle={nighttimeMap}
+                        customMapStyle={theme.map}
                     >
                         <MapView.Circle
                             center={{
                                 latitude: this.props.region.latitude,
                                 longitude: this.props.region.longitude
                             }}
-                            radius={this.props.radius}
+                            radius={this.state.radius}
                             fillColor="rgba(255, 109, 105, 0.6)"
                             zIndex={2}
                         />
                     </MapView>
                     <View style={{position: 'absolute', flexDirection: 'column', bottom: 0, right: 0}}>
+                        <TouchableOpacity
+                            style={{alignSelf: 'flex-end', marginHorizontal: 17, marginBottom: 15, width: 20, height: 20, borderRadius: 30, backgroundColor: '#ff7b74'}}
+
+                        ></TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={{alignSelf: 'flex-end', marginHorizontal: 15, marginBottom: 15}}
+                            onPress={() => this.getCurrentPosition()}
+
+                        >
+                            <Icon name="ios-locate-outline" size={30} color={theme.colorMap.locationConfirmation.mapOutlines}/>
+                        </TouchableOpacity>
                         <TouchableOpacity
                             style={{
                                 flexDirection: 'row',
@@ -311,16 +316,9 @@ class LocationCommunity extends React.Component {
                             onPress={() => this.radiusToggle(this.props.isRadiusInput)
                             }>
                             <Text
-                                style={{color: "#F0FFFF"}}> {this.props.isRadiusInput ? 'Back ' : 'Radius'} </Text>
+                                style={{color: theme.colorMap.locationConfirmation.mapOutlines}}> {this.props.isRadiusInput ? 'Back ' : 'Radius'} </Text>
 
-                            <Icon name="ios-disc" size={30} color="#F0FFFF"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{alignSelf: 'flex-end', marginHorizontal: 15, marginBottom: 15}}
-                            onPress={() => this.getCurrentPosition()}
-
-                        >
-                            <Icon name="ios-locate-outline" size={30} color="#F0FFFF"/>
+                            <Icon name="ios-disc" style={{marginRight: 2}} size={30} color={theme.colorMap.locationConfirmation.mapOutlines}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -331,12 +329,13 @@ class LocationCommunity extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#212C39',
+        backgroundColor: theme.colorMap.locationConfirmation.mapBackgroundColor,
         flex: 1,
         width: '100%',
         alignItems: 'center',
     },
     section1: {
+        marginTop: 20,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -354,7 +353,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'flex-start'
+        justifyContent: 'space-around'
     },
     textInput: {
         flex: 1,
@@ -385,15 +384,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginHorizontal: 30,
         marginTop: 10,
-        color: '#F0FFFF',
+        color: theme.colorMap.locationConfirmation.fontColor,
         fontFamily: 'Roboto-Bold',
-        fontSize: 40,
+        fontSize: 40, //40
+        textDecorationLine: 'underline'
     },
     descriptionText: {
         marginVertical: 20,
         textAlign: 'center',
         marginHorizontal: 60,
-        color: '#F0FFFF',
+        color: theme.colorMap.locationConfirmation.fontColor,
         fontFamily: 'Roboto',
         fontSize: 15,
         justifyContent: 'center'
@@ -427,10 +427,10 @@ const styles = StyleSheet.create({
         height: width * 0.27,
         width: width * 0.27,
         borderRadius: width * 0.5,
-        backgroundColor: '#F0FFFF',
+        backgroundColor: theme.colorMap.locationConfirmation.mapOutlines,
     },
     photo: {
-
+        marginVertical: 20,
         height: width * 0.25,
         width: width * 0.25,
         borderRadius: width * 0.3,

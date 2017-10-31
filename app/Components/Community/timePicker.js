@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {theme} from "../helpers/constants";
+
 
 import MapView from 'react-native-maps';
 
@@ -49,6 +51,7 @@ class TimePicker extends React.Component {
     constructor(props) {
         super(props);
         console.log(props);
+
 
         this.state = {
             selectedDate: '1H',
@@ -133,7 +136,7 @@ class TimePicker extends React.Component {
                     this.state.indicatorPosition,
                     {
                         toValue: indicatorPosition,
-                        duration: 250,
+                        duration: 600,
                     }
                 )]).start(this.props.durationSelected(value));
 
@@ -167,10 +170,10 @@ class TimePicker extends React.Component {
 
         return (
             <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                <Text style={{color: '#F0FFFF'}}>Duration</Text>
+                <Text style={{color: theme.colorMap.locationConfirmation.mapOutlines}}>Duration</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <TouchableOpacity style={{flexDirection: 'row', marginRight: 10}} onPress={()=>this.timeToggle(this.props.isTimeInput)}>
-                        <Icon name="ios-checkmark" size={40} color="#F0FFFF"/>
+                        <Icon name="ios-checkmark" size={40} color={theme.colorMap.locationConfirmation.mapOutlines}/>
                     </TouchableOpacity>
                     <View onLayout={(event) => this.measureView(event)} style={{
                         flexDirection: 'row',
@@ -223,7 +226,7 @@ class TimePicker extends React.Component {
                             <Animated.View style={[styles.animatedView, {opacity: this.state.opacity5}]}/>
                         </TouchableOpacity>
                     </View>
-                    <Text style={{color: '#F0FFFF'}}>  {this.props.duration} </Text>
+                    <Text style={{color: theme.colorMap.locationConfirmation.mapOutlines}}>  {this.props.duration} </Text>
 
                 </View>
             </View>
@@ -233,11 +236,11 @@ class TimePicker extends React.Component {
 
 const styles = StyleSheet.create({
     text: {
-        color: '#F0FFFF'
+        color: theme.colorMap.locationConfirmation.mapOutlines
     },
     indicator: {
         position: 'absolute',
-        borderColor: '#F0FFFF',
+        borderColor: theme.colorMap.locationConfirmation.mapOutlines,
         alignItems: 'center',
         justifyContent: 'center',
         width: 30,
@@ -248,8 +251,8 @@ const styles = StyleSheet.create({
         zIndex: 11,
     },
     animatedView: {
-        borderColor: '#F0FFFF',
-        backgroundColor: '#F0FFFF',
+        borderColor: theme.colorMap.locationConfirmation.mapOutlines,
+        backgroundColor: theme.colorMap.locationConfirmation.mapOutlines,
         alignItems: 'center',
         justifyContent: 'center',
         width: 15,
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        borderColor: '#F0FFFF',
+        borderColor: theme.colorMap.locationConfirmation.mapOutlines,
         alignItems: 'center',
         justifyContent: 'center',
         width: 15,

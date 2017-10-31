@@ -1,4 +1,4 @@
-const daytimeMap = [
+const dayMap = [
     {
         "elementType": "geometry",
         "stylers": [
@@ -213,8 +213,26 @@ const daytimeMap = [
         ]
     }
 ];
+const dayColorPack = {
+    locationConfirmation: {
+        mapBackgroundColor: '#F2E5D2',
+        mapOutlines: '#657D96',
+        fontTitleColor: '#212C39',
+        fontColor: '#212C39',
+        fontColorOpposite: '#F0FFFF'
+    }
+}
 
-const nighttimeMap=[
+const nightColorPack = {
+    locationConfirmation: {
+        mapBackgroundColor: '#3E474F', //3E474F #212C39
+        mapOutlines: '#F0FFFF',
+        fontTitleColor: '#59A8AD',
+        fontColor: '#F0FFFF',
+        fontColorOpposite: '#212C39'
+    }
+}
+const nightMap = [
     {
         "elementType": "geometry",
         "stylers": [
@@ -376,4 +394,16 @@ const nighttimeMap=[
     }
 ];
 
-export {daytimeMap, nighttimeMap}
+var hr = (new Date()).getHours();
+
+let theme = {};
+
+if (hr > 7 && hr < 20) {
+    theme.map = dayMap;
+    theme.colorMap = dayColorPack;
+} else {
+    theme.map = nightMap;
+    theme.colorMap = nightColorPack;
+}
+
+export {theme}

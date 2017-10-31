@@ -51,8 +51,13 @@ const locationService = {
                 center: [latitude, longitude],
                 radius: 0.5
             });
-            geoQuery.once("key_entered", function(key, location, distance) {
-                console.log(key + " is located at [" + location + "] which is within the query (" + distance.toFixed(2) + " km from center)");
+            geoQuery.on("ready", function (key, location, distance) {
+                onKeyEnteredRegistration.cancel();
+
+            });
+
+            var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
+                console.log(key + " entered query at " + location + " (" + distance + " km from center)");
             });
 
             dispatch({type: 'COMMUNITIES_DETECTED', communities: geoQuery});
