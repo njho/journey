@@ -7,6 +7,7 @@ import Neighbors from './app/Components/LoginFlow/Neighbors';
 import LocationCommunity from './app/Components/Community/LocationCommunity';
 import LocationConfirmation from './app/Components/Community/LocationConfirmation';
 import Locations from './app/Components/Community/Locations';
+import Streamer from './app/Components/Streamer/TokBox'
 
 
 // register all screens of the app (including internal ones)
@@ -17,6 +18,5 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('locationCommunity', () => LocationCommunity, store, Provider);
     Navigation.registerComponent('locationConfirmation', () => LocationConfirmation, store, Provider);
     Navigation.registerComponent('locations', () => Locations, store, Provider);
-
-
+    Navigation.registerComponent('streamer', () => Streamer, store, Provider);
 }

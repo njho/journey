@@ -58,9 +58,20 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: true,
         //     overrideBackPress: true
         // },
+        // {
+        //     label: 'two',
+        //     screen: 'locations', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'neighborhood Detected',
+        //     tabBarHidden: false,
+        // },
+
         {
             label: 'two',
-            screen: 'locations', // this is a registered name for a screen
+            screen: 'streamer', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
@@ -68,8 +79,6 @@ Navigation.startTabBasedApp({
             title: 'neighborhood Detected',
             tabBarHidden: false,
         },
-
-
         // {
         //     label: 'two',
         //     screen: 'neighborhoodDetected', // this is a registered name for a screen
