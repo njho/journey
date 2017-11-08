@@ -60,27 +60,39 @@ Navigation.startTabBasedApp({
         // },
         {
             label: 'two',
-            screen: 'neighborhoodDetected', // this is a registered name for a screen
+            screen: 'locations', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
             title: 'neighborhood Detected',
-            tabBarHidden: true,
-            overrideBackPress: true
+            tabBarHidden: false,
         },
 
-        {
-            label: 'four',
-            screen: 'locationConfirmation', // this is a registered name for a screen
-            icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'locationConfirmation',
-            tabBarHidden: true,
-            overrideBackPress: true
-        },
+
+        // {
+        //     label: 'two',
+        //     screen: 'neighborhoodDetected', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'neighborhood Detected',
+        //     tabBarHidden: true,
+        //     overrideBackPress: true
+        // },
+        //
+        // {
+        //     label: 'four',
+        //     screen: 'locationConfirmation', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'locationConfirmation',
+        //     tabBarHidden: true,
+        //     overrideBackPress: true
+        // },
 
     ]
 

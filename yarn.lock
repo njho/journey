@@ -4585,6 +4585,12 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-action-button@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-action-button/-/react-native-action-button-2.8.1.tgz#703b2a7f23b86647cb9dba4bbbddcf23c18a0fda"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-animatable@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.2.4.tgz#b5fb7657e8f6edadbc26697057a327fb920b3039"
@@ -4621,9 +4627,9 @@ react-native-gifted-chat@^0.2.7:
     shallowequal "1.0.2"
     uuid "3.1.0"
 
-react-native-interactable@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-0.1.3.tgz#900a3a403f20e8e32d84b3a0c160a8f71c7380d2"
+react-native-interactable@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-0.1.7.tgz#c785688ea6ec7c4ef443e715d145c6862ae210da"
 
 react-native-invertible-scroll-view@1.0.0:
   version "1.0.0"
@@ -4653,6 +4659,10 @@ react-native-navigation@^1.1.231:
   resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.231.tgz#2a8b269444a3ccde6280eb59d49ed680a8b070d4"
   dependencies:
     lodash "4.x.x"
+
+"react-native-opentok@git+ssh://git@github.com:callstack/react-native-opentok.git":
+  version "0.0.1"
+  resolved "git+ssh://git@github.com:callstack/react-native-opentok.git#15e128a470cbf98a51d7e28d43b1fe9fa06355c0"
 
 react-native-parsed-text@0.0.18:
   version "0.0.18"

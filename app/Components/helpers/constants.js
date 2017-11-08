@@ -220,6 +220,9 @@ const dayColorPack = {
         fontTitleColor: '#212C39',
         fontColor: '#212C39',
         fontColorOpposite: '#F0FFFF'
+    },
+    locations: {
+        backgroundColor: 'white',
     }
 }
 
@@ -230,6 +233,9 @@ const nightColorPack = {
         fontTitleColor: '#59A8AD',
         fontColor: '#F0FFFF',
         fontColorOpposite: '#212C39'
+    },
+    locations: {
+        backgroundColor: 'white',
     }
 }
 const nightMap = [

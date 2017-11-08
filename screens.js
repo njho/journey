@@ -6,6 +6,7 @@ import NeighborhoodDetected from './app/Components/QuotePage/neighborhoodDetecte
 import Neighbors from './app/Components/LoginFlow/Neighbors';
 import LocationCommunity from './app/Components/Community/LocationCommunity';
 import LocationConfirmation from './app/Components/Community/LocationConfirmation';
+import Locations from './app/Components/Community/Locations';
 
 
 // register all screens of the app (including internal ones)
@@ -15,5 +16,7 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('neighbors', () => Neighbors, store, Provider);
     Navigation.registerComponent('locationCommunity', () => LocationCommunity, store, Provider);
     Navigation.registerComponent('locationConfirmation', () => LocationConfirmation, store, Provider);
+    Navigation.registerComponent('locations', () => Locations, store, Provider);
+
 
 }
