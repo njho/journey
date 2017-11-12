@@ -66,6 +66,15 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             new FBSDKPackage(mCallbackManager)
       );
     }
+<<<<<<< ours
+=======
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+  };
+>>>>>>> theirs
 
 
   };*/
@@ -107,9 +116,15 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNFirebaseFirestorePackage(),
                 new RNFirebaseMessagingPackage(),
                 new RNFirebaseStoragePackage(),
-                new MapsPackage()
+                new MapsPackage(),
+                new RNOpenTokPackage()
 
         );
+    }
+
+    @Override
+    public String getJSMainModuleName() {
+        return "index";
     }
 
     @Override

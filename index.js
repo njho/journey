@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import {
     AppRegistry,
     StyleSheet,
@@ -14,6 +15,7 @@ import store from './app/store.js';
 
 import {bootstrap} from './app/Components/config/bootstrap';
 import { registerScreens } from './screens';
+
 
 import Login from './app/Components/Login/';
 import QuotePage from './app/Components/QuotePage';

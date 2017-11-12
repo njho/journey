@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     Animated,
     Text,
@@ -191,7 +192,7 @@ class TimePicker extends React.Component {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }]}>
-                            <View style={styles.indicator}/>
+                            <View />
                         </Animated.View>
 
                         <TouchableOpacity

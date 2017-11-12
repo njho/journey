@@ -23,36 +23,38 @@ const {
     AccessToken
     } = FBSDK;
 
-var FBButton = React.createClass({
 
-    render: function() {
-        return (
-            <View>
-                <LoginButton
-                    publishPermissions={["publish_actions"]}
-
-                    onLoginFinished={
-        (error, result) => {
-          if (error) {
-            console.log(error);
-            alert("login has error: " + result.error);
-        } else if (result.isCancelled) {
-            alert("login is cancelled.");
-        } else {
-            console.log('logged in');
-            AccessToken.getCurrentAccessToken().then(
-              (data) => {
-                alert(data.accessToken.toString())
-            }
-            )
-        }
-    }
-}
-                    onLogoutFinished={() => alert("logout.")}/>
-            </View>
-        );
-    }
-});
+//
+// var FBButton = React.createClass({
+//
+//     render: function() {
+//         return (
+//             <View>
+//                 <LoginButton
+//                     publishPermissions={["publish_actions"]}
+//
+//                     onLoginFinished={
+//         (error, result) => {
+//           if (error) {
+//             console.log(error);
+//             alert("login has error: " + result.error);
+//         } else if (result.isCancelled) {
+//             alert("login is cancelled.");
+//         } else {
+//             console.log('logged in');
+//             AccessToken.getCurrentAccessToken().then(
+//               (data) => {
+//                 alert(data.accessToken.toString())
+//             }
+//             )
+//         }
+//     }
+// }
+//                     onLogoutFinished={() => alert("logout.")}/>
+//             </View>
+//         );
+//     }
+// });
 
 const mapStateToProps = state => ({
     redirectTo: state.common.redirectTo
@@ -95,7 +97,6 @@ class Login extends React.Component {
 
                 </View>
                 <FadeInView><Text>Dog Cat Dog</Text></FadeInView>
-                <FBButton></FBButton>
 
                 <View style={styles.content}>
                     <View>

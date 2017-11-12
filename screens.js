@@ -1,6 +1,6 @@
 import {Navigation} from 'react-native-navigation';
 
-import Login from './app/Components/Login';
+// import Login from './app/Components/Login';
 import QuotePage from './app/Components/QuotePage';
 import NeighborhoodDetected from './app/Components/QuotePage/neighborhoodDetected';
 import Neighbors from './app/Components/LoginFlow/Neighbors';

@@ -17,7 +17,7 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme">
-        <meta-data android:name="OPENTOK_API_KEY" android:value="45991912" />
+        <meta-data android:name="OPENTOK_API_KEY" android:value="45996162" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCoEAttl4BDgkexd1W7zX1KoLm-MoaBfa8"/>
@@ -26,7 +26,9 @@
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
-        <intent-filter>
+          <meta-data android:name="OPENTOK_API_KEY" android:value="45996162" />
+
+          <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>

@@ -91,6 +91,27 @@ const locationService = {
  };
  */
 
+const query = `
+ { createSession(journey_id: "asdfaf", journey_name: "asdf", user_id: "Jacob", user_name: "jinglehimer", journey_description: "This is the description") {
+    token
+    session_id}}
+
+`
+
+const Streamer = {
+    createSession: () => {
+        return fetch('https://us-central1-journeyapp91.cloudfunctions.net/graphql/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({query})
+        }).then((response => console.log(response)))
+
+    }
+}
+
 const Auth = {
     current: () => {
         return new Promise(function (resolve, reject) {
@@ -345,7 +366,8 @@ export default {
     Auth,
     FirebaseQuery,
     FirebaseWatcher,
-    locationService
+    locationService,
+    Streamer
 
     // authService
 };

@@ -1,13 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+
 import {
     StyleSheet,
     View,
     Text,
 } from 'react-native';
 
-const propTypes = {
-    fontSize: PropTypes.number,
-};
 
 const defaultProps = {
     fontSize: 13,
@@ -27,10 +25,6 @@ class PriceMarker extends React.Component {
         );
     }
 }
-
-PriceMarker.propTypes = propTypes;
-PriceMarker.defaultProps = defaultProps;
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
