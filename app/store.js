@@ -5,12 +5,14 @@ import common from './Reducers/common.js';
 import auth from './Reducers/auth.js';
 import communityReducer from './Reducers/communityReducer';
 import locationReducer from './Reducers/locationReducer';
+import navigationReducer from './Reducers/navigationReducer';
 
 const reducer = combineReducers({
     common,
     auth,
     communityReducer,
-    locationReducer
+    locationReducer,
+    navigationReducer
 });
 
 const middleware = applyMiddleware(thunk);

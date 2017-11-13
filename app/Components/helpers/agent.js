@@ -95,10 +95,23 @@ const query = `
  { createSession(journey_id: "asdfaf", journey_name: "asdf", user_id: "Jacob", user_name: "jinglehimer", journey_description: "This is the description") {
     token
     session_id}}
-
 `
 
+
+
 const Streamer = {
+    generateToken: (sessionId ) => {
+        console.log('this is the sessionID: ' + sessionId)
+        const query = `{ requestToken(session_id: "${sessionId}", user_id: "Jason Ho", journey_id: "1238apsfnp98", name: "Jason Ho" ) }`
+        return fetch('https://us-central1-journeyapp91.cloudfunctions.net/graphql/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({query})
+        })
+    },
     createSession: () => {
         return fetch('https://us-central1-journeyapp91.cloudfunctions.net/graphql/', {
             method: 'POST',
@@ -108,7 +121,9 @@ const Streamer = {
             },
             body: JSON.stringify({query})
         }).then((response => console.log(response)))
-
+    },
+    fetchJourneysList: () => {
+        return database.ref('streaming_journeys/').limitToLast(10).once('value');
     }
 }
 

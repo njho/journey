@@ -43,7 +43,7 @@ const LATITUDE_DELTA = 0.0062;
 const LONGITUDE_DELTA = 0.0021;
 
 const mapStateToProps = state => ({
-    locationMeta: state.communityReducer
+    subscriberSessionId: state.navigationReducer.subscriberSessionId
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -59,14 +59,14 @@ const shadowStyle = {
     })
 };
 
-const connectToSession = async () => {
-    try {
-        await OpenTok.connect(sessionId, token);
-    } catch (e) {
-        console.log(e)
-        console.log('wtf');
-    }
-}
+// const connectToSession = async () => {
+//     try {
+//         await OpenTok.connect(sessionId, token);
+//     } catch (e) {
+//         console.log(e)
+//         console.log('wtf');
+//     }
+// }
 
 class Locations extends React.Component {
     static navigatorStyle = {
@@ -100,9 +100,21 @@ class Locations extends React.Component {
     }
 
     async componentWillMount() {
-        /*        await OpenTok.connect(sessionId, token);
-                OpenTok.on(OpenTok.events.ON_SIGNAL_RECEIVED, e => console.log(e));
-                OpenTok.on(OpenTok.events.ON_SESSION_DID_CONNECT, e=> console.log('did connect'));*/
+      await agent.Streamer.generateToken(this.props.sessionId).then((response)=>response.json()).then((data) => {
+          console.log(data)
+          console.log('111111111111111111111111111111111111111111111111111111111111111111111111')
+          console.log(this.props.sessionId);
+          console.log(data.data.requestToken)
+          console.log('this is from component will mount');
+
+          return OpenTok.connect(this.props.sessionId, data.data.requestToken);
+      })
+    }
+
+    componentDidMount() {
+        OpenTok.on(OpenTok.events.ON_SESSION_CONNECTION_CREATED, e => console.log('OpenTok connected or at least tried to'));
+        OpenTok.on(OpenTok.events.ON_SESSION_DID_FAIL_WITH_ERROR, e => console.log('OpenTok connected or at least tried to'));
+
     }
 
     onSend(messages = []) {
@@ -154,7 +166,7 @@ class Locations extends React.Component {
                         <Text>Blanks</Text>
                     </View>
                 )
-            break;
+                break;
 
         }
 
@@ -165,10 +177,15 @@ class Locations extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.section1}>
-                    <Image style={styles.subscriberView}
-                           source={require('../../../app/Assets/images/backstage.jpg')}
-                           resizeMode="stretch"
+
+                    <OpenTok.SubscriberView
+                        style={styles.subscriberView}
+                        sessionId={this.props.sessionId}
+                        onSubscribeStop={() => {
+                            console.log('stopped')
+                        }}
                     />
+
 
                 </View>
 
@@ -208,6 +225,15 @@ class Locations extends React.Component {
             </View>
         );
     }
+}
+
+{/*<Image style={styles.subscriberView}*/
+}
+{/*source={require('../../../app/Assets/images/backstage.jpg')}*/
+}
+{/*resizeMode="stretch"*/
+}
+{/*/>*/
 }
 
 //<Text style={styles.infoText}>30:01</Text>
