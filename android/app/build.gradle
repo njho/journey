@@ -70,6 +70,8 @@ import com.android.build.OutputFile
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
  * ]
+ *
+ * /Users/machinatron/Documents/Programming/journey/android/app/build.gradle
  */
 
 project.ext.react = [
@@ -143,8 +145,9 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-opentok')
     compile project(':react-native-maps')
+    compile project(':react-native-opentok')
+
     compile project(':react-native-linear-gradient')
     compile project(':react-native-vector-icons')
     compile(project(':react-native-firebase')) {

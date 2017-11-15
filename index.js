@@ -70,29 +70,40 @@ Navigation.startTabBasedApp({
         //     title: 'neighborhood Detected',
         //     tabBarHidden: false,
         // },
-
+        //
+        // {
+        //     label: 'two',
+        //     screen: 'liveStreams', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'neighborhood Detected',
+        //     tabBarHidden: false,
+        //     passProps: {sessionId: 'balls'}
+        // },
+        //
+        // {
+        //     label: 'two',
+        //     screen: 'streamer', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'neighborhood Detected',
+        //     tabBarHidden: false,
+        // },
         {
             label: 'two',
-            screen: 'liveStreams', // this is a registered name for a screen
+            screen: 'mainActions', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
             title: 'neighborhood Detected',
             tabBarHidden: false,
-            passProps: {sessionId: 'balls'}
         },
 
-        {
-            label: 'two',
-            screen: 'streamer', // this is a registered name for a screen
-            icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'neighborhood Detected',
-            tabBarHidden: false,
-        },
 
         // {
         //     label: 'two',

@@ -99,21 +99,21 @@ class Locations extends React.Component {
         };
     }
 
-    async componentWillMount() {
-      await agent.Streamer.generateToken(this.props.sessionId).then((response)=>response.json()).then((data) => {
-          console.log(data)
-          console.log('111111111111111111111111111111111111111111111111111111111111111111111111')
-          console.log(this.props.sessionId);
-          console.log(data.data.requestToken)
-          console.log('this is from component will mount');
-
-          return OpenTok.connect(this.props.sessionId, data.data.requestToken);
-      })
-    }
+    // async componentWillMount() {
+    //   await agent.Streamer.generateToken(this.props.sessionId).then((response)=>response.json()).then((data) => {
+    //       console.log(data)
+    //       console.log('111111111111111111111111111111111111111111111111111111111111111111111111')
+    //       console.log(this.props.sessionId);
+    //       console.log(data.data.requestToken)
+    //       console.log('this is from component will mount');
+    //
+    //       return OpenTok.connect(this.props.sessionId, data.data.requestToken);
+    //   })
+    // }
 
     componentDidMount() {
-        OpenTok.on(OpenTok.events.ON_SESSION_CONNECTION_CREATED, e => console.log('OpenTok connected or at least tried to'));
-        OpenTok.on(OpenTok.events.ON_SESSION_DID_FAIL_WITH_ERROR, e => console.log('OpenTok connected or at least tried to'));
+        // OpenTok.on(OpenTok.events.ON_SESSION_CONNECTION_CREATED, e => console.log('OpenTok connected or at least tried to'));
+        // OpenTok.on(OpenTok.events.ON_SESSION_DID_FAIL_WITH_ERROR, e => console.log('OpenTok connected or at least tried to'));
 
     }
 
@@ -178,13 +178,13 @@ class Locations extends React.Component {
             <View style={styles.container}>
                 <View style={styles.section1}>
 
-                    <OpenTok.SubscriberView
-                        style={styles.subscriberView}
-                        sessionId={this.props.sessionId}
-                        onSubscribeStop={() => {
-                            console.log('stopped')
-                        }}
-                    />
+                    {/*<OpenTok.SubscriberView*/}
+                        {/*style={styles.subscriberView}*/}
+                        {/*sessionId={this.props.sessionId}*/}
+                        {/*onSubscribeStop={() => {*/}
+                            {/*console.log('stopped')*/}
+                        {/*}}*/}
+                    {/*/>*/}
 
 
                 </View>

@@ -4568,9 +4568,9 @@ react-native-navigation@^1.1.231:
   dependencies:
     lodash "4.x.x"
 
-"react-native-opentok@git+ssh://git@github.com:callstack/react-native-opentok.git":
-  version "0.0.1"
-  resolved "git+ssh://git@github.com:callstack/react-native-opentok.git#15e128a470cbf98a51d7e28d43b1fe9fa06355c0"
+react-native-opentok@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-opentok/-/react-native-opentok-2.0.1.tgz#2bb6156a40290a6d203f5142d7f70249b76bf534"
 
 react-native-parsed-text@^0.0.19:
   version "0.0.19"
