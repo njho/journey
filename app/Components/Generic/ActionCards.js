@@ -77,17 +77,68 @@ class ActionCards extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity
-                style={styles.card}>
-                <View style={{width: '100%', height: 5, backgroundColor: this.props.color}}/>
+            <TouchableOpacity>
 
-                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                        <Icon name={this.props.icon} size={25}/>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={styles.mainTitle}>{this.props.actionTitle}</Text>
-                        <Text style={styles.subText}>{this.props.actionSubtext}</Text>
-                    </View>
+                <View style={styles.card}>
+                    <LinearGradient colors={['#d8d5db', '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff', '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff', '#d8d5db']} start={{x: 0, y: .50}} end={{x: 1, y: .50}}
+                                    style={{
+                                        borderRadius: 10,
+                                        alignSelf: 'flex-start',
+                                        flex: 1,
+                                        alignItems: 'center'
+                                    }}>
+                        <View style={{
+                            width: '100%',
+                            height: 10,
+                            backgroundColor: this.props.color,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderTopRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                            top: 0,
+                            position: 'absolute',
+
+                        }}/>
+                        <View style={{marginTop: 30}}>
+                            <View style={{
+                                width: width / 6.5,
+                                height: width / 6.5,
+                                backgroundColor: 'white',
+                                borderRadius: width / 6.5,
+                                alignItems: 'center',
+                                justifyContent: 'space-around'
+                            }}>
+                                <View style={{
+                                    opacity: 0.7,
+                                    width: width / 8,
+                                    height: width / 8,
+                                    backgroundColor: this.props.color,
+                                    borderRadius: width / 8,
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around'
+                                }}>
+                                    <Text>
+                                        <Icon name={this.props.icon} style={{color: 'white'}} size={25}/>
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'center', flex: 1}}>
+                            <View style={{
+                                marginTop: 20,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flex: 1
+                            }}>
+                                <Text style={styles.mainTitle}>{this.props.actionTitle}</Text>
+                                <Text style={styles.subText}>{this.props.actionSubtext}</Text>
+
+                            </View>
+                        </View>
+                        <View style={{marginBottom: 30}}></View>
+                    </LinearGradient>
+                </View>
 
             </TouchableOpacity>
 
@@ -97,32 +148,34 @@ class ActionCards extends React.Component {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: 'white',
+        backgroundColor: '#fbf9ff',
         marginHorizontal: 5,
-        paddingHorizontal: 5,
-        borderRadius: 5,
-        width: width / 3,
-        height: width / 2,
-        elevation: 5,
+        borderRadius: 10,
+        width: width / 2.5,
+        height: width * 0.6,
+        elevation: 4,
         flexDirection: 'column',
+        alignItems: 'center',
     },
     mainTitle: {
+        color: 'black',
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize: 18,
         marginVertical: 5,
+        marginHorizontal: 15,
     },
-
     actionTitle: {
         textAlign: 'center',
+        marginHorizontal: 30,
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 28,
-        marginVertical: 5
+        fontSize: 15,
     },
 
     subText: {
-        color: 'white',
+        marginHorizontal: 10,
+        textAlign: 'center',
         marginVertical: 5,
         fontSize: 14
     }

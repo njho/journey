@@ -21,6 +21,7 @@ import {
     StatusBar
 } from 'react-native';
 import agent from '../helpers/agent';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -30,7 +31,7 @@ import Chat from '../Chat/Chat';
 
 
 import {theme} from "../helpers/constants";
-
+import Banner from './MainActionsBanner'
 
 const widthFactor = Dimensions.get('window').width / 375;
 const heightFactor = (Dimensions.get('window').height - 75) / 667;
@@ -65,22 +66,43 @@ class MainActions extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-        }
+        this.state = {}
     }
 
     render() {
         return (
             <View style={styles.container}>
-
                 <Text style={styles.mainTitle}>Journey</Text>
-                <Text style={styles.subtitle}>Applicable Actions</Text>
 
                 <ViewPagerAndroid
-                    peekEnabled={true}
-                    style={{ height: width / 2}}
+                    style={{flex: 1}}>
+                    <View><Banner></Banner></View>
+                    <View style={{
+                        flexDirection: 'column',
+                        flex: 1,
+                        borderRadius: 5,
+                        backgroundColor: '#FF7B74',
+                        paddingHorizontal: 20
+                    }}>
+                        <TouchableOpacity style={{flex: 1}}>
+                            <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 20}}>
+                                <Text style={[styles.mainTitle, {fontSize: 22}, ]}><Icon name="ios-pin-outline"
+                                                                     style={{color: 'white', marginRight: 20}}
+                                                                     size={40}/> Community Explorer.</Text>
+                                <Text style={[styles.mainTitle, {fontSize: 15, fontWeight: 'normal'}, ]}>13 active communities in your area.</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </ViewPagerAndroid>
+
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}><Text
+                    style={styles.subtitle}>Choose
+                    an Action</Text>
+                    <Text style={[styles.subtitle, {fontSize: 14, fontWeight: 'normal', marginRight: 5}]}>NEW
+                        JOURNEY</Text>
+                </View>
+                <ScrollView
                     horizontal={true}
-                    pagingEnabled={true}
                     showsHorizontalScrollIndicator={false}
                     overScrollMode='never'
                     ref={(scrollView) => {
@@ -91,30 +113,28 @@ class MainActions extends React.Component {
                     <ActionCards
                         color="#D0A75D"
                         actionTitle="Commit a Moment"
-                        actionSubText="Commit a moment in time on your Journey!"
+                        actionSubtext="Commit this moment to a Journey!"
                         icon="ios-analytics"
                     />
                     <ActionCards
-                        color1="#D0A75D"
+                        color="#00542D"
                         actionTitle="Bump a Friend"
-                        actionSubText="Commit a moment in time with someone else!"
+                        actionSubtext="Commit a moment in time with a neighbor!"
                         icon="ios-body"
                     />
                     <ActionCards
                         color="#991A2F"
-                        actionTitle="Create a Meeting Point"
-                        actionSubText="An easy way for people other people to find and contribute to your Journey!"
+                        actionTitle="Connection Point"
+                        actionSubtext="Help others easily find your Journey!"
                         icon="md-locate"/>
                     <ActionCards
-                        color="#991A2F"
+                        color="#00BBE7"
                         actionTitle="Create a new Journey"
-                        actionSubText="The world is yours."
+                        actionSubtext="The world is yours."
                         icon="ios-leaf-outline"/>
 
 
-
-
-                </ViewPagerAndroid>
+                </ScrollView>
 
 
             </View>
@@ -126,12 +146,12 @@ class MainActions extends React.Component {
 //<Text style={styles.infoText}>30:01</Text>
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#111024',
         flex: 1,
         paddingHorizontal: 15,
         paddingVertical: 15,
         width: width,
         flexDirection: 'column',
-        backgroundColor: '#3E474F',
     },
     mainTitle: {
         color: 'white',
@@ -140,10 +160,10 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     subtitle: {
-        color: '#f0ffff',
-        fontSize: 24,
-        marginVertical: 5,
-
+        color: '#edeefe',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginVertical: 10,
     },
     section1: {
         flex: 1,

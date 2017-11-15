@@ -15,7 +15,7 @@
     "import": "^0.0.6",
     "lottie-react-native": "2.2.7",
     "react": "16.0.0",
-    "react-native": "0.50.2",
+    "react-native": "0.50.3",
     "react-native-action-button": "^2.8.1",
     "react-native-animatable": "^1.2.4",
     "react-native-fbsdk": "git://github.com/facebook/react-native-fbsdk#065507aa1d2b8b0b6cb50d13117694123f8303fa",

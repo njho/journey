@@ -10,6 +10,7 @@ import Locations from './app/Components/Community/Locations';
 import Streamer from './app/Components/Streamer/TokBox';
 import LiveStreams from './app/Components/Streamer/LiveStreams';
 import MainActions from './app/Components/Main/MainActions';
+import Bump from './app/Components/Bump/Bump'
 
 
 // register all screens of the app (including internal ones)
@@ -23,6 +24,6 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('streamer', () => Streamer, store, Provider);
     Navigation.registerComponent('liveStreams', () => LiveStreams, store, Provider);
     Navigation.registerComponent('mainActions', () => MainActions, store, Provider);
-
+    Navigation.registerComponent('bump', () => Bump, store, Provider);
 
 }
