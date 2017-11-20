@@ -143,7 +143,6 @@ class LocationCommunity extends React.Component {
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
         if (this.props.formStatus === 0) {
-            this.ripple.play();
         } else {
         }
 
@@ -342,164 +341,34 @@ class LocationCommunity extends React.Component {
     render() {
         console.log(this.state.formStatus);
 
-//210c2b
+
         return (
             <View style={styles.container}>
-                <LinearGradient colors={['#F3766F', '#F3766F']} style={{flex: 1, alignItems: 'center', width: '100%'}}>
+                <LinearGradient colors={['#210c2b', '#210c2b']} style={{flex: 1, alignItems: 'center', width: '100%'}}>
+                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Interesting,
+                            that this Journey should start here</Text>
+
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Tell me, what is the name of
+                            this Journey?</Text>
+
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>And why is this
+                            important?</Text>
+
+                        <Text style={{color: 'white', fontSize: 20, fontWeight: '300'}}>Or maybe, it's just for fun?</Text>
 
 
-                    <View style={styles.section1}>
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Please tag yours to help others contribute.</Text>
 
-                        <Animation
-                            ref={animation => {
-                                this.ripple = animation;
-                            }}
-                            style={{
-                                position: 'absolute',
-                                bottom: -(170 / 2),
-                                width: 200,
-                                height: 200,
-                            }}
-                            loop={this.state.loop}
-                            source={require('../../Assets/lottie/ripples.json')}
-                        />
-                        <View style={{
-                            flex: 1,
-                            width: '100%',
-                            flexDirection: 'column',
-                            justifyContent: 'space-around',
-                            alignItems: 'center',
-                        }}>
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Interesting, it seems like
+                            similar Journey's have led individuals to:</Text>
 
 
-                            {this.state.formStatus >= 3 ?
-                                <TouchableWithoutFeedback
-                                    onPress={() => this.setFormStatus(2, this.state.farthestBeen)}>
-                                    <View style={styles.communityView}>
-                                        <Text
-                                            style={[styles.communityText]}
-                                            useNativeDriver={true}>{this.props.communityName}
-                                        </Text>
-                                    </View>
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Would you like to include anyone in this genesis?</Text>
 
-                                </TouchableWithoutFeedback>
-                                : null}
-                            {this.state.formStatus >= 5 ?
-                                <TouchableWithoutFeedback
-                                    onPress={() => this.setFormStatus(4, this.state.farthestBeen)}>
-                                    <Text
-                                        style={[styles.descriptionText]}>{this.props.description}
-                                    </Text>
-                                </TouchableWithoutFeedback>
-                                : null}
-                        </View>
-                        <TouchableOpacity
-                            style={{alignItems: 'center'}}
-                            onPress={() => this.setFormStatus(1, this.state.farthestBeen)}
-                            disabled={this.state.formStatus !== 0}>
-                            {this.state.formStatus === 2 ?
-                                <Animatable.Text
-                                    duration={200}
-                                    animation="slideInUp"
-                                    style={[styles.questionPrompt]}>Zone Identifier
-                                </Animatable.Text>
-                                : null}
-                            {this.state.formStatus === 4 ?
-                                <Animatable.Text
-                                    duration={200}
-                                    animation="slideInUp"
-                                    style={[styles.questionPrompt]}>Description
-                                </Animatable.Text>
-                                : null}
-                            <Animated.View
-                                style={{
-                                    backgroundColor: 'white',
-                                    width: this.state.textEntryWidth,
-                                    height: this.state.textEntryHeight,
-                                    borderRadius: this.state.textEntryRadius,
-                                    alignItems: 'center',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-around'
-                                }}>
-
-                                <View style={styles.textInput}>
-                                    {this.state.formStatus === 2 ?
-
-                                        <TextInput
-                                            style={{
-                                                height: 50,
-                                                textAlign: 'center',
-                                                width: width * 0.75,
-                                                fontSize: 20,
-                                                color: '#F3766F',
-                                                flexDirection: 'column'
-                                            }}
-                                            autoCapitalize="words"
-                                            onChangeText={(text) => this.textHandler(2, text)}
-                                            value={this.props.communityName}
-                                            underlineColorAndroid='transparent'
-                                            autoFocus={true}
-                                            onSubmitEditing={() => this.setFormStatus(3, this.state.farthestBeen)}
-                                        />
-                                        : null}
-
-                                    {this.state.formStatus === 1 ?
-                                        <TouchableWithoutFeedback
-                                            onPress={() => this.setFormStatus(2, this.state.farthestBeen)}>
-                                            <Animated.Text
-                                                style={[{
-                                                    textAlign: 'center',
-                                                    width: width * 0.6,
-                                                    fontSize: 18,
-                                                    paddingBottom: 2,
-                                                    paddingLeft: 5,
-                                                }, styles.placeholderText]}>Create a Connection Zone
-                                            </Animated.Text>
-                                        </TouchableWithoutFeedback> : null}
-
-                                    {this.state.formStatus === 3 ?
-                                        <TouchableWithoutFeedback
-                                            onPress={() => this.setFormStatus(4, this.state.farthestBeen)}>
-                                            <Animated.Text
-                                                style={[{
-                                                    textAlign: 'center',
-                                                    width: width * 0.5,
-                                                    fontSize: 18,
-                                                    paddingBottom: 2,
-                                                }, styles.placeholderText]}>Description
-                                            </Animated.Text>
-                                        </TouchableWithoutFeedback> : null}
-
-                                    {this.state.formStatus === 4 ?
-                                        <TextInput
-                                            style={{
-                                                height: this.state.height,
-                                                textAlign: 'center',
-                                                width: width * 0.75,
-                                                fontSize: 20,
-                                                color: '#F3766F',
-                                            }}
-                                            onChangeText={(text) => this.textHandler(4, text)}
-                                            value={this.props.description}
-                                            underlineColorAndroid='transparent'
-                                            autoFocus={true}
-                                            onSubmitEditing={() => this.setFormStatus(5, this.state.farthestBeen)}
-                                            multiline={true}
-                                            numberOfLines={3}
-                                            autoCapitalize="sentences"
-                                            onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                                        />
-                                        : null}
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: '300'}}>Excellent. Remember, Journey is a tool to help others find you. Moments captured in Journey can be reconstructed throughout time. Your Journey starts now.</Text>
 
 
-                                </View>
-
-                            </Animated.View>
-                        </TouchableOpacity>
-
-
-                    </View>
-                    <View style={styles.section2}>
 
                     </View>
 
@@ -512,7 +381,7 @@ class LocationCommunity extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F3766F',
+        backgroundColor: '#210c2b',
         flex: 1,
         width: '100%',
         alignItems: 'center',

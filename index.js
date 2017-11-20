@@ -94,8 +94,40 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: false,
         // },
         // {
-        //     label: 'two',
+        //     label: 'one?',
         //     screen: 'mainActions', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/americanExpressIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'mainActions Detected',
+        //     tabBarHidden: false,
+        // },
+        {
+            label: 'BumpConfirmation',
+            screen: 'bumpConfirmation', // this is a registered name for a screen
+            icon: require('./app/Assets/icons/americanExpressIcon.png'),
+            /*
+             selectedIcon: require('../img/one_selected.png'), // iOS only
+             */
+            title: 'mainActions Detected',
+            tabBarHidden: false,
+        },
+
+        // {
+        //     label: 'bump',
+        //     screen: 'bump', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Bump',
+        //     tabBarHidden: false,
+        // },
+        //
+        // {
+        //     label: 'two',
+        //     screen: 'personalJourneyStart', // this is a registered name for a screen
         //     icon: require('./app/Assets/icons/visaIcon.png'),
         //     /*
         //      selectedIcon: require('../img/one_selected.png'), // iOS only
@@ -103,16 +135,6 @@ Navigation.startTabBasedApp({
         //     title: 'neighborhood Detected',
         //     tabBarHidden: false,
         // },
-        {
-            label: 'two',
-            screen: 'bump', // this is a registered name for a screen
-            icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'neighborhood Detected',
-            tabBarHidden: false,
-        },
 
 
         // {

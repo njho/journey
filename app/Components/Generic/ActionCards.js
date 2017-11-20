@@ -21,6 +21,8 @@ import {
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../helpers/agent';
+import { Navigation } from 'react-native-navigation';
+
 
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -75,12 +77,12 @@ class ActionCards extends React.Component {
 
     }
 
+
     render() {
         return (
-            <TouchableOpacity>
 
                 <View style={styles.card}>
-                    <LinearGradient colors={['#d8d5db', '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff', '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff', '#d8d5db']} start={{x: 0, y: .50}} end={{x: 1, y: .50}}
+                    <LinearGradient colors={[ '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff','#fbf9ff', '#fbf9ff', '#fbf9ff','#fbf9ff','#fbf9ff', '#d8d5db']} start={{x: 0, y: .50}} end={{x: 1, y: .50}}
                                     style={{
                                         borderRadius: 10,
                                         alignSelf: 'flex-start',
@@ -140,7 +142,6 @@ class ActionCards extends React.Component {
                     </LinearGradient>
                 </View>
 
-            </TouchableOpacity>
 
         );
     }

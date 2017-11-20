@@ -86,12 +86,32 @@ class MainActions extends React.Component {
                     }}>
                         <TouchableOpacity style={{flex: 1}}>
                             <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 20}}>
-                                <Text style={[styles.mainTitle, {fontSize: 22}, ]}><Icon name="ios-pin-outline"
-                                                                     style={{color: 'white', marginRight: 20}}
-                                                                     size={40}/> Community Explorer.</Text>
-                                <Text style={[styles.mainTitle, {fontSize: 15, fontWeight: 'normal'}, ]}>13 active communities in your area.</Text>
+                                <Text style={[styles.mainTitle, {fontSize: 22},]}><Icon name="ios-pin-outline"
+                                                                                        style={{
+                                                                                            color: 'white',
+                                                                                            marginRight: 20
+                                                                                        }}
+                                                                                        size={40}/> Community Explorer.</Text>
+                                <Text style={[styles.mainTitle, {fontSize: 15, fontWeight: 'normal'},]}>13 active
+                                    communities in your area.</Text>
                             </View>
                         </TouchableOpacity>
+                    </View>
+                    <View style={{
+                        flexDirection: 'column',
+                        flex: 1,
+                        width: width,
+                        borderRadius: 5,
+                    }}>
+                        <TouchableOpacity style={{flex: 1, borderRadius: 5}}>
+                            <Image style={{flex: 1, width: null, height: null, borderRadius: 5}}
+                                   source={require('../../Assets/images/jane_goodall.jpg')}/>
+
+                        </TouchableOpacity>
+                        <View style={{flex: 1, position: 'absolute'}}>
+                            <Text>This is a test</Text>
+                        </View>
+
                     </View>
                 </ViewPagerAndroid>
 
@@ -110,18 +130,23 @@ class MainActions extends React.Component {
                     }}
 
                 >
-                    <ActionCards
-                        color="#D0A75D"
-                        actionTitle="Commit a Moment"
-                        actionSubtext="Commit this moment to a Journey!"
-                        icon="ios-analytics"
-                    />
-                    <ActionCards
-                        color="#00542D"
-                        actionTitle="Bump a Friend"
-                        actionSubtext="Commit a moment in time with a neighbor!"
-                        icon="ios-body"
-                    />
+                    <TouchableOpacity>
+                        <ActionCards
+                            color="#D0A75D"
+                            actionTitle="Commit a Moment"
+                            actionSubtext="Commit this moment to a Journey!"
+                            icon="ios-analytics"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigator.push({screen: 'bump'})}>
+                        <ActionCards
+                            color="#00542D"
+                            actionTitle="Bump a Friend"
+                            actionSubtext="Commit a moment in time with a neighbor!"
+                            icon="ios-body"
+                            screen="bump"
+                        />
+                    </TouchableOpacity>
                     <ActionCards
                         color="#991A2F"
                         actionTitle="Connection Point"

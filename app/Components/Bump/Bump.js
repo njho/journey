@@ -80,6 +80,7 @@ class Bump extends React.Component {
         super(props);
         this.state = {
             animation: 1,
+            progress: new Animated.Value(0),
         }
 
     }
@@ -88,12 +89,21 @@ class Bump extends React.Component {
         this.scan.play()
     }
 
+    animateSuccess = () => {
+        this.setState({...this.state, animation: 2});
+        Animated.timing(this.state.progress, {
+            toValue: 1,
+            duration: 3000,
+        }).start(()=>{this.props.navigator.push({screen: 'bumpConfirmation'})})
+    }
+
+
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.bumpButton} onPress={() => {this.setState({ ...this.state, animation: 2});setTimeout(() => {this.bump.play()}, 2)
-                }
-                }>
+                <TouchableOpacity style={styles.bumpButton} onPress={() => {
+                    this.animateSuccess()
+                }}>
                     {this.state.animation === 1 ?
                         <Animation
                             ref={animation => {
@@ -104,9 +114,9 @@ class Bump extends React.Component {
                                 width: width * 0.5,
                                 height: width * 0.5,
                             }}
-                            loop = {true}
+                            loop={true}
                             source={require('../../Assets/lottie/lottieFile.json')}
-                        /> :  <Animation
+                        /> : <Animation
                             ref={animation => {
                                 this.bump = animation;
                             }}
@@ -115,10 +125,15 @@ class Bump extends React.Component {
                                 width: width * 0.75,
                                 height: width * 0.75,
                             }}
+                            progress={this.state.progress}
                             source={require('../../Assets/lottie/done.json')}/>}
 
                 </TouchableOpacity>
-                {this.state.animation ===1 ? <Text style={{marginTop: 20, color: 'white'}}>Waiting on Bump...</Text> : <Text style={{marginTop: 20}}></Text>}
+                {
+                    this.state.animation === 1 ?
+                        <Text style={{marginTop: 20, color: 'white'}}>Waiting on Bump...</Text> :
+                        <Text style={{marginTop: 20}}></Text>
+                }
             </View>
         )
             ;
