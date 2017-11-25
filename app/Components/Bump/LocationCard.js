@@ -108,18 +108,21 @@ class LocationCard extends React.Component {
 
                 <View
                     style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5, alignSelf: 'stretch'}}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={()=>this.props.navigation().showModal({screen: 'locations'})}>
                         <Text style={styles.inverseSubText}>Community</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.inverseSubText}>Location</Text>
                     </TouchableOpacity>
                 </View>
-
-                <Text style={styles.subText}>Skip</Text>
+                <TouchableWithoutFeedback onPress={() => this.props.next()}>
+                    <View>
+                        <Text style={styles.subText}>Skip</Text>
+                    </View>
+                </TouchableWithoutFeedback>
 
                 <MapView
-                    style={{alignSelf: 'stretch', bottom: 0, height: height*0.2, borderRadius: 5}}
+                    style={{alignSelf: 'stretch', bottom: 0, height: height * 0.2, borderRadius: 5}}
                     initialRegion={this.state.region}
                     region={this.state.region}
                 />
@@ -143,6 +146,7 @@ const
             justifyContent: 'center',
             alignSelf: 'stretch',
             flexDirection: 'column',
+            marginBottom: 30,
         },
         titleText: {
             color: '#9A9CE0',

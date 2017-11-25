@@ -11,12 +11,13 @@ import {
     TouchableHighlight,
     Button,
     Easing,
+    ViewPagerAndroid,
     FlatList,
     ScrollView,
     TouchableWithoutFeedback,
     ToastAndroid,
     Switch,
-KeyboardAvoidingView,
+    KeyboardAvoidingView,
     Slider,
     Picker,
     Platform,
@@ -31,6 +32,7 @@ import ConfirmCard from './ConfirmCard';
 import BumpMainCard from './BumpMainCard';
 import LocationCard from './LocationCard';
 import CaptionCard from './CaptionCard';
+import JourneyCard from './JourneyCard';
 
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -85,29 +87,42 @@ class BumpConfirmation extends React.Component {
             translate: new Animated.Value(0),
             status: 0,
             personalJourney: null,
-            data: [{name: 'Clean Up the Oceans'}]
+            data: [{name: 'Clean Up the Oceans'}],
+            scrollEnabled: false,
+            animate: false
         }
         this._deltaY = new Animated.Value(height - 100);
 
     }
 
     componentDidMount() {
-        Animated.sequence([
-            Animated.timing(
-                this.state.rotate,
-                {
-                    toValue: 1,
-                    duration: 1000,
-                    easing: Easing.elastic(),
-                    delay: 1500,
-                }),
-            Animated.timing(
-                this.state.translate, {
-                    toValue: 1,
-                    duration: 750,
-                    easing: Easing.elastic()
-                })
-        ]).start(() => this.setState({...this.state, status: 1}));
+
+    }
+
+
+    next(value) {
+        console.log('entered next value: ' + value);
+
+        switch (value) {
+            case 1 :
+
+                this.viewPager.setPage(2);
+                this.setState({
+                    ...this.state,
+                    animate: true
+                });
+
+                break;
+            case 2:
+                this.scrollView.scrollTo({x: width, y: 0, animated: true});
+                this.setState({
+                    ...this.state,
+                    status: 2,
+                    animate: true
+                });
+                return;
+
+        }
     }
 
 
@@ -135,7 +150,7 @@ class BumpConfirmation extends React.Component {
         })
 
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior='position' style={styles.container}>
                 <Image style={{
                     backgroundColor: '#ccc',
                     flex: 1,
@@ -144,10 +159,89 @@ class BumpConfirmation extends React.Component {
                     height: '100%',
                     justifyContent: 'center',
                 }} source={require('../../../app/Assets/images/background.png')}/>
-                <BumpMainCard/>
-                <CaptionCard/>
+                <ViewPagerAndroid
+                    ref={(comp) => {
+                        this.viewPager = comp
+                    }}
+                    scrollEnabled={this.state.scrollEnabled}
+                    smoothScroll={true}
 
-            </View>
+                    style={{
+                        flex: 1,
+                        width: width,
+                        height: height,
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+
+                    {this.state.status === 0 ?
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                            <JourneyCard/>
+                        </View>
+                        : null
+
+                    }
+
+                    <View style={{flex: 1, paddingTop: 20, alignItems: 'center', justifyContent: 'center'}}>
+
+                        <BumpMainCard {...this.state}/>
+                        <ScrollView
+                            horizontal={true}
+                            pagingEnabled={true}
+                            showsHorizontalScrollIndicator={false}
+                            overScrollMode='never'
+                            ref={(scrollView) => {
+                                this.scrollView = scrollView;
+                            }}
+                        >
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{width: width, flex: 1}}>
+                                    <LocationCard
+                                        viewPagerRef={() => {
+                                            return this.viewPager
+                                        }}
+                                        next={(value) => {
+                                            return this.next(2)
+                                        }}
+                                    />
+                                </View>
+                                <View style={{width: width, flex: 1}}>
+                                    <CaptionCard/>
+                                </View>
+                            </View>
+                        </ScrollView>
+                    </View>
+                </ViewPagerAndroid>
+
+                {this.state.status === 3 ? <View style={styles.panelContainer} pointerEvents={'box-none'}>
+                        <Animated.View
+                            pointerEvents={'box-none'}
+                            style={[styles.panelContainer, {
+                                backgroundColor: 'black',
+                                opacity: this._deltaY.interpolate({
+                                    inputRange: [0, height - 100],
+                                    outputRange: [0.5, 0],
+                                    extrapolateRight: 'clamp'
+                                })
+                            }]}/>
+                        <Interactable.View
+                            verticalOnly={true}
+                            snapPoints={[{y: 20}, {y: height - 300}, {y: height - 80}]}
+                            boundaries={{top: -300}}
+                            initialPosition={{y: height - 80}}
+                            animatedValueY={this._deltaY}>
+                            <View style={styles.panel}>
+
+
+                                <Text style={styles.panelTitle}>Location Check In Available</Text>
+                            </View>
+                        </Interactable.View>
+                    </View>
+
+                    : null}
+
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -430,4 +524,12 @@ export default connect(mapStateToProps, mapDispatchToProps)
     </View>
 
     : null}
-*/
+
+<ConfirmCard
+    viewPagerRef={() => {
+        return this.viewPager
+    }}
+    next={(value) => {
+        return this.next(1)
+    }}
+/>*/

@@ -27,6 +27,7 @@ import agent from '../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import FadeInView from "../helpers/FadeInView";
 import Interactable from 'react-native-interactable';
+import JourneyListItem from '../Generic/JourneyListItem';
 
 
 import {connect} from 'react-redux';
@@ -69,7 +70,7 @@ const shadowStyle = {
 };
 
 
-class CaptionCard extends React.Component {
+class JourneyCard extends React.Component {
     static navigatorStyle = {
         tabBarHidden: true,
         navBarHidden: true
@@ -84,6 +85,35 @@ class CaptionCard extends React.Component {
             personalJourney: null,
             data: [{name: 'Clean Up the Oceans'}],
             facebook: false,
+            journeys:
+                [{
+                    "title": 'Journey1',
+                    "description":
+                        'Cat dog',
+                    "meta": {
+                        "last_action": "bump",
+                        'last_action_meta': 'Marcus Levland',
+                        "num_followers": 34,
+                        "last_entry_date": '2 days ago',
+                        "num_contributors": 12,
+                        "num_entries": 53
+                    }
+                }, {
+                    "title": 'React Native',
+                    "description":
+                        'Cat dog',
+                    "meta": {
+                        "last_action": "photo",
+                        'last_action_meta': 'Cindy Grouper',
+                        "last_entry_date": "4 days ago",
+                        "num_followers": 23,
+                        "num_entries": 30,
+                        "num_contributors": 8,
+
+                    }
+                },
+                ],
+
         }
         this._deltaY = new Animated.Value(height - 100);
 
@@ -108,71 +138,34 @@ class CaptionCard extends React.Component {
 
     }
 
+    renderJourneys() {
+
+
+    }
+
     render() {
 
         return (
             <View style={styles.cardContainer}>
 
-                <View style={{height: height * 0.3}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={styles.titleText}>Write a Caption</Text>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <Text style={[styles.titleText, {color: '#7dddd9'}]}>Send</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <TextInput
-                        style={{
-                            flex: 1,
-                            paddingHorizontal: 16,
-                            color: '#9A9CE0',
-                            height: '100%',
-                        }}
-                        textAlignVertical="top"
-                        multiline={true}
-                        numberOfLines={3}
-                        autoCapitalize="sentences"
-                        underlineColorAndroid='transparent'
-                        onSubmitEditing={() => this.setFormStatus(3, this.state.farthestBeen)}
-                    />
-                </View>
-
-                <Text style={styles.titleText}>Share</Text>
-
                 <View style={{
                     flexDirection: 'row',
-                    width: '100%',
                     justifyContent: 'space-between',
-                    paddingVertical: 5,
                     borderBottomColor: '#9A9CE0',
-                    borderTopColor: '#9A9CE0',
+                    paddingBottom: 5,
                     borderBottomWidth: 1,
-                    borderTopWidth: 1
                 }}>
-                    <View styl={{borderBottomColor: '#9A9CE0'}}>
-                        <Text style={styles.subText}>Facebook </Text>
-                    </View>
-                    <View>
-                        <Switch onValueChange={() => this.valueChange('facebook')} value={this.state.facebook}
-                                thumbTintColor={'#9A9CE0'}/>
-                    </View>
+                    <Text style={styles.titleText}>Choose a Journey</Text>
                 </View>
-                <View style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    marginTop: 5,
 
-                }}>
-                    <View styl={{borderBottomColor: '#9A9CE0'}}>
-                        <Text style={styles.subText}>Twitter </Text>
-                    </View>
-                    <View>
-                        <Switch onValueChange={() => this.valueChange('twitter')} value={this.state.twitter}
-                                thumbTintColor={'#9A9CE0'}/>
-                    </View>
-                </View>
+                <FlatList
+                    stle={{flex: 1}}
+                    data={this.state.journeys}
+                    renderItem={({item}) =>
+                        <JourneyListItem name={item.title} description={item.description}
+                                         meta={item.meta}></JourneyListItem>}
+                />
+
 
             </View>
         );
@@ -188,9 +181,10 @@ const
             paddingHorizontal: 15,
             alignSelf: 'stretch',
             marginHorizontal: 20,
+            flex: 1,
             borderRadius: 10,
+            marginBottom: 20,
             paddingVertical: 20,
-            justifyContent: 'center',
             flexDirection: 'column',
         },
         titleText: {
@@ -235,7 +229,7 @@ const
 export default connect(mapStateToProps, mapDispatchToProps)
 
 (
-    CaptionCard
+    JourneyCard
 )
 ;
 //

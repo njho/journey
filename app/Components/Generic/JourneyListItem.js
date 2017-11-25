@@ -69,7 +69,7 @@ const shadowStyle = {
 };
 
 
-class BumpConfirmation extends React.Component {
+class JourneyListItem extends React.Component {
     static navigatorStyle = {
         tabBarHidden: true,
         navBarHidden: true
@@ -77,18 +77,22 @@ class BumpConfirmation extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            rotate: new Animated.Value(0),
-            translate: new Animated.Value(0),
-            status: 0,
-            personalJourney: null,
-            data: [{name: 'Clean Up the Oceans'}]
-        }
         this._deltaY = new Animated.Value(height - 100);
-
     }
 
     componentDidMount() {
+
+    }
+
+    iconPicker(value) {
+
+        switch(value) {
+            case 'bump':
+                return 'md-wifi'
+            case 'photo':
+                return 'md-square-outline'
+        }
+
 
     }
 
@@ -96,22 +100,37 @@ class BumpConfirmation extends React.Component {
     render() {
 
         return (
-            <View style={styles.cardContainer}>
+            <View style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+                paddingVertical: 25,
+                borderBottomColor: '#9A9CE0',
+                borderBottomWidth: 1,
+                flex: 1,
+            }}>
+                <TouchableOpacity style={{flexDirection: 'row', flex: 1}}>
+                    <View style={{flex: 2, alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon name={this.iconPicker(this.props.meta.last_action)} size={40} color="#9A9CE0"/>
+                        <Text style={styles.subText}>{this.props.meta.last_action_meta}</Text>
 
-                <Text style={styles.titleText}>Add this to your Journey?</Text>
-                <Text style={styles.subText}>Choosing 'No' will add this only as a contribution</Text>
+                        <Text style={styles.subText}>{this.props.meta.last_entry_date}</Text>
 
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5}}>
-                    <TouchableOpacity style={styles.button} onPress={()=>this.props.next()}>
-                        <Text style={styles.inverseSubText}>Yes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.inverseSubText}>No</Text>
-                    </TouchableOpacity>
+                    </View>
+                    <View style={{flex: 4, marginLeft: 10, flexDirection: 'column', justifyContent: 'center', }}>
+                        <Text style={styles.titleText}>{this.props.name}</Text>
+                        <View style={{flexDirection: 'row',}}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>{this.props.meta.num_followers} Entries</Text>
+                            </View>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>{this.props.meta.num_contributors} <Icon name="md-locate" size={14} color="white"/></Text>
+                            </View>
 
 
-                </View>
-
+                        </View>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -135,48 +154,34 @@ const
         },
         titleText: {
             color: '#9A9CE0',
-            textAlign: 'center',
             fontWeight: 'bold',
             fontSize: 20,
-            marginHorizontal: 15,
         },
         subText: {
-            textAlign: 'center',
             color: '#9A9CE0',
-            marginTop: 4,
-            marginHorizontal: 35,
-            fontSize: 15,
-        },
-        inverseSubText: {
-            color: 'white',
+            fontSize: 12,
+            marginHorizontal: 10,
             textAlign: 'center',
-            marginHorizontal: 20,
-            fontSize: 15,
-        },
-        panelContainer: {
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
+
         },
         button: {
-            backgroundColor: '#9A9CE0',
+            backgroundColor: '#86E5C6',
+            justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: 20,
-            marginTop: 15,
+            borderRadius: 8,
+            marginTop: 5,
             marginBottom: 5,
             paddingVertical: 7,
-            marginHorizontal: 5,
+            marginRight: 5,
+        },
+        buttonText: {
+            color: 'white',
+            fontSize: 12,
+            marginHorizontal: 15,
         }
 
     });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)
-
-(
-    BumpConfirmation
-)
-;
+export default connect(mapStateToProps, mapDispatchToProps)(JourneyListItem);
 //

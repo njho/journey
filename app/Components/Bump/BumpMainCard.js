@@ -84,27 +84,32 @@ class BumpMainCard extends React.Component {
 
     }
 
-    componentDidMount() {
-        Animated.sequence([
-            Animated.timing(
-                this.state.rotate,
-                {
-                    toValue: 1,
-                    duration: 1000,
-                    easing: Easing.elastic(),
-                    delay: 1500,
-                }),
-            Animated.timing(
-                this.state.translate, {
-                    toValue: 1,
-                    duration: 750,
-                    easing: Easing.elastic()
-                })
-        ]).start(() => this.setState({...this.state, status: 1}));
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        console.log('received props');
+        if (nextProps.animate === true) {
+            Animated.sequence([
+                Animated.timing(
+                    this.state.rotate,
+                    {
+                        toValue: 1,
+                        duration: 1000,
+                        easing: Easing.elastic(),
+                        delay: 500,
+                    }),
+                Animated.timing(
+                    this.state.translate, {
+                        toValue: 1,
+                        duration: 750,
+                        easing: Easing.elastic()
+                    })
+            ]).start(() => this.setState({...this.state, status: 1}));
+        }
     }
 
 
     render() {
+        console.log(this.props);
         const spinOne = this.state.rotate.interpolate({
             inputRange: [0, 1],
             outputRange: ['30deg', '0deg']
@@ -115,7 +120,7 @@ class BumpMainCard extends React.Component {
         })
         const translate = this.state.rotate.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, width *0.07]
+            outputRange: [0, width * 0.07]
         })
         const translateNegative = this.state.rotate.interpolate({
             inputRange: [0, 1],
@@ -178,10 +183,11 @@ const
         cardContainer: {
             alignSelf: 'stretch',
             backgroundColor: 'white',
+            paddingVertical: 30,
             elevation: 10,
             paddingHorizontal: 15,
+            marginBottom: 20,
             marginHorizontal: 20,
-            paddingVertical: 20,
             borderRadius: 10,
             alignItems: 'center',
             justifyContent: 'center',
@@ -206,7 +212,7 @@ const
             color: '#9A9CE0',
             marginTop: 4,
             marginHorizontal: 35,
-            fontSize: 15,
+            fontSize: 13,
 
         },
         inverseSubText: {
