@@ -87,7 +87,7 @@ class JourneyCard extends React.Component {
             facebook: false,
             journeys:
                 [{
-                    "title": 'Journey1',
+                    "title": 'Emulate',
                     "description":
                         'Cat dog',
                     "meta": {
@@ -152,20 +152,41 @@ class JourneyCard extends React.Component {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     borderBottomColor: '#9A9CE0',
-                    paddingBottom: 5,
+                    paddingBottom: 10,
                     borderBottomWidth: 1,
                 }}>
-                    <Text style={styles.titleText}>Choose a Journey</Text>
+                    <Text style={styles.titleText}>Select your Journeys</Text>
                 </View>
 
                 <FlatList
                     stle={{flex: 1}}
                     data={this.state.journeys}
                     renderItem={({item}) =>
-                        <JourneyListItem name={item.title} description={item.description}
-                                         meta={item.meta}></JourneyListItem>}
-                />
+                        <JourneyListItem
+                            key={item.title}
+                            name={item.title}
+                            description={item.description}
+                            meta={item.meta}
 
+                        ></JourneyListItem>
+
+
+                    }
+                />
+                <View style={{width: '100%', justifyContent: 'space-between'}}>
+                    <TouchableOpacity>
+                        <View>
+                            <Text style={styles.titleText}>+ Journey</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{position: 'absolute', right: 0, bottom: 0, paddingRight: 10,}}
+                        onPress={() => this.props.next()}>
+                        <View>
+                            <Text style={styles.titleText}>Next</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
             </View>
         );

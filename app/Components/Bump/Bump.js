@@ -15,10 +15,16 @@ import {
     TouchableWithoutFeedback,
     ToastAndroid,
     Slider,
+    Share,
     Picker,
     Platform,
     StatusBar
 } from 'react-native';
+
+import { NativeModules } from 'react-native';
+
+
+
 import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../helpers/agent';
 
@@ -85,16 +91,30 @@ class Bump extends React.Component {
 
     }
 
-    componentDidMount() {
-        this.scan.play()
-    }
+    // componentDidMount() {
+    //     this.scan.play()
+    // }
 
     animateSuccess = () => {
         this.setState({...this.state, animation: 2});
         Animated.timing(this.state.progress, {
             toValue: 1,
             duration: 3000,
-        }).start(()=>{this.props.navigator.push({screen: 'bumpConfirmation'})})
+        }).start(() => {
+            this.props.navigator.push({screen: 'bumpConfirmation'})
+        })
+    }
+
+    async componentDidMount() {
+        await fetch('https://mercury.postlight.com/parser?url=https://stackoverflow.com/questions/47524180/highchart-coloring-area-based-on-plotline-xaxis-and-yaxis', {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'x-api-key': 'oBv5iYSdB2eY1wUwMBvWbmDjEQLrHmYCz83uJJ34'
+            }),
+        }).then((response) => {
+            response.json().then((data) => {console.log(data.title); console.log(data.url)});
+        })
     }
 
 
@@ -102,7 +122,9 @@ class Bump extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity style={styles.bumpButton} onPress={() => {
-                    this.animateSuccess()
+                    // this.animateSuccess()
+                    // this.share();
+
                 }}>
                     {this.state.animation === 1 ?
                         <Animation

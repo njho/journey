@@ -77,6 +77,9 @@ class JourneyListItem extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            selected: false
+        }
         this._deltaY = new Animated.Value(height - 100);
     }
 
@@ -85,14 +88,19 @@ class JourneyListItem extends React.Component {
     }
 
     iconPicker(value) {
-
-        switch(value) {
+        switch (value) {
             case 'bump':
                 return 'md-wifi'
             case 'photo':
                 return 'md-square-outline'
         }
+    }
 
+    toggle() {
+        this.setState({
+            ...this.state,
+            selected: !this.state.selected
+        })
 
     }
 
@@ -104,27 +112,36 @@ class JourneyListItem extends React.Component {
                 flexDirection: 'row',
                 width: '100%',
                 justifyContent: 'space-between',
-                paddingVertical: 25,
                 borderBottomColor: '#9A9CE0',
                 borderBottomWidth: 1,
                 flex: 1,
             }}>
-                <TouchableOpacity style={{flexDirection: 'row', flex: 1}}>
-                    <View style={{flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon name={this.iconPicker(this.props.meta.last_action)} size={40} color="#9A9CE0"/>
-                        <Text style={styles.subText}>{this.props.meta.last_action_meta}</Text>
+                <TouchableOpacity style={{flexDirection: 'row', flex: 1,}} onPress={()=>this.toggle()}>
+                    <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
 
-                        <Text style={styles.subText}>{this.props.meta.last_entry_date}</Text>
+                        {this.state.selected ?
+
+                            <Icon name="ios-checkmark-circle-outline" size={40} color="#83E588"/>
+                            :
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name={this.iconPicker(this.props.meta.last_action)} size={40} color="#9A9CE0"/>
+                                <Text style={styles.subText}>{this.props.meta.last_action_meta}</Text>
+
+                                <Text style={styles.subText}>{this.props.meta.last_entry_date}</Text>
+                            </View>
+                        }
+
 
                     </View>
-                    <View style={{flex: 4, marginLeft: 10, flexDirection: 'column', justifyContent: 'center', }}>
+                    <View style={{flex: 4, marginLeft: 10, flexDirection: 'column', justifyContent: 'center',  paddingVertical: 30}}>
                         <Text style={styles.titleText}>{this.props.name}</Text>
                         <View style={{flexDirection: 'row',}}>
                             <View style={styles.button}>
                                 <Text style={styles.buttonText}>{this.props.meta.num_followers} Entries</Text>
                             </View>
                             <View style={styles.button}>
-                                <Text style={styles.buttonText}>{this.props.meta.num_contributors} <Icon name="md-locate" size={14} color="white"/></Text>
+                                <Text style={styles.buttonText}>{this.props.meta.num_contributors} <Icon
+                                    name="md-locate" size={14} color="white"/></Text>
                             </View>
 
 

@@ -1,13 +1,14 @@
 package com.journey;
 
-import android.app.Application;
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.util.Log;
 
-import com.facebook.react.ReactApplication;
+import com.reactnativenavigation.controllers.ActivityCallbacks;
 import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 
 import io.invertase.firebase.RNFirebasePackage;
@@ -22,24 +23,109 @@ import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Stora
 import com.wix.interactable.Interactable;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
-import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
-import com.facebook.soloader.SoLoader;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
-import com.facebook.appevents.AppEventsLogger;
 
 import com.reactnativenavigation.NavigationApplication;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.journey.WebUrlSingleton;
+
 public class MainApplication extends NavigationApplication /*implements ReactApplication */ {
 
+
+
     private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
+
+    void handleWebsiteShare(Intent intent) {
+
+        String webUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (webUrl != null) {
+            Log.i("Balls", webUrl);
+
+            WebUrlSingleton webUrlSingleton = WebUrlSingleton.get();
+
+            webUrlSingleton.setWEB_URL(webUrl);
+
+
+            // Update UI to reflect text being shared
+        }
+    }
+
+    ///This overrides the default seen in the NavigationApplication.java
+
+    @Override
+    public void startActivity(Intent intent){
+        String action = intent.getAction();
+        String type = intent.getStringExtra("EXTRA_TEXT");
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            handleWebsiteShare(intent); // Handle text being sent
+
+        } else {
+            // Handle other intents, such as being started from the home screen
+        }
+
+        String animationType = intent.getStringExtra("animationType");
+        if (animationType != null && animationType.equals("fade")) {
+            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(getApplicationContext(),
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+            ).toBundle();
+            super.startActivity(intent, bundle);
+        } else {
+            super.startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+
+
+        setActivityCallbacks(new ActivityCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
+    }
+
 
 /*  protected static CallbackManager getCallbackManager() {
     return mCallbackManager;
@@ -117,7 +203,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNFirebaseMessagingPackage(),
                 new RNFirebaseStoragePackage(),
                 new MapsPackage(),
-                new RNOpenTokPackage()
+                new RNOpenTokPackage(),
+                new WebUrlPackage()
 
         );
     }

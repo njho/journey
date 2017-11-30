@@ -121,6 +121,14 @@ class BumpConfirmation extends React.Component {
                     animate: true
                 });
                 return;
+            case 3:
+                this.scrollView.scrollTo({x: width*2, y: 0, animated: true});
+                this.setState({
+                    ...this.state,
+                    status: 2,
+                    animate: true
+                });
+                return;
 
         }
     }
@@ -177,7 +185,14 @@ class BumpConfirmation extends React.Component {
 
                     {this.state.status === 0 ?
                         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                            <JourneyCard/>
+                            <ConfirmCard
+                                viewPagerRef={() => {
+                                    return this.viewPager
+                                }}
+                                next={(value) => {
+                                    return this.next(1)
+                                }}
+                            />
                         </View>
                         : null
 
@@ -185,7 +200,6 @@ class BumpConfirmation extends React.Component {
 
                     <View style={{flex: 1, paddingTop: 20, alignItems: 'center', justifyContent: 'center'}}>
 
-                        <BumpMainCard {...this.state}/>
                         <ScrollView
                             horizontal={true}
                             pagingEnabled={true}
@@ -195,8 +209,11 @@ class BumpConfirmation extends React.Component {
                                 this.scrollView = scrollView;
                             }}
                         >
+
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{width: width, flex: 1}}>
+                                    <BumpMainCard {...this.state}/>
+
                                     <LocationCard
                                         viewPagerRef={() => {
                                             return this.viewPager
@@ -207,6 +224,14 @@ class BumpConfirmation extends React.Component {
                                     />
                                 </View>
                                 <View style={{width: width, flex: 1}}>
+                                    <JourneyCard
+                                        next={(value) => {
+                                        return this.next(3)
+                                    }}/>
+                                </View>
+                                <View style={{width: width, flex: 1}}>
+                                    <BumpMainCard {...this.state}/>
+
                                     <CaptionCard/>
                                 </View>
                             </View>
