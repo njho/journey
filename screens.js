@@ -14,6 +14,7 @@ import Bump from './app/Components/Bump/Bump'
 import PersonalJourneyStart from './app/Components/Main/PersonalJourneyStart';
 import BumpConfirmation from './app/Components/Bump/BumpConfirmation';
 import UrlShare from './app/Components/Social/UrlShare';
+import MyWeb from './app/Components/helpers/MyWeb';
 
 
 // register all screens of the app (including internal ones)
@@ -30,6 +31,8 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('bump', () => Bump, store, Provider);
     Navigation.registerComponent('personalJourneyStart', ()=> PersonalJourneyStart, store, Provider);
     Navigation.registerComponent('bumpConfirmation', ()=> BumpConfirmation, store, Provider)
-    Navigation.registerComponent('UrlShare', ()=> UrlShare, store, Provider)
+    Navigation.registerComponent('UrlShare', ()=> UrlShare, store, Provider);
+    Navigation.registerComponent('MyWeb', ()=>  MyWeb, store, Provider)
+
 
 }

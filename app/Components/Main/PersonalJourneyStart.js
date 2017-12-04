@@ -251,7 +251,8 @@ class LocationCommunity extends React.Component {
                         <Animated.View
                             style={[{
                                 position: 'absolute',
-                                borderRadius: 10,
+                                borderRadius
+                                    : 10,
                                 height: 10,
                                 width: 10,
                                 backgroundColor: 'white'

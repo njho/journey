@@ -4695,6 +4695,10 @@ react-native-scrollable-mixin@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
 
+react-native-swipe-gestures@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.2.tgz#914e1a72a94bc55b322b4622a01103ab879296dd"
+
 react-native-ui-kitten@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-native-ui-kitten/-/react-native-ui-kitten-2.0.1.tgz#bbd4483a11e35f13502f0bd86d78ef1621fd0d7d"

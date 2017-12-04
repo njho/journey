@@ -159,7 +159,7 @@ class JourneyCard extends React.Component {
                 </View>
 
                 <FlatList
-                    stle={{flex: 1}}
+                    style={{flex: 1}}
                     data={this.state.journeys}
                     renderItem={({item}) =>
                         <JourneyListItem
