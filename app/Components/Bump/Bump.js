@@ -18,10 +18,15 @@ import {
     Share,
     Picker,
     Platform,
-    StatusBar
+    DeviceEventEmitter,
+    StatusBar,
+    Alert
 } from 'react-native';
 
 import { NativeModules } from 'react-native';
+import { getTagId, readTag, writeTag } from 'nfc-react-native'
+
+
 
 
 
@@ -82,6 +87,36 @@ class Bump extends React.Component {
         navBarHidden: true
     };
 
+    readTagId() {
+        getTagId()
+    }
+
+    readTagData() {
+        readTag([
+            { sector: 1, blocks: [1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
+            { sector: 2, blocks: [0,1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
+            { sector: 3, blocks: [0], clave: 'FFFFFFFFFFFF', keyType: 'A' }
+        ])
+    }
+
+    writeTagData() {
+        Alert.alert('I have no idea');
+
+        writeTag([{ sector: 1, blocks: [
+            { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+            { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+            clave: 'FFFFFFFFFFFF', keyType: 'A' },
+            { sector: 2, blocks: [
+                { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+                { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+                { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+                clave: 'FFFFFFFFFFFF', keyType: 'A' },
+            { sector: 3, blocks: [
+                { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+                clave: 'FFFFFFFFFFFF', keyType: 'A' },
+        ], 1148002313)
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -91,9 +126,28 @@ class Bump extends React.Component {
 
     }
 
-    // componentDidMount() {
-    //     this.scan.play()
-    // }
+    componentDidMount() {
+        this.scan.play();
+        DeviceEventEmitter.addListener('onTagError', function (e) {
+            console.log('error', e)
+            Alert.alert(JSON.stringify(e))
+        })
+
+        DeviceEventEmitter.addListener('onTagDetected', function (e) {
+            Alert.alert(JSON.stringify(e))
+        })
+
+        DeviceEventEmitter.addListener('onTagRead', (e) => {
+            console.log('reading', e)
+            Alert.alert(JSON.stringify(e))
+        })
+
+        DeviceEventEmitter.addListener('onTagWrite', (e) => {
+            console.log('writing', e)
+            Alert.alert(JSON.stringify(e))
+        })
+    }
+
 
     animateSuccess = () => {
         this.setState({...this.state, animation: 2});
@@ -105,25 +159,32 @@ class Bump extends React.Component {
         })
     }
 
-    async componentDidMount() {
-        await fetch('https://mercury.postlight.com/parser?url=https://stackoverflow.com/questions/47524180/highchart-coloring-area-based-on-plotline-xaxis-and-yaxis', {
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'x-api-key': 'oBv5iYSdB2eY1wUwMBvWbmDjEQLrHmYCz83uJJ34'
-            }),
-        }).then((response) => {
-            response.json().then((data) => {console.log(data.title); console.log(data.url)});
-        })
-    }
+
 
 
     render() {
         return (
             <View style={styles.container}>
+
+                <View style={styles.container}>
+                    <Text style={styles.welcome}>
+                        Welcome to React Native!
+                    </Text>
+                    <Button
+                        onPress={this.readTagId}
+                        title="Get id of Tag"
+                    />
+                    <Button
+                        onPress={this.readTagData}
+                        title="Get sectors of a Tag"
+                    />
+                    <Button
+                        onPress={this.writeTagData}
+                        title="Write sectors of a Tag"
+                    />
+                </View>
                 <TouchableOpacity style={styles.bumpButton} onPress={() => {
-                    // this.animateSuccess()
-                    // this.share();
+                    this.animateSuccess()
 
                 }}>
                     {this.state.animation === 1 ?

@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.NFC" />
+
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -31,9 +33,18 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
 
+
             <meta-data
                 android:name="OPENTOK_API_KEY"
                 android:value="45996162" />
+
+
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+            </intent-filter>
+
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

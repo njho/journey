@@ -3808,6 +3808,10 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+nfc-react-native@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/nfc-react-native/-/nfc-react-native-0.4.4.tgz#5600204b420c5c03ea77c1e531406462030d75e3"
+
 node-fetch-npm@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/node-fetch-npm/-/node-fetch-npm-2.0.2.tgz#7258c9046182dca345b4208eda918daf33697ff7"

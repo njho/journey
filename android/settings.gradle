@@ -1,4 +1,8 @@
 rootProject.name = 'Journey'
+include ':nfc-react-native'
+project(':nfc-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/nfc-react-native/android')
+include ':nfc-react-native'
+project(':nfc-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/nfc-react-native/android')
 include ':react-native-opentok'
 project(':react-native-opentok').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-opentok/android')
 include ':react-native-maps'
@@ -19,4 +23,8 @@ include ':react-native-fbsdk'
 project(':react-native-fbsdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fbsdk/android')
 include ':react-native-navigation'
 project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation/android/app/')
+include ':nfc-react-native'
+project(':nfc-react-native').projectDir = new File(rootProject.projectDir,  '../node_modules/nfc-react-native/android')
+
 include ':app'
+

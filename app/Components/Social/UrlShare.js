@@ -526,14 +526,16 @@ class UrlShare extends React.Component {
                                 </View>
                             </View>
                             <FlatList
-                                style={{flex: 1, marginBottom: 30,}}
+                                style={{flex: 1, marginBottom: 30, marginTop: 10}}
                                 data={this.state.journeys}
-                                renderItem={({item}) =>
+                                keyExtractor={this._keyExtractor}
+                                renderItem={({item, index}) =>
                                     <JourneyListItemTwo
-                                        key={item.title}
+                                        index={index}
                                         name={item.title}
                                         description={item.description}
                                         meta={item.meta}
+
                                     />
                                 }
                             />
@@ -579,10 +581,10 @@ const styles = StyleSheet.create({
         ,
         availableJourneys: {
             textAlign: 'center',
-            margin: 10,
             fontSize: 18,
+            fontWeight: 'bold',
             marginVertical: 10,
-            marginLeft: 10,
+            marginLeft: 15,
             color: '#4D81C2'
         }
         ,

@@ -82,17 +82,17 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: false,
         //     passProps: {sessionId: 'balls'}
         // },
-        //
+
         // {
         //     label: 'two',
         //     screen: 'streamer', // this is a registered name for a screen
         //     icon: require('./app/Assets/icons/visaIcon.png'),
-        //     /*
+        //         /*
         //      selectedIcon: require('../img/one_selected.png'), // iOS only
         //      */
         //     title: 'neighborhood Detected',
         //     tabBarHidden: false,
-        // },
+        // }
         // {
         //     label: 'one?',
         //     screen: 'mainActions', // this is a registered name for a screen
@@ -113,7 +113,7 @@ Navigation.startTabBasedApp({
         //     title: 'mainActions Detected',
         //     tabBarHidden: false,
         // },
-
+        //
         // {
         //     label: 'bump',
         //     screen: 'bump', // this is a registered name for a screen
@@ -125,16 +125,47 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: false,
         // },
 
+        // {
+        //     label: 'UrlShare',
+        //     screen: 'UrlShare', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Bump',
+        //     tabBarHidden: false,
+        // },
+        // {
+        //     label: 'JourneyView',
+        //     screen: 'JourneyView', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'JourneyView',
+        //     tabBarHidden: false,
+        // },
         {
-            label: 'UrlShare',
-            screen: 'UrlShare', // this is a registered name for a screen
+            label: 'Timeline',
+            screen: 'Timeline', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
-            title: 'Bump',
+            title: 'Timeline',
             tabBarHidden: false,
         },
+        // {
+        //     label: 'individualTimeline',
+        //     screen: 'IndividualTimeline', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'individualtimeline',
+        //     tabBarHidden: false,
+        // },
+
 
 
 

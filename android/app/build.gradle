@@ -145,6 +145,7 @@ android {
 }
 
 dependencies {
+    compile project(':nfc-react-native')
     compile project(':react-native-maps')
     compile project(':react-native-opentok')
 
@@ -184,6 +185,8 @@ dependencies {
     compile 'com.facebook.react:react-native:+'
     compile 'com.airbnb.android:lottie:2.2.5'
     compile project(':react-native-navigation')
+
+
     // From node_modules
 }
 

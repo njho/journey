@@ -27,7 +27,7 @@ import agent from '../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import FadeInView from "../helpers/FadeInView";
 import Interactable from 'react-native-interactable';
-import JourneyListItem from '../Generic/JourneyListItem';
+import JourneyListItemTwo from '../Generic/JourneyListItemTwo';
 
 
 import {connect} from 'react-redux';
@@ -162,13 +162,13 @@ class JourneyCard extends React.Component {
                     style={{flex: 1}}
                     data={this.state.journeys}
                     renderItem={({item}) =>
-                        <JourneyListItem
+                        <JourneyListItemTwo
                             key={item.title}
                             name={item.title}
                             description={item.description}
                             meta={item.meta}
 
-                        ></JourneyListItem>
+                        ></JourneyListItemTwo>
 
 
                     }

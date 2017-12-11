@@ -35,6 +35,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
+import BumpCard from './Cards/BumpCard'
 
 
 import Chat from '../Chat/Chat';
@@ -106,64 +107,34 @@ class JourneyListItem extends React.Component {
 
     _keyExtractor = (item, index) => item.id;
 
+    renderItem() {
+        switch (this.props.meta.type) {
+            case 'bump':
+                return <BumpCard
+                description={this.props.description}
+                />
+                break;
+        }
+    }
+
 
     render() {
 
 
         return (
             <View style={{
-                flexDirection: 'row',
+                flexDirection: 'column',
                 width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
                 flex: 1,
+                paddingTop: 15,
                 backgroundColor: this.props.index % 2 === 0 ? '#f9f9f9' : 'white'
             }}>
-                <TouchableOpacity style={{flexDirection: 'row', flex: 1, alignItems: 'center'}} onPress={() => this.toggle()}>
-                    <View style={{flex: 1, alignItems: 'center', marginLeft: 20, justifyContent: 'center'}}>
 
 
-                        <View style={{
-                            width: '100%',
-                            height: width * 0.2,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <Image
-                                style={{width: width * 0.15, height: width * 0.15, borderRadius: width * 0.15}}
-                                source={{uri: 'http://image.boomsbeat.com/data/images/full/759/1-jpg'}}/>
-                        </View>
-
-
-                    </View>
-                    <View style={{
-                        flex: 4,
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        paddingVertical: 10,
-                        marginLeft: 20
-                    }}>
-                        <Text style={styles.titleText}>{this.props.name}</Text>
-                        <Text style={styles.subText}>{this.props.meta.last_entry_date}</Text>
-                    </View>
-                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                    {this.state.selected ?
-                            <Icon name="ios-checkmark-circle-outline" size={40} style={{marginRight: 30}} color="#00BBF5"/>
-                        : <View>
-                            <Text
-                                style={{
-                                    color: '#00BBF5',
-                                    marginRight: 30,
-                                    fontSize: 14
-                                }}>
-                               Add</Text>
-                        </View>
-                    }
-                    </View>
-    </TouchableOpacity>
-    </View>
-    )
-        ;
+                {this.renderItem()}
+            </View>
+        )
+            ;
     }
 }
 
@@ -178,7 +149,12 @@ const
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            marginBottom: 40,
+            marginBottom: 35,
+        },
+        userPhoto: {
+            height: 35,
+            width: 35,
+            borderRadius: 35,
         },
         titleText: {
             color: '#4D81C2',
@@ -211,3 +187,52 @@ const
 
 export default connect(mapStateToProps, mapDispatchToProps)(JourneyListItem);
 //
+
+{/*<View style={[{*/
+}
+{/*flexDirection: 'row',*/
+}
+{/*borderColor: 'white',*/
+}
+{/*width: 35,*/
+}
+{/*height: 35,*/
+}
+{/*borderWidth: 2,*/
+}
+{/*borderRadius: 30,*/
+}
+{/*alignItems: 'center',*/
+}
+{/*justifyContent: 'center',*/
+}
+{/*backgroundColor: 'white'*/
+}
+{/*}]}>*/
+}
+{/*<Image style={styles.userPhoto}*/
+}
+{/*source={require('../../../app/Assets/images/elon_musk.jpeg')}/>*/
+}
+{/*</View>*/
+}
+{/*<View*/
+}
+{/*style={{flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>*/
+}
+{/*<Text style={{marginLeft: 10, fontSize: 14, fontWeight: 'bold'}}>Fun-eh</Text>*/
+}
+{/*<View style={{flexDirection: 'column', alignItems: 'flex-end'}}>*/
+}
+{/*<Text style={{*/
+}
+{/*marginRight: 20, fontSize: 14, color: '#4D81C2', fontWeight: 'bold',*/
+}
+{/*}}>{this.props.substory ? this.props.substory : '../' + this.props.name}</Text>*/
+}
+
+
+{/*</View>*/
+}
+{/*</View>*/
+}

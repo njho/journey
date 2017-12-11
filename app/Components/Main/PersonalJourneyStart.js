@@ -236,7 +236,7 @@ class LocationCommunity extends React.Component {
 
         return (
             <View style={styles.container}>
-                <LinearGradient colors={['#210c2b', '#210c2b']}
+                <LinearGradient colors={['#16171C', '#16171C']}
                                 style={{flex: 1, position: 'absolute', alignItems: 'center', width: '100%'}}>
                 </LinearGradient>
                 <View style={{
