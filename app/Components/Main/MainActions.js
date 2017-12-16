@@ -104,8 +104,7 @@ class MainActions extends React.Component {
                         borderRadius: 5,
                     }}>
                         <TouchableOpacity style={{flex: 1, borderRadius: 5}}>
-                            <Image style={{flex: 1, width: null, height: null, borderRadius: 5}}
-                                   source={require('../../Assets/images/jane_goodall.jpg')}/>
+                            `
 
                         </TouchableOpacity>
                         <View style={{flex: 1, position: 'absolute'}}>

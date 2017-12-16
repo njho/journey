@@ -24,7 +24,6 @@ import com.wix.interactable.Interactable;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactPackage;
-import es.tiarg.nfcreactnative.NfcReactNativePackage;
 
 import com.facebook.CallbackManager;
 
@@ -207,8 +206,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNFirebaseStoragePackage(),
                 new MapsPackage(),
                 new RNOpenTokPackage(),
-                new WebUrlPackage(),
-                new NfcReactNativePackage()
+                new WebUrlPackage()
         );
     }
 

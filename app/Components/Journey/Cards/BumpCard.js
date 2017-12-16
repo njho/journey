@@ -34,6 +34,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
+import CommentBar from "./CommentBar";
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -157,69 +158,7 @@ class BumpMainCard extends React.Component {
                             </MapView.Marker>
                         </MapView>
                         <View>
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'stretch',
-                            }}>
-                                <TouchableOpacity
-                                    style={{
-                                        flexDirection: 'row',
-                                        flex: 1,
-                                        alignItems: 'center',
-                                        backgroundColor: '#4D81C2',
-                                        justifyContent: 'center',
-                                    }}>
-                                    <Icon name="ios-heart-outline" style={{color: 'white'}} size={25}/>
-
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            marginVertical: 10,
-                                            fontSize: 14,
-                                            marginLeft: 10
-
-                                        }}>
-
-                                        31</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{
-                                        flexDirection: 'row',
-                                        flex: 1,
-                                        backgroundColor: '#4D81C2',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
-                                    <Icon name="ios-chatbubbles-outline" style={{color: 'white'}} size={25}/>
-
-
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            marginVertical: 10,
-                                            fontSize: 14,
-                                            marginLeft: 10
-                                        }}>
-
-                                        31</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
-                                    flexDirection: 'row',
-                                    flex: 2,
-                                    backgroundColor: '#4D81C2',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            marginHorizontal: 20,
-                                            marginVertical: 10,
-                                            fontSize: 14
-                                        }}>
-                                        Contribute</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <CommentBar/>
                             <View
                                 style={{
                                     position: 'absolute',

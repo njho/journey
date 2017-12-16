@@ -145,7 +145,6 @@ android {
 }
 
 dependencies {
-    compile project(':nfc-react-native')
     compile project(':react-native-maps')
     compile project(':react-native-opentok')
 

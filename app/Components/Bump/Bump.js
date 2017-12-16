@@ -24,7 +24,7 @@ import {
 } from 'react-native';
 
 import { NativeModules } from 'react-native';
-import { getTagId, readTag, writeTag } from 'nfc-react-native'
+// import { getTagId, readTag, writeTag } from 'nfc-react-native'
 
 
 
@@ -87,35 +87,35 @@ class Bump extends React.Component {
         navBarHidden: true
     };
 
-    readTagId() {
-        getTagId()
-    }
-
-    readTagData() {
-        readTag([
-            { sector: 1, blocks: [1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
-            { sector: 2, blocks: [0,1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
-            { sector: 3, blocks: [0], clave: 'FFFFFFFFFFFF', keyType: 'A' }
-        ])
-    }
-
-    writeTagData() {
-        Alert.alert('I have no idea');
-
-        writeTag([{ sector: 1, blocks: [
-            { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
-            { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
-            clave: 'FFFFFFFFFFFF', keyType: 'A' },
-            { sector: 2, blocks: [
-                { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
-                { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
-                { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
-                clave: 'FFFFFFFFFFFF', keyType: 'A' },
-            { sector: 3, blocks: [
-                { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
-                clave: 'FFFFFFFFFFFF', keyType: 'A' },
-        ], 1148002313)
-    }
+    // readTagId() {
+    //     getTagId()
+    // }
+    //
+    // readTagData() {
+    //     readTag([
+    //         { sector: 1, blocks: [1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
+    //         { sector: 2, blocks: [0,1,2], clave: 'FFFFFFFFFFFF', keyType: 'A' },
+    //         { sector: 3, blocks: [0], clave: 'FFFFFFFFFFFF', keyType: 'A' }
+    //     ])
+    // }
+    //
+    // writeTagData() {
+    //     Alert.alert('I have no idea');
+    //
+    //     writeTag([{ sector: 1, blocks: [
+    //         { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+    //         { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+    //         clave: 'FFFFFFFFFFFF', keyType: 'A' },
+    //         { sector: 2, blocks: [
+    //             { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+    //             { index: 1, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] },
+    //             { index: 2, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+    //             clave: 'FFFFFFFFFFFF', keyType: 'A' },
+    //         { sector: 3, blocks: [
+    //             { index: 0, data: [15,15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,15,15] } ],
+    //             clave: 'FFFFFFFFFFFF', keyType: 'A' },
+    //     ], 1148002313)
+    // }
 
     constructor(props) {
         super(props);
@@ -128,24 +128,24 @@ class Bump extends React.Component {
 
     componentDidMount() {
         this.scan.play();
-        DeviceEventEmitter.addListener('onTagError', function (e) {
-            console.log('error', e)
-            Alert.alert(JSON.stringify(e))
-        })
-
-        DeviceEventEmitter.addListener('onTagDetected', function (e) {
-            Alert.alert(JSON.stringify(e))
-        })
-
-        DeviceEventEmitter.addListener('onTagRead', (e) => {
-            console.log('reading', e)
-            Alert.alert(JSON.stringify(e))
-        })
-
-        DeviceEventEmitter.addListener('onTagWrite', (e) => {
-            console.log('writing', e)
-            Alert.alert(JSON.stringify(e))
-        })
+        // DeviceEventEmitter.addListener('onTagError', function (e) {
+        //     console.log('error', e)
+        //     Alert.alert(JSON.stringify(e))
+        // })
+        //
+        // DeviceEventEmitter.addListener('onTagDetected', function (e) {
+        //     Alert.alert(JSON.stringify(e))
+        // })
+        //
+        // DeviceEventEmitter.addListener('onTagRead', (e) => {
+        //     console.log('reading', e)
+        //     Alert.alert(JSON.stringify(e))
+        // })
+        //
+        // DeviceEventEmitter.addListener('onTagWrite', (e) => {
+        //     console.log('writing', e)
+        //     Alert.alert(JSON.stringify(e))
+        // })
     }
 
 
@@ -166,23 +166,6 @@ class Bump extends React.Component {
         return (
             <View style={styles.container}>
 
-                <View style={styles.container}>
-                    <Text style={styles.welcome}>
-                        Welcome to React Native!
-                    </Text>
-                    <Button
-                        onPress={this.readTagId}
-                        title="Get id of Tag"
-                    />
-                    <Button
-                        onPress={this.readTagData}
-                        title="Get sectors of a Tag"
-                    />
-                    <Button
-                        onPress={this.writeTagData}
-                        title="Write sectors of a Tag"
-                    />
-                </View>
                 <TouchableOpacity style={styles.bumpButton} onPress={() => {
                     this.animateSuccess()
 
@@ -272,3 +255,23 @@ const styles = StyleSheet.create({
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Bump);
+
+
+//
+// <View style={styles.container}>
+//     <Text style={styles.welcome}>
+//         Welcome to React Native!
+//     </Text>
+//     <Button
+//         onPress={this.readTagId}
+//         title="Get id of Tag"
+//     />
+//     <Button
+//         onPress={this.readTagData}
+//         title="Get sectors of a Tag"
+//     />
+//     <Button
+//         onPress={this.writeTagData}
+//         title="Write sectors of a Tag"
+//     />
+// </View>

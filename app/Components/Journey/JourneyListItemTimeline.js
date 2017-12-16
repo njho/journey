@@ -35,7 +35,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
-import BumpCard from './Cards/BumpCard'
+import BumpCard from './Cards/BumpCard';
+import PhotoCard from './Cards/PhotoCard'
 
 
 import Chat from '../Chat/Chat';
@@ -111,8 +112,11 @@ class JourneyListItem extends React.Component {
         switch (this.props.meta.type) {
             case 'bump':
                 return <BumpCard
-                description={this.props.description}
+                    description={this.props.description}
                 />
+                break;
+            case 'photo':
+                return <PhotoCard/>
                 break;
         }
     }

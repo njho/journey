@@ -26,6 +26,7 @@ import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
+import ImageResizer from 'react-native-image-resizer';
 
 
 import {connect} from 'react-redux';
@@ -34,6 +35,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
+import CommentBar from "./CommentBar";
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -67,6 +69,8 @@ class BumpMainCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            imgWidth: 0,
+            imgHeight: 0,
             rotate: new Animated.Value(0),
             translate: new Animated.Value(0),
             status: 0,
@@ -84,47 +88,36 @@ class BumpMainCard extends React.Component {
     }
 
 
+    componentDidMount() {
+
+        Image.getSize('https://d26p6gt0m19hor.cloudfront.net/assets/donations/home/grid/give-monthly-ac4abafab17cd6b74196227a89e29ecc1f9a6d53c4690dff13556c0352e79112.jpg', (returnWidth, returnHeight) => {
+            // calculate image width and height
+            console.log(returnWidth);
+            console.log(returnHeight)
+            console.log(height);
+            console.log(width);
+            const screenWidth = width;
+            const scaleFactor = returnWidth / screenWidth
+            const imageHeight = returnHeight / scaleFactor
+            this.setState({imgWidth: screenWidth, imgHeight: imageHeight})
+        })
+    }
+
+
     render() {
+        const {imgWidth, imgHeight} = this.state
 
 
         return (
             <View style={styles.cardContainer}>
 
-                <View style={[{
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                }]}>
+                <Image
+                    style={{width: width, height: imgHeight}}
+                    source={{uri: 'https://d26p6gt0m19hor.cloudfront.net/assets/donations/home/grid/give-monthly-ac4abafab17cd6b74196227a89e29ecc1f9a6d53c4690dff13556c0352e79112.jpg'}}
+                />
+                <CommentBar/>
 
-                    <View style={{flexDirection: 'row', paddingVertical: 20}}>
-                        <View
-                            style={[{
-                                alignItems: 'center',
-                            }, {transform: [{translateX: width * 0.08},]}]}
-                        >
-                            <Image style={styles.userPhoto}
-                                   source={require('../../../../app/Assets/images/elon_musk.jpeg')}/>
 
-                        </View>
-                        <View
-                            style={[{
-                                alignItems: 'center'
-                            }, {transform: [{translateX: -width * 0.08}]}]}
-                        >
-                            <Image style={styles.userPhoto}
-                                   source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
-
-                        </View>
-                    </View>
-                    <View>
-                        <MapView
-                            style={{width: width, height: height * 0.15, borderRadius: 5}}
-                            initialRegion={this.state.region}
-                            region={this.state.region}
-                        />
-                    </View>
-                </View>
             </View>
         );
     }
@@ -134,14 +127,12 @@ const
     styles = StyleSheet.create({
 
         cardContainer: {
-            alignSelf: 'stretch',
             alignItems: 'center',
-            justifyContent: 'center',
+            flex: 1,
         },
         userPhoto: {
             height: width * 0.1,
             width: width * 0.1,
-            borderRadius: width * 0.3,
             alignSelf: 'flex-start'
         },
         titleText: {
