@@ -75,7 +75,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+        entryFile: "index.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -144,7 +144,15 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs "../../node_modules/react-native-background-geolocation/android/libs"
+    }
+}
+
 dependencies {
+    compile project(':react-native-image-resizer')
+    compile project(':react-native-background-geolocation')
     compile project(':react-native-maps')
     compile project(':react-native-opentok')
 
@@ -157,13 +165,12 @@ dependencies {
 //    All for react-native-firebase
     // RNFirebase required dependencies
     compile "com.google.firebase:firebase-core:11.4.2"
-    compile(project(':react-native-maps')){
+    compile(project(':react-native-maps')) {
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
     }
     compile 'com.google.android.gms:play-services-base:11.4.2'
     compile 'com.google.android.gms:play-services-maps:11.4.2'
-
 
     // RNFirebase optional dependencies
     compile "com.google.firebase:firebase-ads:11.4.2"
@@ -175,6 +182,7 @@ dependencies {
     compile "com.google.firebase:firebase-messaging:11.4.2"
     compile "com.google.firebase:firebase-perf:11.4.2"
     compile "com.google.firebase:firebase-storage:11.4.2"
+    compile(name: 'tslocationmanager', ext: 'aar')
 
     compile project(':react-native-interactable')
     compile project(':lottie-react-native')
@@ -185,6 +193,8 @@ dependencies {
     compile 'com.airbnb.android:lottie:2.2.5'
     compile project(':react-native-navigation')
 
+
+    compile project(':react-native-svg')
 
     // From node_modules
 }

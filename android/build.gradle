@@ -22,12 +22,13 @@ allprojects {
             url "$rootDir/../node_modules/react-native/android"
         }
         maven { url "https://maven.google.com" }
-        maven { url "http://tokbox.bintray.com/maven"}
+        maven { url "http://tokbox.bintray.com/maven" }
+
     }
 }
 
 subprojects {
-    afterEvaluate {project ->
+    afterEvaluate { project ->
         if (project.hasProperty("android")) {
             android {
                 compileSdkVersion 26

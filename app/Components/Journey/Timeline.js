@@ -116,88 +116,25 @@ class TimeLine extends React.Component {
                         "image_uri": '../../../app/Assets/images/asset3.jpg'
 
                     }
-                }, {
-                    "title": 'Emulate',
-                    "description":
-                        'Cat dog',
-                    "meta": {
-                        "type": "live",
-                        "last_action": "bump",
-                        'last_action_meta': 'Marcus Levland',
-                        "num_followers": 34,
-                        "last_entry_date": '2 days ago',
-                        "num_contributors": 12,
-                        "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset4.jpg'
-                    },
-                    "title": 'Emulate',
-                    "description":
-                        'Cat dog',
-                    "meta": {
-                        "last_action": "bump",
-                        'last_action_meta': 'Marcus Levland',
-                        "num_followers": 34,
-                        "last_entry_date": '2 days ago',
-                        "num_contributors": 12,
-                        "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset2.jpg'
-                    }
-                }, {
-                    "title": 'Our Volunteers',
-                    "description":
-                        'Our volunteers are making a difference. Take a look at how our team continues to influence change across the globe',
-                    "meta": {
-                        "type": "bump",
-                        "last_action": "bump",
-                        'last_action_meta': 'Marcus Levland',
-                        "num_followers": 34,
-                        "last_entry_date": '2 days ago',
-                        "num_contributors": 12,
-                        "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset2.jpg'
-                    }
-                }, {
-                    "title": 'Water Education',
-                    "description":
-                        'We have one service chapter focused on ensuring individuals are educated in maintaining water resources and bettering educational facilities. Take a look here.',
-                    "meta": {
-                        "type": "photo",
-                        "last_action": "photo",
-                        'last_action_meta': 'Cindy Grouper',
-                        "last_entry_date": "4 days ago",
-                        "num_followers": 23,
-                        "num_entries": 30,
-                        "num_contributors": 8,
-                        "image_uri": '../../../app/Assets/images/asset3.jpg'
-
-                    }
-                }, {
-                    "title": 'Emulate',
-                    "description":
-                        'Cat dog',
-                    "meta": {
-                        "type": "live",
-                        "last_action": "bump",
-                        'last_action_meta': 'Marcus Levland',
-                        "num_followers": 34,
-                        "last_entry_date": '2 days ago',
-                        "num_contributors": 12,
-                        "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset4.jpg'
-                    },
-                    "title": 'Emulate',
-                    "description":
-                        'Cat dog',
-                    "meta": {
-                        "last_action": "bump",
-                        'last_action_meta': 'Marcus Levland',
-                        "num_followers": 34,
-                        "last_entry_date": '2 days ago',
-                        "num_contributors": 12,
-                        "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset2.jpg'
-                    }
                 },
+                    {
+                        "title": 'Our Spain Experience!',
+                        "substory": 'Gifty Product Development',
+                        "description":
+                            'We have one service chapter focused on ensuring individuals are educated in maintaining water resources and bettering educational facilities. Take a look here.',
+                        "meta": {
+                            "type": "live",
+                            "last_action": "photo",
+                            'last_action_meta': 'Cindy Grouper',
+                            "last_entry_date": "4 days ago",
+                            "num_followers": 23,
+                            "num_entries": 30,
+                            "num_contributors": 8,
+                            "image_uri": '../../../app/Assets/images/asset3.jpg'
+
+                        }
+                    },
+
 
 
                 ],
@@ -322,6 +259,7 @@ class TimeLine extends React.Component {
                             description={item.description}
                             meta={item.meta}
                             image_uri={item.image_uri}
+                            navigator={this.props.navigator}
                         />
                     }
                 />

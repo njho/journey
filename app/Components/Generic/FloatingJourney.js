@@ -27,7 +27,6 @@ import agent from '../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import FadeInView from "../helpers/FadeInView";
 import Interactable from 'react-native-interactable';
-import LiveStoryCard from './Cards/LiveStoryCard';
 
 
 import {connect} from 'react-redux';
@@ -36,8 +35,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
-import BumpCard from './Cards/BumpCard';
-import PhotoCard from './Cards/PhotoCard'
 
 
 import Chat from '../Chat/Chat';
@@ -72,7 +69,7 @@ const shadowStyle = {
 };
 
 
-class JourneyListItem extends React.Component {
+class FloatingJourney extends React.Component {
     static navigatorStyle = {
         tabBarHidden: true,
         navBarHidden: true
@@ -107,40 +104,31 @@ class JourneyListItem extends React.Component {
 
     }
 
-    _keyExtractor = (item, index) => item.id;
-
-    renderItem() {
-        switch (this.props.meta.type) {
-            case 'bump':
-                return <BumpCard
-                    description={this.props.description}
-                />
-                break;
-            case 'photo':
-                return <PhotoCard/>
-                break;
-            case 'live':
-                return <LiveStoryCard {...this.props}/>
-                break;
-        }
-    }
-
 
     render() {
 
-
         return (
-            <View style={{
-                flexDirection: 'column',
-                width: '100%',
-                flex: 1,
-                paddingTop: 15,
-                backgroundColor: this.props.index % 2 === 0 ? '#f9f9f9' : 'white'
-            }}>
-                {this.renderItem()}
-            </View>
-        )
-            ;
+            <TouchableOpacity>
+                <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                end={{x: 1, y: .50}}
+                                style={{
+                                    marginVertical: 5,
+                                    borderRadius: 20,
+                                    alignSelf: 'flex-start',
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+
+                    <Text
+                        style={{
+                            color: 'white',
+                            marginVertical: 7,
+                            marginHorizontal: 20, fontSize: 15
+                        }}>
+                        +{this.props.number} Intersecting Journeys</Text>
+                </LinearGradient>
+            </TouchableOpacity>
+        );
     }
 }
 
@@ -148,28 +136,28 @@ const
     styles = StyleSheet.create({
 
         cardContainer: {
+            backgroundColor: 'white',
             elevation: 10,
+            paddingHorizontal: 15,
+            marginHorizontal: 20,
             paddingVertical: 20,
             borderRadius: 10,
             marginTop: 30,
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            marginBottom: 35,
-        },
-        userPhoto: {
-            height: 35,
-            width: 35,
-            borderRadius: 35,
+            marginBottom: 40,
         },
         titleText: {
-            color: '#4D81C2',
+            color: '#9A9CE0',
             fontWeight: 'bold',
-            fontSize: 18,
+            fontSize: 20,
         },
         subText: {
-            color: '#5690d8',
+            color: '#9A9CE0',
             fontSize: 12,
+            marginHorizontal: 10,
+            textAlign: 'center',
 
         },
         button: {
@@ -186,59 +174,10 @@ const
             color: 'white',
             fontSize: 12,
             marginHorizontal: 15,
-        }
+        },
 
     });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(JourneyListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(FloatingJourney);
 //
-
-{/*<View style={[{*/
-}
-{/*flexDirection: 'row',*/
-}
-{/*borderColor: 'white',*/
-}
-{/*width: 35,*/
-}
-{/*height: 35,*/
-}
-{/*borderWidth: 2,*/
-}
-{/*borderRadius: 30,*/
-}
-{/*alignItems: 'center',*/
-}
-{/*justifyContent: 'center',*/
-}
-{/*backgroundColor: 'white'*/
-}
-{/*}]}>*/
-}
-{/*<Image style={styles.userPhoto}*/
-}
-{/*source={require('../../../app/Assets/images/elon_musk.jpeg')}/>*/
-}
-{/*</View>*/
-}
-{/*<View*/
-}
-{/*style={{flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>*/
-}
-{/*<Text style={{marginLeft: 10, fontSize: 14, fontWeight: 'bold'}}>Fun-eh</Text>*/
-}
-{/*<View style={{flexDirection: 'column', alignItems: 'flex-end'}}>*/
-}
-{/*<Text style={{*/
-}
-{/*marginRight: 20, fontSize: 14, color: '#4D81C2', fontWeight: 'bold',*/
-}
-{/*}}>{this.props.substory ? this.props.substory : '../' + this.props.name}</Text>*/
-}
-
-
-{/*</View>*/
-}
-{/*</View>*/
-}

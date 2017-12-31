@@ -36,6 +36,8 @@ import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
 import CommentBar from "./CommentBar";
+import CommentBarV2 from "./CommentBarV2";
+
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -115,7 +117,7 @@ class BumpMainCard extends React.Component {
                     style={{width: width, height: imgHeight}}
                     source={{uri: 'https://d26p6gt0m19hor.cloudfront.net/assets/donations/home/grid/give-monthly-ac4abafab17cd6b74196227a89e29ecc1f9a6d53c4690dff13556c0352e79112.jpg'}}
                 />
-                <CommentBar/>
+                <CommentBarV2/>
 
 
             </View>

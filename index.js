@@ -145,14 +145,34 @@ Navigation.startTabBasedApp({
         //     title: 'JourneyView',
         //     tabBarHidden: false,
         // },
+        // {
+        //     label: 'Timeline',
+        //     screen: 'Timeline', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Timeline',
+        //     tabBarHidden: false,
+        // },
+        // {
+        //     label: 'LiveStoryView',
+        //     screen: 'LiveStoryView', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'LiveStoryView',
+        //     tabBarHidden: false,
+        // },
         {
-            label: 'Timeline',
-            screen: 'Timeline', // this is a registered name for a screen
+            label: 'LiveStoryMapView',
+            screen: 'LiveStoryMapView', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
-            title: 'Timeline',
+            title: 'LiveStoryView',
             tabBarHidden: false,
         },
         // {

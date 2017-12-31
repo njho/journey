@@ -24,6 +24,7 @@ import com.wix.interactable.Interactable;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactPackage;
+import com.horcrux.svg.SvgPackage;
 
 import com.facebook.CallbackManager;
 
@@ -141,6 +142,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImageResizerPackage(),
+            new RNBackgroundGeolocation(),
             new NfcReactNativePackage(),
             new NfcReactNativePackage(),
             new RNOpenTokPackage(),
@@ -206,7 +209,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNFirebaseStoragePackage(),
                 new MapsPackage(),
                 new RNOpenTokPackage(),
-                new WebUrlPackage()
+                new WebUrlPackage(),
+                new SvgPackage()
         );
     }
 

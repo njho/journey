@@ -25,6 +25,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCoEAttl4BDgkexd1W7zX1KoLm-MoaBfa8" />
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
 
         <activity
             android:name=".MainActivity"

@@ -23,7 +23,7 @@ import {
     StatusBar
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import agent from '../../helpers/agent';
+import agent from '../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
 import ImageResizer from 'react-native-image-resizer';
@@ -50,9 +50,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
-import CommentBar from "./CommentBar";
-import CommentBarV2 from "./CommentBarV2";
-import HorizontalAvatar from '../../Generic/HorizontalAvatar';
+import HorizontalAvatar from '../Generic/HorizontalAvatar';
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -81,8 +79,11 @@ const shadowStyle = {
 };
 
 
-class LiveStoryCard extends React.Component {
-
+class LiveJourneyView extends React.Component {
+    static navigatorStyle = {
+        tabBarHidden: true,
+        navBarHidden: true
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -265,6 +266,13 @@ class LiveStoryCard extends React.Component {
 
         return (
             <View style={styles.cardContainer}>
+
+                <MapView
+                    style={{alignSelf: 'stretch', bottom: 0, height: height * 0.2, borderRadius: 5}}
+                    initialRegion={this.state.region}
+                    region={this.state.region}
+                />
+
                 <View style={styles.cardContainer}>
 
                     <Image
@@ -288,11 +296,10 @@ class LiveStoryCard extends React.Component {
                         left: 20
                     }}>
                         <Text style={styles.subStoryText}>
-                            /{this.props.substory.toUpperCase()}
-                        </Text>
+SubStory                        </Text>
                         <View>
                             <Text style={styles.titleText}>
-                                {this.props.name.toUpperCase()}
+                           Example Title
                             </Text>
                         </View>
                         <TouchableOpacity onPress={()=>this.props.navigator.push({screen: 'JourneyView'})}>
@@ -347,7 +354,6 @@ class LiveStoryCard extends React.Component {
 
                     </View>
                 </View>
-                <CommentBarV2/>
             </View>
         );
     }
@@ -405,7 +411,7 @@ const
 export default connect(mapStateToProps, mapDispatchToProps)
 
 (
-    LiveStoryCard
+    LiveJourneyView
 )
 ;
 //
