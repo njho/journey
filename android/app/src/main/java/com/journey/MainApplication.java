@@ -25,10 +25,12 @@ import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactPackage;
 import com.horcrux.svg.SvgPackage;
+import com.transistorsoft.rnbackgroundgeolocation.*;
 
 import com.facebook.CallbackManager;
 
 import com.reactnativenavigation.NavigationApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -142,6 +144,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
             new ImageResizerPackage(),
             new RNBackgroundGeolocation(),
             new NfcReactNativePackage(),
@@ -210,8 +213,11 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new MapsPackage(),
                 new RNOpenTokPackage(),
                 new WebUrlPackage(),
-                new SvgPackage()
-        );
+                new SvgPackage(),
+                new RNBackgroundGeolocation(),
+                new RNDeviceInfo()
+
+                );
     }
 
     @Override

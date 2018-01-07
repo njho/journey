@@ -18,8 +18,9 @@ import MyWeb from './app/Components/helpers/MyWeb';
 import JourneyView from "./app/Components/Journey/JourneyView";
 import Timeline from "./app/Components/Journey/Timeline";
 import IndividualTimeline from "./app/Components/Journey/IndividualTimeline";
-import LiveStoryView from './app/Components/Journey/LiveStoryView'
-import LiveStoryMapView from './app/Components/Journey/MapView/LiveStoryMapView'
+import LiveStoryView from './app/Components/Journey/LiveStoryView';
+import LiveStoryMapView from './app/Components/Journey/MapView/LiveStoryMapView';
+import JourneyStart from './app/Components/Journey/JourneyStart/JourneyStart';
 
 
 
@@ -44,7 +45,7 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('IndividualTimeline', ()=> IndividualTimeline, store, Provider);
     Navigation.registerComponent('LiveStoryView', ()=> LiveStoryView, store, Provider);
     Navigation.registerComponent('LiveStoryMapView', ()=> LiveStoryMapView, store, Provider);
-
+    Navigation.registerComponent('JourneyStart', ()=> JourneyStart, store, Provider);
 
 
 }

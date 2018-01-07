@@ -4681,6 +4681,10 @@ react-native-communications@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
 
+react-native-device-info@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.13.0.tgz#81051eebd3db6959e4f1d2cb0ae8df74105040cf"
+
 react-native-fbsdk@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-0.6.3.tgz#ab115264756d4060b8ec2a881194d9775fa8ee11"
