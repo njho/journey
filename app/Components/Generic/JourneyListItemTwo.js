@@ -97,10 +97,13 @@ class JourneyListItem extends React.Component {
     }
 
     toggle() {
+        this.props.callback(!this.state.selected);
+
         this.setState({
             ...this.state,
             selected: !this.state.selected
         })
+
 
     }
 

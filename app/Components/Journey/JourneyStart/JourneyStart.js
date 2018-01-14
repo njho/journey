@@ -16,7 +16,7 @@ import {
     TouchableWithoutFeedback,
     ToastAndroid,
     Switch,
-
+    Modal,
     Slider,
     Picker,
     Platform,
@@ -46,6 +46,8 @@ import Svg, {
 import LinearGradient from 'react-native-linear-gradient';
 
 import {connect} from 'react-redux';
+import {Navigation} from 'react-native-navigation';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import OpenTok from 'react-native-opentok';
 import MapView, {MAP_TYPES} from 'react-native-maps';
@@ -71,6 +73,11 @@ const LONGITUDE_DELTA = 0.1;
 
 const BREAKPOINT1 = 246;
 const BREAKPOINT2 = 350;
+
+const SLIDE_IN_DOWN_KEYFRAMES = {
+    from: {translateY: -8},
+    to: {translateY: 0},
+};
 
 const mapStateToProps = state => ({
     subscriberSessionId: state.navigationReducer.subscriberSessionId
@@ -99,17 +106,23 @@ class JourneyStart extends React.Component {
     constructor(props) {
         super(props);
 
+        this._deltaY = new Animated.Value(0);
         this.eventId = 1;
 
         this.state = {
             enabled: false,
             isMoving: false,
             username: 'njho28',
-            events: []
+            events: [],
+            translateContainerUp: new Animated.Value(0),
+            translateAvatarUp: new Animated.Value(0),
+            translateScrollViewUp: new Animated.Value(0)
         };
     }
 
     componentDidMount() {
+        // this.marker.play();
+
         // Step 1:  Listen to events:
         BackgroundGeolocation.on('location', this.onLocation.bind(this));
         BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
@@ -270,23 +283,23 @@ class JourneyStart extends React.Component {
 
     pickerToggled(item, value) {
         switch (item) {
-            case 'locationOnly':
+            case 'captureInterval':
                 this.setState({
                     ...this.state,
-                    locationOnly: value
+                    captureInterval: value
                 });
                 console.log('I am in here!');
                 break;
-            case 'distance':
+            case 'broadcastType':
                 this.setState({
                     ...this.state,
-                    distance: value
+                    broadcastType: value
                 });
                 break;
-            case 'altitude':
+            case 'privacy':
                 this.setState({
                     ...this.state,
-                    altitude: value
+                    privacy: value
                 });
                 break;
         }
@@ -310,6 +323,49 @@ class JourneyStart extends React.Component {
         });
     }
 
+    navigate() {
+        Navigation.showModal({
+            screen: "JourneyPicker", // unique ID registered with Navigation.registerScreen
+            animationType: 'slide-up', // 'none' / 'slide-up' , appear animation for the modal (optional, default 'slide-
+            passProps: {
+                "returnScreen": "JourneyStart",
+                onUnmount: () => this.animate()
+            }
+        });
+
+    }
+
+
+    animate() {
+        Animated.parallel([
+            Animated.timing(
+                this._deltaY,
+                {
+                    toValue: 1,
+                    duration: 250,
+                    delay: 0,
+                }
+            ),
+            Animated.timing(
+                this.state.translateContainerUp,
+                {
+                    toValue: 1,
+                    duration: 500,
+                    delay: 0
+                }
+            ),
+            Animated.timing(
+                this.state.translateScrollViewUp,
+                {
+                    toValue: 1,
+                    duration: 250,
+                    delay: 500
+                }
+            ),
+        ]).start();
+
+    }
+
     renderEvents() {
         return this.state.events.map((event) => (
             <View key={event.key} style={styles.listItem}>
@@ -322,124 +378,292 @@ class JourneyStart extends React.Component {
         ));
     }
 
+    toggleModal(visible) {
+        this.setState({...this.state, modalVisible: visible});
+    }
+
+
     render() {
+
+        const translateTitleUp = this._deltaY.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -height * 0.2]
+        });
+
+        const opacity = this._deltaY.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0]
+        });
+
+        const opacityInverse = this.state.translateContainerUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+        });
+        const translateContainerUp = this.state.translateContainerUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -height]
+        });
+
+        const opacityInverseTwo = this.state.translateScrollViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+        });
+
+        const translateScrollViewUp = this.state.translateScrollViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [40, 0]
+        });
+
+
         return (
-            <LinearGradient colors={['#5ab7ff', '#863fe8']} style={{flex: 1}}>
-                <ScrollView style={{flex: 1,}}
-                            contentContainerStyle={{flexGrow: 1,}}>
+            <LinearGradient colors={['white', 'black']} style={{flex: 1}}>
 
-                    <HeaderTitle title={'BROADCAST SETTINGS'} fontSize={11}/>
-                    <ListItem title={'Capture Interval'} fontSize={14} style={{marginVertical: 1}}
-                              picker
-                              pickerValues={['1 min', '3 min', '5 min', '10 min', '30 min', '1 hr', ]}
-                              callback={(value) => {
-                                  return this.pickerToggled('captureInterval', value)
-                              }}/>
-                    <ListItem title={'Location Only'} fontSize={14} style={{marginVertical: 1}} switch
-                              callback={(value) => {
-                                  return this.switchToggled('locationOnly', value)
-                              }}/>
-                    <ListItem title={'Broadcast Type'} fontSize={14} style={{marginVertical: 1}} picker
-                              default={'live'}
-                              pickerValues={['Live', 'Cached']}
-                              callback={(value) => {
-                                  return this.pickerToggled('broadcastType', value)
-                              }}/>
-                    <ListItem title={'Privacy Setting'}
-                              fontSize={14}
-                              style={{marginVertical: 1}}
-                              picker
-                              default={'public'}
-                              pickerValues={['Public', 'Private']}
-                              callback={(value) => {
-                                  return this.pickerToggled('privacy', value)
-                              }}
-                    />
 
-                    <HeaderTitle title={'INFORMATION CAPTURE'} fontSize={11} style={{marginVertical: 2}}/>
-                    <ListItem title={'Distance'} fontSize={14} style={{marginVertical: 1}} switch callback={(value) => {
-                        return this.switchToggled('distance', value)
-                    }}/>
-                    <ListItem title={'Altitude'} fontSize={14} style={{marginVertical: 1}} switch callback={(value) => {
-                        return this.switchToggled('altitude', value)
-                    }}/>
-                    <Text
-                        style={{
-                            marginVertical: 10,
-                            marginTop: 20,
-                            marginHorizontal: 20,
-                            fontSize: 16,
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            color: 'white',
-                        }}>CHOOSE A JOURNEY</Text>
-                    <View style={{
-                        width: width,
-                        justifyContent: 'space-between',
-                        marginVertical: 10,
-                    }}>
+                <View style={[
+                    {height: height, alignItems: 'center', position: 'absolute', top: 0}]}>
+
+                    <LinearGradient colors={["transparent", "#16171C", "#16171C"]} locations={[0.5, 0.9, 1.0]}
+                                    style={styles.linearGradient}>
+                    </LinearGradient>
+                    <View style={{backgroundColor: '#16171C', width: width, flex: 1,}}>
+                    </View>
+                </View>
+                <Animated.View style={[{
+
+                    flex: 1,
+                    opacity: opacity
+                }, {transform: [{translateY: translateTitleUp}]}]}
+                               contentContainerStyle={{flexGrow: 1,}}>
+                    <View style={[{flexDirection: 'row', justifyContent: 'center', marginTop: height * 0.15},]}>
+                        <Animatable.Text animation={SLIDE_IN_DOWN_KEYFRAMES}
+                                         duration={1500}
+
+                                         iterationCount="infinite"
+                                         direction="alternate"><Icon name="ios-pin-outline" style={{color: 'white'}}
+                                                                     size={130}/>
+                        </Animatable.Text>
+
+
+                        <View style={{alignSelf: 'flex-end', marginRight: 0.1 * width,}}>
+                            <Text style={{color: 'white'}}>-1.012231, 2.2449141</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>December 28, 2017</Text>
+                        </View>
+                    </View>
+
+                    <View style={{position: 'absolute', bottom: 0}}>
+                        <Text
+                            style={{
+                                marginVertical: 10,
+                                marginTop: 20,
+                                marginHorizontal: 20,
+                                fontSize: 18,
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                color: 'white',
+                            }}>CHOOSE A JOURNEY</Text>
                         <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
+                            width: width,
                             justifyContent: 'space-between',
-                            marginHorizontal: 20
+                            marginVertical: 5,
                         }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                marginHorizontal: 20
+                            }}>
 
-                            <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 20}}>
-                                <View style={{
-                                    borderColor: 'white',
-                                    borderWidth: 1,
-                                    width: width / 2 - 30,
-                                    borderRadius: 40
+                                <TouchableOpacity style={{alignSelf: 'center',}}
+                                                  onPress={() => this.navigate()}
+
+                                >
+                                    <View style={{
+                                        borderColor: 'white',
+                                        borderWidth: 1,
+                                        width: width / 2 - 30,
+                                        borderRadius: 5
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 13,
+                                            color: 'white',
+                                            paddingHorizontal: 20,
+                                            paddingVertical: 20,
+                                            textAlign: 'center'
+                                        }}>Existing Journey</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{alignSelf: 'center'}}>
+                                    <View style={{
+                                        borderColor: 'white',
+                                        borderWidth: 1,
+                                        width: width / 2 - 30,
+                                        borderRadius: 5
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 13,
+                                            color: 'white',
+                                            paddingHorizontal: 20,
+                                            paddingVertical: 20,
+                                            textAlign: 'center'
+                                        }}>+ New Journey</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={{color: 'white', textAlign: 'center', marginTop: 90, marginBottom: 20}}>Skip
+                                This Step</Text>
+                            <View>
+                            </View>
+                        </View>
+                    </View>
+
+                </Animated.View>
+
+
+                <Animated.View style={[{
+                    position: 'absolute',
+                    opacity: opacityInverse,
+                    top: height,
+                    height: height,
+                    width: width,
+                }, {transform: [{translateY: translateContainerUp}]}]}
+                               contentContainerStyle={{flexGrow: 1,}}>
+
+                    <Animated.View style={[{
+                        marginTop: 20,
+                        marginBottom: 20,
+                        opacity: opacityInverse,
+                        justifyContent: 'center',
+                        backgroundColor: 'white',
+                        alignItems: 'center'
+                    }]}
+                                   contentContainerStyle={{flexGrow: 1,}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>Posting to </Text>
+                            <Text style={{
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginBottom: 15,
+                                textAlign: 'center'
+                            }}> 6 </Text>
+                            <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>
+                                Journeys</Text>
+                        </View>
+
+                        <View style={{
+                            backgroundColor: '#233249',
+                            borderRadius: 40,
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}>
+                            <Image style={styles.userPhoto}
+                                   source={{uri: "https://i.imgur.com/sNam9iJ.jpg"}}/>
+                            <View style={{flexDirection: 'column'}}>
+                                <Text style={{
+                                    color: 'white',
+                                    marginLeft: 18,
+                                    marginTop: 10,
+                                    marginRight: 10,
+                                    fontWeight: 'bold'
                                 }}>
-                                    <Text style={{
-                                        fontSize: 13,
-                                        color: 'white',
-                                        paddingHorizontal: 20,
-                                        paddingVertical: 10,
-                                        textAlign: 'center'
-                                    }}>Existing journey</Text>
+                                    December 28, 2017
+                                </Text>
+                                <Text style={{color: 'white', marginLeft: 18, marginBottom: 10, marginRight: 25}}>
+                                    -1412304.1013, 1238.148123
+                                </Text>
+                            </View>
+
+                        </View>
+
+                    </Animated.View>
+
+                    <Animated.View style={[{
+                        opacity: opacityInverseTwo,
+
+                    }, {transform: [{translateY: translateScrollViewUp}]}]}>
+                        <ScrollView
+                            overScrollMode="never"
+
+                        >
+
+                            <HeaderTitle title={'BROADCAST SETTINGS'} fontSize={11}/>
+                            <ListItem title={'Capture Interval'} fontSize={14} style={{marginVertical: 1}}
+                                      picker
+                                      pickerValues={['1 min', '3 min', '5 min', '10 min', '30 min', '1 hr',]}
+                                      default={'1 min'}
+                                      callback={(value) => {
+                                          return this.pickerToggled('captureInterval', value)
+                                      }}/>
+                            <ListItem title={'Location Capture Only'} fontSize={14} style={{marginVertical: 1}} switch
+                                      callback={(value) => {
+                                          return this.switchToggled('locationOnly', value)
+                                      }}/>
+                            <ListItem title={'Broadcast Type'} fontSize={14} style={{marginVertical: 1}} picker
+                                      default={'live'}
+                                      pickerValues={['Live', 'Cached']}
+                                      callback={(value) => {
+                                          return this.pickerToggled('broadcastType', value)
+                                      }}/>
+                            <ListItem title={'Privacy Setting'}
+                                      fontSize={14}
+                                      style={{marginVertical: 1}}
+                                      picker
+                                      default={'public'}
+                                      pickerValues={['Public', 'Private']}
+                                      callback={(value) => {
+                                          return this.pickerToggled('privacy', value)
+                                      }}
+                            />
+
+                            <HeaderTitle title={'INFORMATION DISPLAY'} fontSize={11} style={{marginVertical: 2}}/>
+                            <ListItem title={'Distance'} fontSize={14} style={{marginVertical: 1}} switch
+                                      callback={(value) => {
+                                          return this.switchToggled('distance', value)
+                                      }}/>
+                            <ListItem title={'Altitude'} fontSize={14} style={{marginVertical: 1}} switch
+                                      callback={(value) => {
+                                          return this.switchToggled('altitude', value)
+                                      }}/>
+
+                            <View style={{marginVertical: 20, width: '80%', alignSelf: 'center'}}>
+                                <Text style={{width: '100%', color: 'white', textAlign: 'center', fontSize: 15}}>Not
+                                    Quite
+                                    Capturing the
+                                    Right
+                                    Experience?</Text>
+                                <Text style={{width: '100%', color: 'white', textAlign: 'center', fontSize: 12}}>Let us
+                                    know
+                                    what
+                                    would make your Journey
+                                    more valuable!</Text>
+                            </View>
+
+
+                            <TouchableOpacity
+                                style={{alignSelf: 'center', paddingTop: 20, paddingBottom: 0.5 * height}}
+                                onPress={() => this.onToggleEnabled()}
+                            >
+                                <View style={{borderColor: 'white', borderWidth: 1, borderRadius: 40}}>
+                                    <Text
+                                        style={{
+                                            fontSize: 16,
+                                            color: 'white',
+                                            paddingHorizontal: 30,
+                                            paddingVertical: 10
+                                        }}>START
+                                        JOURNEY!</Text>
                                 </View>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 20}}>
-                                <View style={{
-                                    borderColor: 'white',
-                                    borderWidth: 1,
-                                    width: width / 2 - 30,
-                                    borderRadius: 40
-                                }}>
-                                    <Text style={{
-                                        fontSize: 13,
-                                        color: 'white',
-                                        paddingHorizontal: 20,
-                                        paddingVertical: 10,
-                                        textAlign: 'center'
-                                    }}>New Journey</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                        </View>
-                    </View>
-                    <View style={{marginVertical: 20, width: '80%', alignSelf: 'center'}}>
-                        <Text style={{width: '100%', color: 'white', textAlign: 'center', fontSize: 15}}>Not Quite the
-                            Right
-                            Experience?</Text>
-                        <Text style={{width: '100%', color: 'white', textAlign: 'center', fontSize: 12}}>Let us know
-                            what
-                            would make your Journey
-                            more valuable!</Text>
-                    </View>
+                            <View style={styles.list}>
+                                {this.renderEvents()}
+                            </View>
+                        </ScrollView>
+                    </Animated.View>
 
 
-                    <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 20}}>
-                        <View style={{borderColor: 'white', borderWidth: 1, borderRadius: 40}}>
-                            <Text style={{fontSize: 16, color: 'white', paddingHorizontal: 30, paddingVertical: 10}}>START
-                                JOURNEY</Text>
-                        </View>
-                    </TouchableOpacity>
-                </ScrollView>
+                </Animated.View>
 
             </LinearGradient>
 
@@ -500,7 +724,18 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginLeft: 15,
         color: '#4D81C2'
-    }
+    }, linearGradient: {
+        backgroundColor: "transparent",
+        flex: 1,
+        position: "absolute",
+        width: width,
+        height: height * 0.42,
+
+    }, userPhoto: {
+        height: 0.15 * width,
+        width: 0.15 * width,
+        borderRadius: width * 0.15,
+    },
 });
 
 
@@ -532,7 +767,6 @@ export default connect(mapStateToProps, mapDispatchToProps)
 //
 //         <Button small title="pause/play" danger={this.state.isMoving} success={!this.state.isMoving}
 //                 onPress={this.onClickChangePace.bind(this)}/>
-//
-//
 //     </View>
 // </View>
+

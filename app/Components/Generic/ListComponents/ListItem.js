@@ -12,7 +12,8 @@ class ListItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            switchValue: false
+            switchValue: false,
+            pickerValue: props.default
         };
     }
 
@@ -21,17 +22,17 @@ class ListItem extends React.Component {
         this.props.callback(value);
     }
 
+    picker = (itemValue, itemPosition) => {
+        this.setState({
+            ...this.state,
+            pickerValue: itemValue
+        })
+    }
+
 
     render() {
 
         const values = ['1', '2'];
-
-        var renderPickerItems = () => {
-           return this.props.pickerValues.map((index, item) => {
-
-                return <Picker.Item key ={index} label={'fuck'} value={item}/>
-            })
-        }
 
         return (
             <View style={this.props.style}>
@@ -66,8 +67,8 @@ class ListItem extends React.Component {
                             value={this.state.switchValue}
                             onValueChange={this.toggleSwitch}
                             thumbTintColor={'white'}
-                            tintColor={'#3E5A88'}
-                            onTintColor={'#3E5A88'}
+                            tintColor={'#dadada'}
+                            onTintColor={'#21ff8e'}
                             style={{marginRight: 10}}/> : null}
                     {this.props.picker && this.props.pickerValues ?
                         <Picker
@@ -82,10 +83,10 @@ class ListItem extends React.Component {
                                 textAlign: 'right',
                                 fontSize: this.props.fontSize,
                             }}
-                            mode="dropdown"
                             color={'white'}
                             textStyle={{fontSize: 12, color: 'yellow', textAlign: 'right'}}
-                            selectedValue={'Public'}
+                            selectedValue={this.state.pickerValue}
+                            onValueChange={this.picker}
                          >
 
                             {this.props.pickerValues.map((item, index) => {

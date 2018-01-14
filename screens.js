@@ -21,6 +21,7 @@ import IndividualTimeline from "./app/Components/Journey/IndividualTimeline";
 import LiveStoryView from './app/Components/Journey/LiveStoryView';
 import LiveStoryMapView from './app/Components/Journey/MapView/LiveStoryMapView';
 import JourneyStart from './app/Components/Journey/JourneyStart/JourneyStart';
+import JourneyPicker from './app/Components/Generic/JourneyPicker';
 
 
 
@@ -46,6 +47,7 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('LiveStoryView', ()=> LiveStoryView, store, Provider);
     Navigation.registerComponent('LiveStoryMapView', ()=> LiveStoryMapView, store, Provider);
     Navigation.registerComponent('JourneyStart', ()=> JourneyStart, store, Provider);
+    Navigation.registerComponent('JourneyPicker', ()=> JourneyPicker, store, Provider);
 
 
 }

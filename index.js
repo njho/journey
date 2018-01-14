@@ -124,7 +124,7 @@ Navigation.startTabBasedApp({
         //     title: 'Bump',
         //     tabBarHidden: false,
         // },
-
+        //
         // {
         //     label: 'UrlShare',
         //     screen: 'UrlShare', // this is a registered name for a screen
@@ -185,6 +185,16 @@ Navigation.startTabBasedApp({
             title: 'JourneyStart',
             tabBarHidden: false,
         },
+        // {
+        //     label: 'JourneyPicker',
+        //     screen: 'JourneyPicker', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'JourneyPicker',
+        //     tabBarHidden: false,
+        // },
         // {
         //     label: 'individualTimeline',
         //     screen: 'IndividualTimeline', // this is a registered name for a screen
