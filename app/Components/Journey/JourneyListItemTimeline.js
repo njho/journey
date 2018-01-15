@@ -148,6 +148,7 @@ const
     styles = StyleSheet.create({
 
         cardContainer: {
+
             elevation: 10,
             paddingVertical: 20,
             borderRadius: 10,

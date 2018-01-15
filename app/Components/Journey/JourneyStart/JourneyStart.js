@@ -80,7 +80,7 @@ const SLIDE_IN_DOWN_KEYFRAMES = {
 };
 
 const mapStateToProps = state => ({
-    subscriberSessionId: state.navigationReducer.subscriberSessionId
+    selected: state.appMetaReducer.journeyPicker
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -534,22 +534,25 @@ class JourneyStart extends React.Component {
                         marginBottom: 20,
                         opacity: opacityInverse,
                         justifyContent: 'center',
-                        backgroundColor: 'white',
                         alignItems: 'center'
                     }]}
                                    contentContainerStyle={{flexGrow: 1,}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>Posting to </Text>
-                            <Text style={{
-                                color: 'white',
-                                fontWeight: 'bold',
-                                fontSize: 20,
-                                marginBottom: 15,
-                                textAlign: 'center'
-                            }}> 6 </Text>
-                            <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>
-                                Journeys</Text>
-                        </View>
+                        <TouchableWithoutFeedback
+                        onPress={()=>this.navigate()}>
+                            <View  style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>Posting to </Text>
+                                <Text style={{
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    fontSize: 20,
+                                    marginBottom: 15,
+                                    textAlign: 'center'
+                                }}> {this.props.selected.length} </Text>
+                                <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>
+                                    Journey{this.props.selected.length > 1 ? 's' : null }</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+
 
                         <View style={{
                             backgroundColor: '#233249',

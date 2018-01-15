@@ -97,12 +97,7 @@ class JourneyListItem extends React.Component {
     }
 
     toggle() {
-        this.props.callback(!this.state.selected);
-
-        this.setState({
-            ...this.state,
-            selected: !this.state.selected
-        })
+        this.props.callback(!this.props.selected);
 
 
     }
@@ -150,7 +145,7 @@ class JourneyListItem extends React.Component {
                         <Text style={styles.subText}>{this.props.meta.last_entry_date}</Text>
                     </View>
                     <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                    {this.state.selected ?
+                    {this.props.selected ?
                             <Icon name="ios-checkmark-circle-outline" size={40} style={{marginRight: 30}} color="#00BBF5"/>
                         : <View>
                             <Text

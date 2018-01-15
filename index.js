@@ -165,26 +165,26 @@ Navigation.startTabBasedApp({
         //     title: 'LiveStoryView',
         //     tabBarHidden: false,
         // },
-        // {
-        //     label: 'LiveStoryMapView',
-        //     screen: 'LiveStoryMapView', // this is a registered name for a screen
-        //     icon: require('./app/Assets/icons/visaIcon.png'),
-        //     /*
-        //      selectedIcon: require('../img/one_selected.png'), // iOS only
-        //      */
-        //     title: 'LiveStoryView',
-        //     tabBarHidden: false,
-        // },
         {
-            label: 'JourneyStart',
-            screen: 'JourneyStart', // this is a registered name for a screen
+            label: 'LiveStoryMapView',
+            screen: 'LiveStoryMapView', // this is a registered name for a screen
             icon: require('./app/Assets/icons/visaIcon.png'),
             /*
              selectedIcon: require('../img/one_selected.png'), // iOS only
              */
-            title: 'JourneyStart',
+            title: 'LiveStoryView',
             tabBarHidden: false,
         },
+        // {
+        //     label: 'JourneyStart',
+        //     screen: 'JourneyStart', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'JourneyStart',
+        //     tabBarHidden: false,
+        // },
         // {
         //     label: 'JourneyPicker',
         //     screen: 'JourneyPicker', // this is a registered name for a screen

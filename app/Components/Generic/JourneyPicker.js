@@ -16,7 +16,7 @@ const width = Dimensions.get('window').width;
 import JourneyListItemTwo from './JourneyListItemTwo';
 
 const mapStateToProps = state => ({
-    subscriberSessionId: state.navigationReducer.subscriberSessionId
+    selected: state.appMetaReducer.journeyPicker
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -36,10 +36,10 @@ class JourneyPicker extends React.Component {
         super(props);
         console.log(props);
         this.state = {
-            selected: [],
+
             journeys:
                 [{
-                    "uid": 'q234k;lnas;fd',
+                    "uid": 'q234k;laafanas;fd',
                     "title": 'Our Volunteers',
                     "substory": 'Helping our Volunteers Succeed',
                     "description":
@@ -72,7 +72,7 @@ class JourneyPicker extends React.Component {
 
                     }
                 }, {
-                    "uid": 'q234k;lnas;fd',
+                    "uid": 'q234k;lnasdaf;fd',
 
                     "title": 'Emulate',
                     "substory": 'Helping our Volunteers Succeed',
@@ -123,7 +123,7 @@ class JourneyPicker extends React.Component {
                 }, {
                     "title": 'Emulate',
                     "substory": 'Helping our Volunteers Succeed',
-                    "uid": 'q234k;lnas1414;fd',
+                    "uid": 'q234k;lafasdf nas1414;fd',
 
                     "description":
                         'Cat dog',
@@ -141,25 +141,14 @@ class JourneyPicker extends React.Component {
     }
 
     pickerToggled(uid, value) {
+        var newArray =[];
         if (value) {
-            this.setState({
-                ...this.state,
-                selected: update(this.state.selected, {$push: [uid]}),
-                okayVisible: value
-            });
-            console.log(this.state.selected);
-
+            newArray = update(this.props.selected, {$push: [uid]});
         } else {
-
-            let newArray = this.state.selected.filter(e => e !== uid);
-            this.setState({
-                ...this.state,
-                selected: newArray,
-                okayVisible: value
-            });
-            console.log(this.state.selected);
+            newArray = this.props.selected.filter(e => e !== uid);
+            console.log(this.props.selected);
         }
-        this.props.pickerToggled(this.state.selected);
+        this.props.pickerToggled(newArray);
     };
 
     headerButton() {
@@ -196,7 +185,7 @@ class JourneyPicker extends React.Component {
                                                 alignItems: 'center'
                                             }}>
 
-                                {this.state.selected.length > 0 ? null : <Icon name="ios-add"
+                                {this.props.selected.length > 0 ? null : <Icon name="ios-add"
                                                                                style={{
                                                                                    color: 'white',
                                                                                    marginLeft: 20,
@@ -207,11 +196,11 @@ class JourneyPicker extends React.Component {
                                     style={{
                                         color: 'white',
                                         marginVertical: 10,
-                                        marginLeft: this.state.selected.length > 0 ? 20 : 0,
+                                        marginLeft: this.props.selected.length > 0 ? 20 : 0,
                                         marginRight: 20,
                                         fontSize: 14
                                     }}>
-                                    {this.state.selected.length > 0 ? 'Select' : 'New Journey'}
+                                    {this.props.selected.length > 0 ? 'Select' : 'New Journey'}
                                 </Text>
                             </LinearGradient>
                         </TouchableOpacity>
@@ -229,6 +218,7 @@ class JourneyPicker extends React.Component {
                             name={item.title}
                             description={item.description}
                             meta={item.meta}
+                            selected={this.props.selected.includes(item.uid)}
                             callback={(value) => {
                                 return this.pickerToggled(item.uid, value)
                             }}

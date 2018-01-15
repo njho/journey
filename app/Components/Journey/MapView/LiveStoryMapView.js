@@ -26,6 +26,8 @@ import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
+import update from 'immutability-helper';
+
 import ImageResizer from 'react-native-image-resizer';
 import {geoPath, geoMercator} from 'd3-geo';
 import Svg, {
@@ -53,6 +55,7 @@ import Animation from 'lottie-react-native';
 import HorizontalAvatarJourney from '../../Generic/HorizontalAvatarJourney';
 import CommentBarV2 from "../Cards/CommentBarV2";
 import MapBumpCard from "./MapBumpCard";
+import MapJourneyCard from './MapJourneyCard';
 
 import BackgroundGeolocation from "react-native-background-geolocation";
 
@@ -106,12 +109,14 @@ class LiveJourneyView extends React.Component {
             status: 0,
             personalJourney: null,
             cardData: [{
+                type: 'bump',
                 name: 'Clean Up the Oceans',
                 coordinate: {
                     latitude: 37.78875,
                     longitude: -122.4324,
                 },
             }, {
+                type: 'journey',
                 name: 'three', coordinate: {
                     latitude: 37.789752,
                     longitude: -122.388521,
@@ -120,9 +125,17 @@ class LiveJourneyView extends React.Component {
 
             },
                 {
+                    type: 'photo',
                     name: 'three', coordinate: {
                     latitude: 37.826669,
                     longitude: -122.479980,
+                }
+                },
+                {
+                    type: 'document',
+                    name: 'four', coordinate: {
+                    latitude: 37.703780,
+                    longitude: -122.471763,
                 }
                 }
             ],
@@ -173,10 +186,10 @@ class LiveJourneyView extends React.Component {
                     }
                 },
                 entryFour: {
-                    type: 'video',
+                    type: 'document',
                     coordinate: {
-                        latitude: 37.826669,
-                        longitude: -122.479980,
+                        latitude: 37.703780,
+                        longitude: -122.471763,
                     },
                     stats: {
                         likes: 18,
@@ -187,6 +200,8 @@ class LiveJourneyView extends React.Component {
             opacityAnim: new Animated.Value(1),
             _deltaY
         }
+
+        this.handleViewableItemsChanged = this.handleViewableItemsChanged.bind(this)
 
 
     }
@@ -227,14 +242,44 @@ class LiveJourneyView extends React.Component {
 
 
     markerClick = (e, key, index) => {
+        const {region, coordinate, _deltaY} = this.state;
         console.log('marker click');
         console.log(e.nativeEvent);
         console.log('a Marker has been clicked!');
         console.log(key);
-        // console.log(_deltaY);
+        console.log(_deltaY);
 
         this.interactable.snapTo({index: 0});
-        this.scrollView.scrollToIndex({animated: true, index: index});
+
+        this.setState({
+            ...this.state,
+            inFocus: index
+        })
+        region.stopAnimation();
+        region.timing({
+            latitude: _deltaY.interpolate({
+                inputRange: [0, 592],
+                outputRange: [
+                    e.nativeEvent.coordinate.latitude - (LATITUDE_DELTA * 0.5 ),
+                    e.nativeEvent.coordinate.latitude,
+                ],
+                extrapolate: 'clamp',
+            }),
+            longitude: e.nativeEvent.coordinate.longitude,
+            latitudeDelta: _deltaY.interpolate({
+                inputRange: [0, 592],
+                outputRange: [LATITUDE_DELTA, LATITUDE_DELTA * 15],
+                extrapolate: 'clamp',
+            }),
+            longitudeDelta: _deltaY.interpolate({
+                inputRange: [0, 592],
+                outputRange: [LONGITUDE_DELTA * 0.5, LONGITUDE_DELTA * 1.15],
+                extrapolate: 'clamp',
+            }),
+            duration: 0,
+        }).start();
+
+        this.scrollView.scrollToIndex({animated: false, index: index});
 
         // this.scrollViewSwiped({
         //     viewableItems: [{
@@ -258,15 +303,21 @@ class LiveJourneyView extends React.Component {
 
     }
 
-    scrollViewSwiped = ({viewableItems, changed}) => {
-
+    handleViewableItemsChanged = ({viewableItems, changed}) => {
 
         const {region, coordinate, _deltaY} = this.state;
         console.log('scrollViewSwiped');
         console.log(viewableItems);
+        console.log(viewableItems[0].index);
         console.log(changed);
         console.log('this is deltaY:' + _deltaY);
         console.log(_deltaY);
+
+
+        this.setState({
+            ...this.state,
+            inFocus: viewableItems[0].index
+        })
 
         region.stopAnimation();
         region.timing({
@@ -295,6 +346,126 @@ class LiveJourneyView extends React.Component {
 
         // console.log('Visible items are', viewableItems);
         // console.log('Changed in this iteration', changed);
+    }
+
+    renderMarker(key, index) {
+
+        switch (this.state.markers[key].type) {
+            case 'document':
+                return <MapView.Marker
+                    onPress={(e) => this.markerClick(e, key, index)}
+                    key={index}
+                    coordinate={this.state.markers[key].coordinate}>
+                    <View
+                        style={[{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'white',
+                            width: 0.11 * width,
+                            height: 0.11 * width,
+                            borderRadius: 0.11 * width,
+                            borderColor: '#538FB7',
+                            borderWidth: 1,
+                        }]}
+                    >
+                        <View
+                            style={[{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: '#538FB7',
+                                width: 0.1 * width,
+                                height: 0.1 * width,
+                                borderRadius: 0.1 * width
+                            }]}
+                        >
+                            <Icon name="ios-document-outline"
+                                  style={{
+                                      color: 'white',
+                                      margin: 10
+                                  }} size={20}/>
+                        </View>
+                    </View>
+                </MapView.Marker>
+
+                break;
+
+            case 'bump':
+                return <MapView.Marker
+                    onPress={(e) => this.markerClick(e, key, index)}
+                    key={index}
+                    coordinate={this.state.markers[key].coordinate}>
+                    <View
+                        style={[{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'white',
+                            width: 0.11 * width,
+                            height: 0.11 * width,
+                            borderRadius: 0.11 * width,
+                            borderColor: '#ca449d',
+                            borderWidth: 1,
+                        }]}
+                    >
+                        <View
+                            style={[{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: '#CA449D',
+                                width: 0.1 * width,
+                                height: 0.1 * width,
+                                borderRadius: 0.1 * width
+                            }]}
+                        >
+                            <Icon name="ios-wifi-outline"
+                                  style={{
+                                      color: 'white',
+                                  }} size={25}/>
+                        </View>
+                    </View>
+                </MapView.Marker>
+
+                break;
+            default:
+                return <MapView.Marker
+                    onPress={(e) => this.markerClick(e, key, index)}
+                    key={index}
+                    anchor={{x: 0.5, y: 1}}
+                    coordinate={this.state.markers[key].coordinate}>
+                    <View
+                        style={[{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+
+                        }]}
+                    >
+                        <View>
+                            <Image
+                                style={{
+                                    flex: 1,
+                                    width: 0.1 * width,
+                                    height: 0.1 * width / 0.816,
+                                }}
+                                source={require('../../../Assets/images/MarkerBlue.png')}/>
+
+                        </View>
+                    </View>
+                </MapView.Marker>
+                break;
+
+        }
+    }
+
+    renderFlatList(item) {
+
+        switch(item.type) {
+            case 'bump':
+                return <MapBumpCard/>
+            case 'journey':
+                return <MapJourneyCard substory={"catDog"} name={"This is the name"}/>
+            default:
+                return <MapBumpCard/>
+        }
+
     }
 
     render() {
@@ -356,30 +527,7 @@ class LiveJourneyView extends React.Component {
                                     </View>
                                 </Animated.View>
                             </MapView.Marker> :
-                            <MapView.Marker
-                                onPress={(e) => this.markerClick(e, key, index)}
-                                key={index}
-                                anchor={{x: 0.5, y: 1}}
-                                coordinate={this.state.markers[key].coordinate}>
-                                <View
-                                    style={[{
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-
-                                    }]}
-                                >
-                                    <View>
-                                        <Image
-                                            style={{
-                                                flex: 1,
-                                                width: 0.1 * width,
-                                                height: 0.1 * width / 0.816,
-                                            }}
-                                            source={require('../../../Assets/images/MarkerBlue.png')}/>
-
-                                    </View>
-                                </View>
-                            </MapView.Marker>
+                            this.renderMarker(key, index)
                     ))}
 
                 </MapView.Animated>
@@ -400,7 +548,7 @@ class LiveJourneyView extends React.Component {
 
                 }}>
                     <Button title="test" onPress={() => {
-                        this.scrollViewSwiped();
+                        this.handleViewableItemsChanged();
                         this.setState({
                             ...this.state,
                             coordinate: {
@@ -420,8 +568,9 @@ class LiveJourneyView extends React.Component {
                             this.interactable = ref;
                         }}
                         verticalOnly={true}
-                        snapPoints={[{y: 0}, {y: height}]}
+                        snapPoints={[{y: 0, damping: 0.6, tension: 400}, {y: height, damping: 0.6, tension: 400}]}
                         boundaries={{top: -300}}
+
                         initialPosition={{y: height}}
                         animatedValueY={_deltaY}
                         onDrag={this.onDragEvent}
@@ -436,11 +585,11 @@ class LiveJourneyView extends React.Component {
                             pagingEnabled={true}
                             showsHorizontalScrollIndicator={false}
                             onViewableItemsChanged={
-                                ({viewableItems, changed}) => this.scrollViewSwiped({viewableItems, changed})
+                                this.handleViewableItemsChanged
                             }
                             renderItem={({item}) =>
-                                <View key={item.name} style={{width: width,}}>
-                                    <MapBumpCard/>
+                                <View key={item.name} style={{width: width, alignItems: 'center', justifyContent: 'center', elevation: 5}}>
+                                    {this.renderFlatList(item)}
                                 </View>
                             }
                         />
