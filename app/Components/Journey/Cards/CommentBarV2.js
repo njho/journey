@@ -25,10 +25,10 @@ class CommentBarV2 extends React.Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                    <Icon name="ios-heart-outline" style={{color: '#727272'}} size={25}/>
+                    <Icon name="ios-heart-outline" style={{color: this.props.color}} size={25}/>
                     <Text
                         style={{
-                            color: '#727272',
+                            color: this.props.color,
                             marginVertical: 10,
                             fontSize: 14,
                             marginLeft: 10
@@ -46,10 +46,10 @@ class CommentBarV2 extends React.Component {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                    <Icon name="ios-chatbubbles-outline" style={{color: '#727272'}} size={25}/>
+                    <Icon name="ios-chatbubbles-outline" style={{color: this.props.color}} size={25}/>
                     <Text
                         style={{
-                            color: '#727272',
+                            color: this.props.color,
                             marginVertical: 10,
                             fontSize: 14,
                             marginLeft: 10

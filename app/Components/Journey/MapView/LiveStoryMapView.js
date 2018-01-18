@@ -54,6 +54,8 @@ import MapView, {MAP_TYPES} from 'react-native-maps';
 import Animation from 'lottie-react-native';
 import HorizontalAvatarJourney from '../../Generic/HorizontalAvatarJourney';
 import CommentBarV2 from "../Cards/CommentBarV2";
+import MapDocumentCard from './MapDocumentCard';
+
 import MapBumpCard from "./MapBumpCard";
 import MapJourneyCard from './MapJourneyCard';
 
@@ -296,10 +298,18 @@ class LiveJourneyView extends React.Component {
         console.log(e.nativeEvent);
     }
 
-    onSnapEvent = (e) => {
+    onSnapEvent = (event) => {
         console.log('in onSnap');
         console.log(this.state._deltaY)
         const {region, coordinate} = this.state;
+        const snapPointId = event.nativeEvent.id;
+        console.log(`drawer state is ${snapPointId}`);
+        if (event.nativeEvent.id === 'close') {
+            this.setState({
+                ...this.state,
+                inFocus: null
+            })
+        }
 
     }
 
@@ -457,11 +467,13 @@ class LiveJourneyView extends React.Component {
 
     renderFlatList(item) {
 
-        switch(item.type) {
+        switch (item.type) {
             case 'bump':
                 return <MapBumpCard/>
             case 'journey':
                 return <MapJourneyCard substory={"catDog"} name={"This is the name"}/>
+            case 'document':
+                return <MapDocumentCard/>
             default:
                 return <MapBumpCard/>
         }
@@ -568,14 +580,18 @@ class LiveJourneyView extends React.Component {
                             this.interactable = ref;
                         }}
                         verticalOnly={true}
-                        snapPoints={[{y: 0, damping: 0.6, tension: 400}, {y: height, damping: 0.6, tension: 400}]}
+                        snapPoints={[{y: 0, damping: 0.6, tension: 400, id: 'open'}, {
+                            y: height,
+                            damping: 0.6,
+                            tension: 400,
+                            id: 'close'
+                        }]}
                         boundaries={{top: -300}}
 
                         initialPosition={{y: height}}
                         animatedValueY={_deltaY}
                         onDrag={this.onDragEvent}
-                        onSnap={this.onSnapEvent}
-                    >
+                        onSnap={this.onSnapEvent.bind(this)}>
                         <FlatList
                             data={this.state.cardData}
                             ref={(scrollView) => {
@@ -588,7 +604,12 @@ class LiveJourneyView extends React.Component {
                                 this.handleViewableItemsChanged
                             }
                             renderItem={({item}) =>
-                                <View key={item.name} style={{width: width, alignItems: 'center', justifyContent: 'center', elevation: 5}}>
+                                <View key={item.name} style={{
+                                    width: width,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    elevation: 5
+                                }}>
                                     {this.renderFlatList(item)}
                                 </View>
                             }

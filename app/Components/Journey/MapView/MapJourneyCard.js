@@ -247,7 +247,7 @@ class LiveStoryCard extends React.Component {
             console.log(returnHeight)
             console.log(height);
             console.log(width);
-            const screenWidth = width;
+            const screenWidth = width * 0.85;
             const scaleFactor = returnWidth / screenWidth
             const imageHeight = returnHeight / scaleFactor
             this.setState({imgWidth: screenWidth, imgHeight: imageHeight})
@@ -263,82 +263,78 @@ class LiveStoryCard extends React.Component {
 
         return (
             <View style={styles.cardContainer}>
-                <View style={styles.cardContainer}>
+                <TouchableOpacity style={styles.cardContainer}>
+                    <View style={styles.cardContainer}>
 
-                    <Image
-                        style={{width: width, height: this.state.imgHeight}}
-                        source={{uri: 'http://www.cocokelley.com/wp-content/uploads/2017/06/the-candy-colored-streets-in-Tallin-Estonia-visual-travel-diary-on-coco-kelley.4.jpg'}}/>
-                    <View style={{
-                        width: width,
-                        height: this.state.imgHeight,
-                        position: 'absolute',
-                        backgroundColor: 'rgba(0,0,0,0.25)',
-                    }}>
+                        <Image
+                            style={{width: width, height: this.state.imgHeight}}
+                            source={{uri: 'http://www.cocokelley.com/wp-content/uploads/2017/06/the-candy-colored-streets-in-Tallin-Estonia-visual-travel-diary-on-coco-kelley.4.jpg'}}/>
+                        <View style={{
+                            width: width,
+                            height: this.state.imgHeight,
+                            position: 'absolute',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                        }}>
 
-                    </View>
-                    <View style={{
-                        flexDirection: 'column',
-                        flexWrap: 'wrap',
-                        width: width,
-                        justifyContent: 'flex-start',
-                        position: 'absolute',
-                        top: 40,
-                        left: 20
-                    }}>
-                        <Text style={styles.subStoryText}>
-                            /{this.props.substory.toUpperCase()}
-                        </Text>
-                        <View>
-                            <Text style={styles.titleText}>
-                                {this.props.name.toUpperCase()}
-                            </Text>
                         </View>
-                        <TouchableOpacity onPress={()=>this.props.navigator.push({screen: 'JourneyView'})}>
-                            <HorizontalAvatar name='Jenna Negardata'/>
-                        </TouchableOpacity>
+                        <View style={{
+                            flexDirection: 'column',
+                            flexWrap: 'wrap',
+                            width: width,
+                            justifyContent: 'flex-start',
+                            position: 'absolute',
+                            top: 40,
+                            left: 20
+                        }}>
+                            <Text style={styles.subStoryText}>
+                                /{this.props.substory.toUpperCase()}
+                            </Text>
+                            <View>
+                                <Text style={styles.titleText}>
+                                    {this.props.name.toUpperCase()}
+                                </Text>
+                            </View>
+
+                        </View>
+
+                        <View style={{
+                            position: 'absolute',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            bottom: 0,
+                            width: '100%',
+
+                        }}>
+                            <View style={{
+                                flexDirection: 'row', backgroundColor: 'rgba(0,0,0,0.4)',width: '100%', alignItems: 'center'
+                            }}>
+                                <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                                    <Icon name="ios-photos-outline" style={{color: 'white', marginTop: 10}} size={25}/>
+                                    <Text
+                                        style={{color: 'white', marginHorizontal: 25, marginBottom: 5}}>25</Text>
+                                </View>
+                                <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                                    <Svg
+                                        style={{marginTop: 10, }}
+                                        height={this.state.svgHeight}
+                                        width={60}
+                                    >
+                                        <Path
+                                            d={pathGenerator(this.state.geojson)}
+                                            fill="none"
+                                            stroke="white"
+                                            strokeWidth={2}
+                                        />
+                                    </Svg>
+                                    <Text style={{color: 'white', marginVertical: 5,}}>Madrid, Spain</Text>
+                                </View>
+                            </View>
+                            <CommentBarV2 color={'white'} likes={10} comments={20} style={{marginHorizontal: 15}}/>
 
 
+                        </View>
                     </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        alignItems: 'center',
-                        bottom: 20,
-                        left: 20
-                    }}>
-
-                        <Text style={{color: 'white', marginLeft: 10,}}>2 minutes ago</Text>
-
-                    </View>
-                    <View style={{
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        alignItems: 'center',
-                        bottom: 20,
-                        right: 20
-                    }}>
-
-                        <Icon name="ios-photos-outline" style={{color: 'white'}} size={25}/>
-                        <Text style={{color: 'white', marginHorizontal: 25, marginTop: 5, marginBottom: 10}}>25</Text>
-                        <Svg
-                            style={{marginVertical: 10}}
-                            height={this.state.svgHeight}
-                            width={60}
-                        >
-                            <Path
-                                d={pathGenerator(this.state.geojson)}
-                                fill="none"
-                                stroke="white"
-                                strokeWidth={2}
-                            />
-                        </Svg>
-                        <Text style={{color: 'white', marginBottom: 5,}}>Madrid, Spain</Text>
-
-                    </View>
-                </View>
-                <CommentBarV2/>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -349,7 +345,7 @@ const
 
         cardContainer: {
             position: 'absolute',
-            width: width * 0.8,
+            width: width * 0.85,
             height: height * 0.5,
             elevation: 5,
             bottom: 5
@@ -364,12 +360,14 @@ const
             marginRight: 20,
             color: 'white',
             fontWeight: "900",
-            fontSize: 28,
+            fontSize: 22,
+            marginTop: -4
 
         },
         subStoryText: {
             color: 'white',
             fontSize: 13,
+
         },
         inverseSubText: {
             color: 'white',
