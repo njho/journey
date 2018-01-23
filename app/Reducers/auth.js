@@ -5,9 +5,7 @@ export default (state = {}, action) => {
         case 'REGISTER':
             return {
                 ...state,
-                inProgress: false,
-                errors: action.error ? action.payload.errors : null,
-                uid: action.uid
+                uid: action.user.uid
             };
         case 'LOGIN_PAGE_UNLOADED':
         case 'REGISTER_PAGE_UNLOADED':

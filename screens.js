@@ -22,12 +22,14 @@ import LiveStoryView from './app/Components/Journey/LiveStoryView';
 import LiveStoryMapView from './app/Components/Journey/MapView/LiveStoryMapView';
 import JourneyStart from './app/Components/Journey/JourneyStart/JourneyStart';
 import JourneyPicker from './app/Components/Generic/JourneyPicker';
+import Login from './app/Components/LoginFlow/Login';
 
 
 
 // register all screens of the app (including internal ones)
 export function registerScreens(store, Provider) {
-    Navigation.registerComponent('login', () => QuotePage, store, Provider);
+    Navigation.registerComponent('login', ()=> Login, store, Provider);
+    Navigation.registerComponent('quotePage', () => QuotePage, store, Provider);
     Navigation.registerComponent('neighborhoodDetected', () => NeighborhoodDetected, store, Provider);
     Navigation.registerComponent('neighbors', () => Neighbors, store, Provider);
     Navigation.registerComponent('locationCommunity', () => LocationCommunity, store, Provider);
@@ -48,6 +50,5 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('LiveStoryMapView', ()=> LiveStoryMapView, store, Provider);
     Navigation.registerComponent('JourneyStart', ()=> JourneyStart, store, Provider);
     Navigation.registerComponent('JourneyPicker', ()=> JourneyPicker, store, Provider);
-
 
 }

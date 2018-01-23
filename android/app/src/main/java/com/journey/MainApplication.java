@@ -40,7 +40,6 @@ import com.journey.WebUrlSingleton;
 public class MainApplication extends NavigationApplication /*implements ReactApplication */ {
 
 
-
     private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
     void handleWebsiteShare(Intent intent) {
@@ -61,7 +60,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     ///This overrides the default seen in the NavigationApplication.java
 
     @Override
-    public void startActivity(Intent intent){
+    public void startActivity(Intent intent) {
         String action = intent.getAction();
         String type = intent.getStringExtra("EXTRA_TEXT");
 
@@ -88,7 +87,6 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     @Override
     public void onCreate() {
         super.onCreate();
-
 
 
         setActivityCallbacks(new ActivityCallbacks() {
@@ -119,7 +117,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+                super.onActivityResult(requestCode, resultCode, data);
+                MainApplication.getCallbackManager().onActivityResult(requestCode, resultCode, data);
             }
 
             @Override
@@ -130,9 +129,9 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     }
 
 
-/*  protected static CallbackManager getCallbackManager() {
-    return mCallbackManager;
-  }*/
+    protected static CallbackManager getCallbackManager() {
+        return mCallbackManager;
+    }
 
 /*  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -217,7 +216,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNBackgroundGeolocation(),
                 new RNDeviceInfo()
 
-                );
+        );
     }
 
     @Override

@@ -36,6 +36,16 @@ Navigation.startTabBasedApp({
         //     title: 'Screen One',
         //     tabBarHidden: true
         // },
+        // {
+        //     label: 'One',
+        //     screen: 'quotePage', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Screen One',
+        //     tabBarHidden: true
+        // },
 
         // {
         //     label: 'two',
@@ -124,7 +134,7 @@ Navigation.startTabBasedApp({
         //     title: 'Bump',
         //     tabBarHidden: false,
         // },
-        //
+
         // {
         //     label: 'UrlShare',
         //     screen: 'UrlShare', // this is a registered name for a screen
@@ -145,16 +155,16 @@ Navigation.startTabBasedApp({
         //     title: 'JourneyView',
         //     tabBarHidden: false,
         // },
-        // {
-        //     label: 'Timeline',
-        //     screen: 'Timeline', // this is a registered name for a screen
-        //     icon: require('./app/Assets/icons/visaIcon.png'),
-        //     /*
-        //      selectedIcon: require('../img/one_selected.png'), // iOS only
-        //      */
-        //     title: 'Timeline',
-        //     tabBarHidden: false,
-        // },
+        {
+            label: 'Timeline',
+            screen: 'Timeline', // this is a registered name for a screen
+            icon: require('./app/Assets/icons/visaIcon.png'),
+            /*
+             selectedIcon: require('../img/one_selected.png'), // iOS only
+             */
+            title: 'Timeline',
+            tabBarHidden: false,
+        },
         // {
         //     label: 'LiveStoryView',
         //     screen: 'LiveStoryView', // this is a registered name for a screen
@@ -165,16 +175,16 @@ Navigation.startTabBasedApp({
         //     title: 'LiveStoryView',
         //     tabBarHidden: false,
         // },
-        {
-            label: 'LiveStoryMapView',
-            screen: 'LiveStoryMapView', // this is a registered name for a screen
-            icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'LiveStoryView',
-            tabBarHidden: false,
-        },
+        // {
+        //     label: 'LiveStoryMapView',
+        //     screen: 'LiveStoryMapView', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'LiveStoryView',
+        //     tabBarHidden: false,
+        // },
         // {
         //     label: 'JourneyStart',
         //     screen: 'JourneyStart', // this is a registered name for a screen
