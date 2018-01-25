@@ -98,7 +98,12 @@ class TimeLine extends React.Component {
                         "last_entry_date": '2 days ago',
                         "num_contributors": 12,
                         "num_entries": 53,
-                        "image_uri": '../../../app/Assets/images/asset2.jpg'
+                        "image_uri": '../../../app/Assets/images/asset2.jpg',
+                        "members": [{
+                            user: 'Bob Dylan',
+                            photo: 'uri',
+                            'description': 'cat dog man'
+                        }, {user: 'Bob Dylan', photo: 'uri', 'description': 'cat dog man'}]
                     }
                 }, {
                     "title": 'Water Education',
@@ -134,6 +139,24 @@ class TimeLine extends React.Component {
 
                         }
                     },
+                    {
+                        "title": 'Our Spain Experience!',
+                        "substory": 'Gifty Product Development',
+                        "description":
+                            'We have one service chapter focused on ensuring individuals are educated in maintaining water resources and bettering educational facilities. Take a look here.',
+                        "meta": {
+                            "type": "article",
+                            "last_action": "photo",
+                            'last_action_meta': 'Cindy Grouper',
+                            "last_entry_date": "4 days ago",
+                            "num_followers": 23,
+                            "num_entries": 30,
+                            "num_contributors": 8,
+                            "image_uri": '../../../app/Assets/images/asset3.jpg'
+
+                        }
+                    },
+
 
 
 
@@ -257,6 +280,7 @@ class TimeLine extends React.Component {
                             index={index}
                             name={item.title}
                             description={item.description}
+                            members={item.members ?  item.members : null}
                             meta={item.meta}
                             image_uri={item.image_uri}
                             navigator={this.props.navigator}

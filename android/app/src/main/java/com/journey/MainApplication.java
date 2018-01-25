@@ -160,12 +160,15 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
       );
     }
 <<<<<<< ours
+<<<<<<< ours
 =======
 
     @Override
     protected String getJSMainModuleName() {
       return "index";
     }
+=======
+>>>>>>> theirs
   };
 >>>>>>> theirs
 

@@ -97,6 +97,7 @@ class NeighborhoodDetected extends React.Component {
         super(props);
 
         this.state = {
+            loading: true,
             closeNeighborSelected: false,
             farNeighborSelected: false,
             slide: 1,
@@ -222,6 +223,11 @@ class NeighborhoodDetected extends React.Component {
             if (user) {
                 this.props.login(user.toJSON());
                 this.props.navigator.resetTo({screen: 'Timeline'})
+            } else {
+                this.setState({
+                    ...this.state,
+                    loading: false
+                })
             }
         });
     }
@@ -295,7 +301,6 @@ class NeighborhoodDetected extends React.Component {
                         </TouchableWithoutFeedback> : null
 
                 }
-
                 <Animated.View style={[{
                     alignItems: 'center',
                     marginTop: 0.2 * height
@@ -307,6 +312,7 @@ class NeighborhoodDetected extends React.Component {
                     <Animated.Text style={{marginTop: 5, opacity: logoSubText}}>Connection in the 21st
                         Century</Animated.Text>
                 </Animated.View>
+                {!this.state.loading ?
                 <Animated.View style={{
                     flexDirection: 'column',
                     position: 'absolute',
@@ -364,6 +370,7 @@ class NeighborhoodDetected extends React.Component {
                     </View>
 
                 </Animated.View>
+                    : null}
                 {this.state.farthestBeen === 1 ? <Animated.View style={{
                     flexDirection: 'column',
                     position: 'absolute',

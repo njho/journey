@@ -604,8 +604,22 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* JourneyTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 				E5B4071951F14D14B84B8938 /* Resources */,
 				BB3AA8862C834AEDB2DF51BF /* Frameworks */,
+=======
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";

@@ -38,7 +38,8 @@ import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
 import BumpCard from './Cards/BumpCard';
 import BumpCardv2 from './Cards/BumpCardv2';
-import PhotoCard from './Cards/PhotoCard'
+import PhotoCard from './Cards/PhotoCard';
+import ArticleCard from './Cards/ArticleCard';
 
 
 import Chat from '../Chat/Chat';
@@ -115,10 +116,14 @@ class JourneyListItem extends React.Component {
             case 'bump':
                 return <BumpCardv2
                     description={this.props.description}
+                    members={this.props.members}
                 />
                 break;
             case 'photo':
                 return <PhotoCard/>
+                break;
+            case 'article':
+                return <ArticleCard/>
                 break;
             case 'live':
                 return <LiveStoryCard {...this.props}/>
@@ -131,13 +136,14 @@ class JourneyListItem extends React.Component {
 
 
         return (
-            <View elevation={5} style={{
+            <View style={{
                 flexDirection: 'column',
                 width: '100%',
                 flex: 1,
                 paddingTop: 15,
-                elevation: 5,
-                backgroundColor: 'white'
+                elevation: 3,
+                backgroundColor: 'white',
+                marginVertical: 10
             }}>
                 {this.renderItem()}
             </View>

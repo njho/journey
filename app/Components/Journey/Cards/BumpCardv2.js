@@ -35,7 +35,7 @@ import OpenTok from 'react-native-opentok';
 import MapView from 'react-native-maps';
 import Animation from 'lottie-react-native';
 import CommentBar from "./CommentBar";
-
+import Dash from 'react-native-dash';
 
 const widthFactor = Dimensions.get('window').width / 375;
 const heightFactor = (Dimensions.get('window').height - 75) / 667;
@@ -95,15 +95,25 @@ class BumpCardv2 extends React.Component {
 
         return (
             <View style={styles.cardContainer}>
+                <Dash dashColor='#FF6D69' style={{top: 20, marginLeft: 0.1 * width, width:100, height:300, position: 'absolute', flexDirection: 'column'}}/>
                 <View style={[{
                     marginHorizontal: 20,
                     paddingBottom: 10,
                     flexDirection: 'row',
                     elevation: 5
                 }]}>
-
-                    <Image style={styles.userPhoto}
-                           source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
+                    <View style={{
+                        height: width * 0.16,
+                        width: width * 0.16,
+                        borderRadius: width * 0.3,
+                        marginRight: 10,
+                        backgroundColor: '#FF6D69',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Image style={styles.userPhoto}
+                               source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
+                    </View>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={styles.titleText}>WHITNEY</Text>
                         <View style={{
@@ -118,7 +128,8 @@ class BumpCardv2 extends React.Component {
 
                 </View>
                 <View style={[{
-                    marginHorizontal: 20,
+                    marginRight: 10,
+                    marginLeft: 20 + 0.1 * width,
                     paddingBottom: 15,
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -154,22 +165,42 @@ class BumpCardv2 extends React.Component {
                         <View>
                             <FlatList
                                 style={{width: width}}
-                                data={[{user: 'Bob Dylan', photo: 'uri', 'description': 'cat dog man'}, {user: 'Bob Wylan'}]}
+                                data={[{
+                                    user: 'Bob Dylan',
+                                    photo: 'uri',
+                                    'description': 'cat dog man'
+                                }, {user: 'Bob Dylan', photo: 'uri', 'description': 'cat dog man'}]}
 
                                 renderItem={({item, index}) =>
                                     <View style={{
                                         paddingHorizontal: 20,
-                                        paddingVertical: 10,
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
-                                        backgroundColor: index % 2 === 0 ? '#f9f9f9' : 'white'
+                                        backgroundColor: index % 2 === 0 ? '#f9f9f9' : 'white',
+                                        paddingVertical: 10,
                                     }}>
-                                        <Image style={styles.userPhotoSmall}
-                                               source={require('../../../../app/Assets/images/elon_musk.jpeg')}/>
-                                        <View style={{flexDirection: 'column'}}>
-                                            <Text>HELMA SCHMIDT</Text>
-                                            <Text>.programming development</Text>
+
+                                        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                            <View style={{
+                                                height: width * 0.11,
+                                                width: width * 0.11,
+                                                borderRadius: width * 0.3,
+                                                marginRight: 10,
+                                                backgroundColor: '#4D81C2',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+
+                                                <Image style={styles.userPhotoSmall}
+                                                       source={require('../../../../app/Assets/images/elon_musk.jpeg')}/>
+                                            </View>
+
+                                            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                                                <Text style={{fontSize: 12, color: '#4D81C2', fontWeight: 'bold'}}>HELMA SCHMIDT</Text>
+                                                <Text style={{fontSize: 12, fontWeight: 'bold', color: '#00BDF2'}}>.programming
+                                                    development</Text>
+                                            </View>
                                         </View>
                                         <TouchableOpacity>
                                             <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
@@ -186,7 +217,8 @@ class BumpCardv2 extends React.Component {
                                                     style={{
                                                         color: 'white',
                                                         marginVertical: 7,
-                                                        marginHorizontal: 20, fontSize: 15
+                                                        marginHorizontal: 20,
+                                                        fontSize: 10
                                                     }}>Explore</Text>
                                             </LinearGradient>
                                         </TouchableOpacity>
@@ -215,11 +247,6 @@ class BumpCardv2 extends React.Component {
                                     fontWeight: 'bold'
                                 }}>Some location</Text>
                             </View>
-
-                            <View>
-                                <Text>{this.props.substory ? this.props.substory : '../' + this.props.name}</Text>
-                            </View>
-
                         </View>
 
                     </View>
@@ -241,13 +268,11 @@ const
             height: width * 0.15,
             width: width * 0.15,
             borderRadius: width * 0.3,
-            marginRight: 10
         },
         userPhotoSmall: {
             height: width * 0.1,
             width: width * 0.1,
             borderRadius: width * 0.3,
-            marginRight: 10
         },
         titleText: {
             color: '#FF6D69',
