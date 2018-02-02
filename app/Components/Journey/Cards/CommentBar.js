@@ -13,18 +13,16 @@ class CommentBar extends React.Component {
 
     render() {
         return (
-            <View style={{
-                marginVertical: 10,
-                paddingTop: 10,
-                marginHorizontal: 25,
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderTopWidth: 0.2,
-                borderColor: '#686868'
-            }}>
+            <View style={[
+                this.props.style
+                , {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    borderColor: '#686868',
+                    marginVertical: 5
+                }]}>
                 <TouchableOpacity
                     style={{
-                        marginVertical:4,
                         marginHorizontal: 10,
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -35,7 +33,6 @@ class CommentBar extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
-                        marginVertical:4,
                         marginHorizontal: 10,
                         flexDirection: 'row',
 

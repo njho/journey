@@ -23,6 +23,7 @@ import LiveStoryMapView from './app/Components/Journey/MapView/LiveStoryMapView'
 import JourneyStart from './app/Components/Journey/JourneyStart/JourneyStart';
 import JourneyPicker from './app/Components/Generic/JourneyPicker';
 import Login from './app/Components/LoginFlow/Login';
+import SideDrawer from './app/Components/Drawer';
 
 
 
@@ -50,5 +51,6 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('LiveStoryMapView', ()=> LiveStoryMapView, store, Provider);
     Navigation.registerComponent('JourneyStart', ()=> JourneyStart, store, Provider);
     Navigation.registerComponent('JourneyPicker', ()=> JourneyPicker, store, Provider);
+    Navigation.registerComponent('SideDrawer', () => SideDrawer, store, Provider);
 
 }

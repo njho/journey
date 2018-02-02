@@ -17,7 +17,8 @@ import {
     ToastAndroid,
     Switch,
 
-    Slider,
+    Slider, Linking,
+
     Picker,
     Platform,
     StatusBar
@@ -89,6 +90,10 @@ class BumpCardv2 extends React.Component {
 
     }
 
+    linkPress = ()=> {
+        Linking.openURL(this.props.url)
+    }
+
 
     render() {
 
@@ -96,7 +101,7 @@ class BumpCardv2 extends React.Component {
         return (
             <View style={styles.cardContainer}>
 
-                <View style={[{
+                <TouchableOpacity style={[{
                     marginHorizontal: 20,
                     flexDirection: 'row',
                     elevation: 5
@@ -125,7 +130,7 @@ class BumpCardv2 extends React.Component {
                         </View>
                     </View>
 
-                </View>
+                </TouchableOpacity>
 
 
                 <View style={[{
@@ -135,14 +140,17 @@ class BumpCardv2 extends React.Component {
                     marginVertical: 15
                 }]}>
                     <View
-                    style={{flexDirection: 'row', marginHorizontal:20, elevation: 20}}>
+                        style={{flexDirection: 'row', marginHorizontal: 20, elevation: 20}}>
                         <Image style={{width: 20, height: 20, marginTop: 10, borderRadius: 20}}
                                source={{uri: 'http://s2.googleusercontent.com/s2/favicons?domain_url=http://udemy.com'}}
                         />
-                        <View style={{marginHorizontal: 15}}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold'}}>Salt & Pepper - The Art of Illustrating
-                                Texture</Text>
-                        </View>
+                        <TouchableWithoutFeedback
+                            onPress={() => this.linkPress()}>
+                            <View style={{marginHorizontal: 15}}>
+                                <Text style={{fontSize: 24, fontWeight: 'bold'}}>Salt & Pepper - The Art of Illustrating
+                                    Texture</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
 
                 </View>

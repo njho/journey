@@ -8,6 +8,7 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
+    Modal,
     TouchableHighlight,
     Button,
     Easing,
@@ -22,6 +23,8 @@ import {
     WebView,
     StatusBar
 } from 'react-native';
+import {BlurView} from 'react-native-blur'
+
 
 import {NativeModules} from 'react-native';
 
@@ -73,7 +76,7 @@ const shadowStyle = {
 
 class TimeLine extends React.Component {
     static navigatorStyle = {
-        tabBarHidden: true,
+        tabBarHidden: false,
         navBarHidden: true
     };
 
@@ -85,6 +88,8 @@ class TimeLine extends React.Component {
             url: null,
             excerpt: null,
             animateList: false,
+            modalVisible: false,
+            viewRef: null,
             journeys:
                 [{
                     "title": 'Our Volunteers', "substory": 'this is a long example',
@@ -158,13 +163,28 @@ class TimeLine extends React.Component {
                     },
 
 
-
-
                 ],
             translateTitleUp: new Animated.Value(0),
             translatePartTwo: new Animated.Value(0),
             translateImageUp: new Animated.Value(0)
 
+        }
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
+    }
+
+
+    onNavigatorEvent(event) {
+        // handle a deep link
+        if (event.type == 'DeepLink') {
+            console.log('we are handlingt he deep link');
+            console.log(event.link);
+
+            switch (event.link) {
+                case 'login':
+                    this.props.navigator.resetTo({screen: 'login'})
+
+            }
         }
     }
 
@@ -240,6 +260,11 @@ class TimeLine extends React.Component {
 
     }
 
+    launchModal(bool) {
+        this.setState({modalVisible: bool})
+    }
+
+
     render() {
         const config = {
             velocityThreshold: 0.3,
@@ -270,6 +295,14 @@ class TimeLine extends React.Component {
 
         return (
             <View style={styles.container}>
+                <TouchableOpacity onPress={() => this.props.navigator.toggleDrawer({
+                    side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
+                    animated: true, // does the toggle have transition animation or does it happen immediately (optional)
+                })}>
+                    <View>
+                        <Text> Dog Cat Dog</Text>
+                    </View>
+                </TouchableOpacity>
                 <FlatList
                     style={{flex: 1, height: height, width: width, marginBottom: 10}}
                     data={this.state.journeys}
@@ -280,13 +313,14 @@ class TimeLine extends React.Component {
                             index={index}
                             name={item.title}
                             description={item.description}
-                            members={item.members ?  item.members : null}
+                            members={item.members ? item.members : null}
                             meta={item.meta}
                             image_uri={item.image_uri}
                             navigator={this.props.navigator}
                         />
                     }
                 />
+
             </View>
 
         )
@@ -363,6 +397,14 @@ const styles = StyleSheet.create({
         subText: {
             marginHorizontal: 20,
             fontSize: 14
+        },
+        contentWrap: {
+            flex: 1,
+            position: 'absolute',
+            width: width,
+            height: height,
+            justifyContent: 'center',
+            alignItems: 'center',
         }
 
     })
@@ -371,3 +413,5 @@ const styles = StyleSheet.create({
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);
 
+
+//

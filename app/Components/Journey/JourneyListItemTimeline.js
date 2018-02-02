@@ -120,10 +120,10 @@ class JourneyListItem extends React.Component {
                 />
                 break;
             case 'photo':
-                return <PhotoCard/>
+                return <PhotoCard description={this.props.description}/>
                 break;
             case 'article':
-                return <ArticleCard/>
+                return <ArticleCard url={'https://www.google.com'}/>
                 break;
             case 'live':
                 return <LiveStoryCard {...this.props}/>
@@ -143,7 +143,7 @@ class JourneyListItem extends React.Component {
                 paddingTop: 15,
                 elevation: 3,
                 backgroundColor: 'white',
-                marginVertical: 10
+                marginVertical: 20
             }}>
                 {this.renderItem()}
             </View>

@@ -39,7 +39,6 @@ import CommentBar from "./CommentBar";
 import CommentBarV2 from "./CommentBarV2";
 
 
-
 const widthFactor = Dimensions.get('window').width / 375;
 const heightFactor = (Dimensions.get('window').height - 75) / 667;
 const height = Dimensions.get('window').height;
@@ -112,12 +111,58 @@ class BumpMainCard extends React.Component {
 
         return (
             <View style={styles.cardContainer}>
+                <View style={[{
+                    marginHorizontal: 20,
+                    paddingBottom: 20,
+                    paddingTop: 8,
+                    flexDirection: 'row',
+                    elevation: 5
+                }]}>
 
-                <Image
-                    style={{width: width, height: imgHeight}}
-                    source={{uri: 'https://d26p6gt0m19hor.cloudfront.net/assets/donations/home/grid/give-monthly-ac4abafab17cd6b74196227a89e29ecc1f9a6d53c4690dff13556c0352e79112.jpg'}}
-                />
-                <CommentBarV2/>
+                    <View style={{
+                        height: width * 0.14,
+                        width: width * 0.14,
+                        borderRadius: width * 0.3,
+                        marginRight: 10,
+                        backgroundColor: '#FF6D69',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Image style={styles.userPhoto}
+                               source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
+                    </View>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={styles.titleText}>WHITNEY</Text>
+                        <View style={{
+                            backgroundColor: '#FF6D69',
+                            borderRadius: 20,
+                            paddingHorizontal: 10,
+                            paddingVertical: 4
+                        }}>
+                            <Text style={{color: 'white'}}>.exploring developmental genetics</Text>
+                        </View>
+                    </View>
+
+                </View>
+                <View style={{
+                    borderWidth: 0.2,
+                    width: '100%',
+                    elevation: 2,
+                    borderColor: '#cecece',
+                    backgroundColor: 'white'
+                }}>
+                    <Image
+                        style={{width: width, height: imgHeight}}
+                        source={{uri: 'https://d26p6gt0m19hor.cloudfront.net/assets/donations/home/grid/give-monthly-ac4abafab17cd6b74196227a89e29ecc1f9a6d53c4690dff13556c0352e79112.jpg'}}
+                    />
+
+                    <Text style={{
+                        fontSize: 12,
+                        paddingHorizontal: 10,
+                        paddingVertical: 10
+                    }}>{this.props.description}</Text>
+                </View>
+                <CommentBar style={{paddingHorizontal: 7}}/>
 
 
             </View>
@@ -132,20 +177,7 @@ const
             alignItems: 'center',
             flex: 1,
         },
-        userPhoto: {
-            height: width * 0.1,
-            width: width * 0.1,
-            alignSelf: 'flex-start'
-        },
-        titleText: {
-            color: '#9A9CE0',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginHorizontal: 15,
-            width: '100%'
 
-        },
         subText: {
             textAlign: 'center',
             color: '#9A9CE0',
@@ -175,7 +207,24 @@ const
             marginBottom: 5,
             paddingVertical: 7,
             marginHorizontal: 5,
-        }
+        },
+        userPhoto: {
+            height: width * 0.13,
+            width: width * 0.13,
+            borderRadius: width * 0.3,
+        },
+        userPhotoSmall: {
+            height: width * 0.1,
+            width: width * 0.1,
+            borderRadius: width * 0.3,
+        },
+        titleText: {
+            color: '#FF6D69',
+            fontWeight: 'bold',
+            fontSize: 14,
+            width: '100%'
+
+        },
 
     });
 

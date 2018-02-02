@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 
+import com.cmcewen.blurview.BlurViewPackage;
 import com.reactnativenavigation.controllers.ActivityCallbacks;
 import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -26,6 +27,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.transistorsoft.rnbackgroundgeolocation.*;
+
 
 import com.facebook.CallbackManager;
 
@@ -143,6 +145,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BlurViewPackage(),
             new RNDeviceInfo(),
             new ImageResizerPackage(),
             new RNBackgroundGeolocation(),
@@ -217,7 +220,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new WebUrlPackage(),
                 new SvgPackage(),
                 new RNBackgroundGeolocation(),
-                new RNDeviceInfo()
+                new RNDeviceInfo(),
+                new BlurViewPackage()
 
         );
     }

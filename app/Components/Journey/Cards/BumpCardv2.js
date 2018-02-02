@@ -26,6 +26,7 @@ import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
+import SlideAndRotate from '../../Generic/SlideAndRotate';
 
 
 import {connect} from 'react-redux';
@@ -95,161 +96,166 @@ class BumpCardv2 extends React.Component {
 
         return (
             <View style={styles.cardContainer}>
-                <Dash dashColor='#FF6D69' style={{top: 20, marginLeft: 0.1 * width, width:100, height:300, position: 'absolute', flexDirection: 'column'}}/>
-                <View style={[{
-                    marginHorizontal: 20,
-                    paddingBottom: 10,
-                    flexDirection: 'row',
-                    elevation: 5
-                }]}>
-                    <View style={{
-                        height: width * 0.16,
-                        width: width * 0.16,
-                        borderRadius: width * 0.3,
-                        marginRight: 10,
-                        backgroundColor: '#FF6D69',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <Image style={styles.userPhoto}
-                               source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
-                    </View>
-                    <View style={{flexDirection: 'column'}}>
-                        <Text style={styles.titleText}>WHITNEY</Text>
-                        <View style={{
-                            backgroundColor: '#FF6D69',
-                            borderRadius: 20,
-                            paddingHorizontal: 10,
-                            paddingVertical: 4
-                        }}>
-                            <Text style={{color: 'white'}}>.exploring developmental genetics</Text>
-                        </View>
-                    </View>
+                <Dash dashColor='#FF6D69' style={{
+                    top: 20,
+                    marginLeft: 0.08 * width,
+                    width: 100,
+                    height: 100,
+                    position: 'absolute',
+                    flexDirection: 'column'
+                }}/>
 
-                </View>
-                <View style={[{
-                    marginRight: 10,
-                    marginLeft: 20 + 0.1 * width,
-                    paddingBottom: 15,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start'
-                }]}>
-                    <Text style={styles.subText}>
-                        {this.props.description}
-                    </Text>
-                </View>
+
 
                 <View style={[{
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '100%',
                 }]}>
 
+                    <View style={{
+                        borderWidth: 0.2,
+                        width: '100%',
+                        elevation: 2,
+                        borderColor: '#cecece',
+                        backgroundColor: 'white'
+                    }}>
 
-                    <View>
-                        <MapView
-                            style={{width: width, height: height * 0.25, borderRadius: 5, elevation: 4}}
-                            initialRegion={this.state.region}
-                            region={this.state.region}
-                            litemode={true}
-                        >
+                        <Icon name="ios-quote"
+                              style={{
+                                  color: '#FF6D69',
+                                  position: 'absolute',
+                                  opacity: 0.3,
+                                  top: -40,
+                                  right: 10
+                              }} size={100}/>
 
-                            <MapView.Marker
-                                anchor={{x: 0.5, y: 0.5}}
-                                coordinate={this.state.coordinate}>
-
-                            </MapView.Marker>
-                        </MapView>
-                        <View>
-                            <FlatList
-                                style={{width: width}}
-                                data={[{
-                                    user: 'Bob Dylan',
-                                    photo: 'uri',
-                                    'description': 'cat dog man'
-                                }, {user: 'Bob Dylan', photo: 'uri', 'description': 'cat dog man'}]}
-
-                                renderItem={({item, index}) =>
-                                    <View style={{
-                                        paddingHorizontal: 20,
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        backgroundColor: index % 2 === 0 ? '#f9f9f9' : 'white',
-                                        paddingVertical: 10,
-                                    }}>
-
-                                        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                            <View style={{
-                                                height: width * 0.11,
-                                                width: width * 0.11,
-                                                borderRadius: width * 0.3,
-                                                marginRight: 10,
-                                                backgroundColor: '#4D81C2',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}>
-
-                                                <Image style={styles.userPhotoSmall}
-                                                       source={require('../../../../app/Assets/images/elon_musk.jpeg')}/>
-                                            </View>
-
-                                            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                                <Text style={{fontSize: 12, color: '#4D81C2', fontWeight: 'bold'}}>HELMA SCHMIDT</Text>
-                                                <Text style={{fontSize: 12, fontWeight: 'bold', color: '#00BDF2'}}>.programming
-                                                    development</Text>
-                                            </View>
-                                        </View>
-                                        <TouchableOpacity>
-                                            <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
-                                                            end={{x: 1, y: .50}}
-                                                            style={{
-                                                                marginVertical: 5,
-                                                                borderRadius: 20,
-                                                                alignSelf: 'flex-start',
-                                                                flexDirection: 'row',
-                                                                alignItems: 'center'
-                                                            }}>
-
-                                                <Text
-                                                    style={{
-                                                        color: 'white',
-                                                        marginVertical: 7,
-                                                        marginHorizontal: 20,
-                                                        fontSize: 10
-                                                    }}>Explore</Text>
-                                            </LinearGradient>
-                                        </TouchableOpacity>
-                                    </View>
-                                }
-                            />
-                            <CommentBar/>
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: -50,
-                                    backgroundColor: '#9A9CE0',
-                                    borderRadius: 5,
-                                    paddingVertical: 5,
-                                    paddingHorizontal: 7,
-                                    marginRight: 7,
-                                    marginBottom: 7,
-                                    alignSelf: 'flex-start',
-                                    flex: 0
-                                }}
-                            >
-                                <Text style={{
-                                    color: 'white',
-                                    flex: 0,
-                                    fontWeight: 'bold'
-                                }}>Some location</Text>
+                        <View style={[{
+                            paddingTop: 30,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            paddingHorizontal: 20,
+                        }]}>
+                            <View style={{
+                                height: width * 0.09,
+                                width: width * 0.09,
+                                borderRadius: width * 0.3,
+                                marginRight: 10,
+                                backgroundColor: '#FF6D69',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <Image style={styles.userPhoto}
+                                       source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
                             </View>
-                        </View>
+                            <View>
+                                <Text style={styles.titleText}>WHITNEY</Text>
+                                <View style={{
+                                    backgroundColor: '#FF6D69',
+                                    paddingHorizontal: 10,
+                                    borderRadius: 20,
+                                    paddingVertical: 4,
+                                    marginBottom: 5
+                                }}>
+                                    <Text style={{color: 'white', fontSize: 8}}>.exploring developmental genetics</Text>
+                                </View>
+                            </View>
 
+                        </View>
+                        <View style={{paddingHorizontal: 20, paddingBottom: 30}}>
+                            <Text style={styles.subText}>
+                                {this.props.description}
+                            </Text>
+                        </View>
+                        <FlatList
+                            style={{width: '100%'}}
+                            data={[{
+                                user: 'Bob Dylan',
+                                photo: 'uri',
+                                'description': 'cat dog man'
+                            }, {user: 'Bob Dylan', photo: 'uri', 'description': 'cat dog man'}]}
+
+                            renderItem={({item, index}) =>
+                                <View style={{
+                                    paddingHorizontal: 20,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    backgroundColor: index % 2 === 0 ? '#f9f9f9' : 'white',
+                                    paddingVertical: 10,
+                                }}>
+
+                                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                        <View style={{
+                                            height: width * 0.11,
+                                            width: width * 0.11,
+                                            borderRadius: width * 0.3,
+                                            marginRight: 15,
+                                            backgroundColor: '#4D81C2',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}>
+
+                                            <Image style={styles.userPhotoSmall}
+                                                   source={require('../../../../app/Assets/images/elon_musk.jpeg')}/>
+                                        </View>
+
+                                        <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                                            <Text style={{fontSize: 11, color: '#4D81C2', fontWeight: 'bold'}}>HELMA
+                                                SCHMIDT</Text>
+                                            <Text style={{fontSize: 11, fontWeight: 'bold', color: '#00BDF2'}}>.programming
+                                                development</Text>
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity>
+                                        <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                                        end={{x: 1, y: .50}}
+                                                        style={{
+                                                            marginVertical: 5,
+                                                            borderRadius: 20,
+                                                            alignSelf: 'flex-start',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center'
+                                                        }}>
+
+                                            <Text
+                                                style={{
+                                                    color: 'white',
+                                                    marginVertical: 7,
+                                                    marginHorizontal: 20,
+                                                    fontSize: 10
+                                                }}>Explore</Text>
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                        />
+                        <View style={{width: width}}>
+
+                            <MapView
+                                style={{width: '100%', height: height * 0.2, borderRadius: 5, elevation: 4}}
+                                initialRegion={this.state.region}
+                                region={this.state.region}
+                                litemode={true}
+                            >
+
+
+                                <MapView.Marker
+                                    anchor={{x: 0.5, y: 0.5}}
+                                    coordinate={this.state.coordinate}>
+
+                                </MapView.Marker>
+                            </MapView>
+
+                            <SlideAndRotate style={{position: 'absolute', elevation: 5, right: 20, top: 10}} height={25}
+                                            width={25} backgroundColor={'#FF6D69'} icon={'ios-add'}/>
+
+                        </View>
                     </View>
+                    <CommentBar/>
+
+
                 </View>
             </View>
         );
@@ -265,8 +271,8 @@ const
             elevation: 5
         },
         userPhoto: {
-            height: width * 0.15,
-            width: width * 0.15,
+            height: width * 0.08,
+            width: width * 0.08,
             borderRadius: width * 0.3,
         },
         userPhotoSmall: {
@@ -277,14 +283,13 @@ const
         titleText: {
             color: '#FF6D69',
             fontWeight: 'bold',
-            fontSize: 20,
-            width: '100%'
+            fontSize: 14,
 
         },
         subText: {
-            color: '#FF6D69',
-            fontSize: 13,
-            marginVertical: 5
+            color: '#4D81C2',
+            fontWeight: 'bold',
+            fontSize: 16,
 
         },
 
@@ -341,3 +346,5 @@ style={[{
 source={require('../../../../app/Assets/images/whitney_wolf.jpg')}/>
 </View>
 </View>*/
+
+

@@ -27,7 +27,7 @@ registerScreens(store, Provider);
 Navigation.startTabBasedApp({
     tabs: [
         {
-            label: 'One',
+            label: 'Login',
             screen: 'login', // this is a registered name for a screen
              icon: require('./app/Assets/icons/visaIcon.png'),
             /*
@@ -155,16 +155,16 @@ Navigation.startTabBasedApp({
         //     title: 'JourneyView',
         //     tabBarHidden: false,
         // },
-        {
-            label: 'Timeline',
-            screen: 'Timeline', // this is a registered name for a screen
-            icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'Timeline',
-            tabBarHidden: false,
-        },
+        // {
+        //     label: 'Timeline',
+        //     screen: 'Timeline', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Timeline',
+        //     tabBarHidden: false,
+        // },
         // {
         //     label: 'LiveStoryView',
         //     screen: 'LiveStoryView', // this is a registered name for a screen
@@ -256,6 +256,12 @@ Navigation.startTabBasedApp({
         // },
 
     ]
+    ,
+        drawer: {
+        left: {
+            screen: 'SideDrawer',
+        }
+    }
 
 });
 /*
