@@ -104,7 +104,6 @@ class MainActions extends React.Component {
                         borderRadius: 5,
                     }}>
                         <TouchableOpacity style={{flex: 1, borderRadius: 5}}>
-                            `
 
                         </TouchableOpacity>
                         <View style={{flex: 1, position: 'absolute'}}>

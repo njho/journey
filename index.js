@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import {
     AppRegistry,
@@ -8,13 +8,13 @@ import {
     Image,
     Keyboard
 } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
 
 import {Provider} from 'react-redux';
 import store from './app/store.js';
 
 import {bootstrap} from './app/Components/config/bootstrap';
-import { registerScreens } from './screens';
+import {registerScreens} from './screens';
 
 
 import Login from './app/Components/Login/';
@@ -26,16 +26,16 @@ registerScreens(store, Provider);
 
 Navigation.startTabBasedApp({
     tabs: [
-        {
-            label: 'Login',
-            screen: 'login', // this is a registered name for a screen
-             icon: require('./app/Assets/icons/visaIcon.png'),
-            /*
-             selectedIcon: require('../img/one_selected.png'), // iOS only
-             */
-            title: 'Screen One',
-            tabBarHidden: true
-        },
+        // {
+        //     label: 'Login',
+        //     screen: 'login', // this is a registered name for a screen
+        //     icon: require('./app/Assets/icons/visaIcon.png'),
+        //     /*
+        //      selectedIcon: require('../img/one_selected.png'), // iOS only
+        //      */
+        //     title: 'Screen One',
+        //     tabBarHidden: true
+        // },
         // {
         //     label: 'One',
         //     screen: 'quotePage', // this is a registered name for a screen
@@ -217,8 +217,6 @@ Navigation.startTabBasedApp({
         // },
 
 
-
-
         // {
         //     label: 'two',
         //     screen: 'personalJourneyStart', // this is a registered name for a screen
@@ -254,13 +252,32 @@ Navigation.startTabBasedApp({
         //     tabBarHidden: true,
         //     overrideBackPress: true
         // },
+        {
+            label: 'Profile',
+            screen: 'Profile', // this is a registered name for a screen
+            icon: require('./app/Assets/icons/visaIcon.png'),
+            /*
+             selectedIcon: require('../img/one_selected.png'), // iOS only
+             */
+            tabBarHidden: false,
+
+        },
 
     ]
     ,
-        drawer: {
+    drawer: {
         left: {
             screen: 'SideDrawer',
-        }
+        },
+
+    },
+    tabsStyle: {
+        topBarShadowColor: 'red',
+        statusBarColor: '#221B36',    },
+    appStyle: {
+        topBarShadowColor: 'red',
+        statusBarColor: '#221B36',
+
     }
 
 });

@@ -24,6 +24,7 @@ import JourneyStart from './app/Components/Journey/JourneyStart/JourneyStart';
 import JourneyPicker from './app/Components/Generic/JourneyPicker';
 import Login from './app/Components/LoginFlow/Login';
 import SideDrawer from './app/Components/Drawer';
+import Profile from './app/Components/Profile/Profile';
 
 
 
@@ -52,5 +53,6 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('JourneyStart', ()=> JourneyStart, store, Provider);
     Navigation.registerComponent('JourneyPicker', ()=> JourneyPicker, store, Provider);
     Navigation.registerComponent('SideDrawer', () => SideDrawer, store, Provider);
+    Navigation.registerComponent('Profile', () => Profile, store, Provider);
 
 }

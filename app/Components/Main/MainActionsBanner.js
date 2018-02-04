@@ -78,9 +78,12 @@ class Banner extends React.Component {
     render() {
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, width: width, height: height}}>
+
                     <Text style={styles.mainTitle}>Near You Now</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+
                         <View style={{
                             width: 40,
                             height: 40,

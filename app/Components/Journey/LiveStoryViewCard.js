@@ -14,7 +14,6 @@ import {
     FlatList,
     ScrollView,
     TouchableWithoutFeedback,
-    ViewPagerAndroid,
     ToastAndroid,
     Switch,
     findNodeHandle,
@@ -28,7 +27,6 @@ import agent from '../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
 import ImageResizer from 'react-native-image-resizer';
-import LiveStoryViewCard from './LiveStoryViewCard';
 import {geoPath, geoMercator} from 'd3-geo';
 import Svg, {
     Circle,
@@ -83,7 +81,7 @@ const shadowStyle = {
 };
 
 
-class LiveJourneyView extends React.Component {
+class LiveStoryViewCard extends React.Component {
     static navigatorStyle = {
         tabBarHidden: true,
         navBarHidden: true
@@ -273,29 +271,125 @@ class LiveJourneyView extends React.Component {
 
             <View style={styles.container}>
 
-                <ViewPagerAndroid
-                    ref={(comp) => {
-                        this.viewPager = comp
-                    }}
-                    scrollEnabled={this.state.scrollEnabled}
-                    smoothScroll={true}
 
-                    style={{
-                        flex: 1,
-                        width: width,
-                        height: height,
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center'
+                {this.props.url === 'liveStoryView1' ?
+                    <Image
+                        ref={(img) => {
+                            this.backgroundImage = img;
+                        }}
+
+                        style={{width: width, height: height, position: 'absolute',}}
+                        source={require('../../Assets/images/StreetView1.png')}
+                        onLoadEnd={this.imageLoaded.bind(this)}
+                    />
+                    : <Image
+                        ref={(img) => {
+                            this.backgroundImage = img;
+                        }}
+
+                        style={{width: width, height: height, position: 'absolute',}}
+                        source={require('../../Assets/images/StreetView2.png')}
+                        onLoadEnd={this.imageLoaded.bind(this)}
+                    />}
+                <BlurView
+                    style={{height: height, width: width, position: 'absolute'}}
+                    viewRef={this.state.viewRef}
+                    blurType="light"
+                    blurAmount={2}
+                />
+
+                {this.props.url === 'liveStoryView1' ? <Image
+
+                    style={{width: width, height: this.state.imgHeight}}
+                    source={require('../../Assets/images/StreetView1.png')}
+                    onLoadEnd={this.imageLoaded.bind(this)}
+                /> : <Image
+
+                    style={{width: width, height: this.state.imgHeight}}
+                    source={require('../../Assets/images/StreetView2.png')}
+                    onLoadEnd={this.imageLoaded.bind(this)}
+                />}
+
+
+                <View
+                    style={{flexDirection: 'column', position: 'absolute', right: 30, top: 50}}>
+                    <Svg
+                        style={{marginVertical: 10}}
+                        height={this.state.svgHeight}
+                        width={60}
+                    >
+                        <Path
+                            d={pathGenerator(this.state.geojson)}
+                            fill="none"
+                            stroke="white"
+                            strokeWidth={2}
+                        />
+                    </Svg>
+
+                </View>
+
+                <View style={{
+                    position: 'absolute',
+                    width: width,
+                    bottom: 0,
+                    paddingHorizontal: 10,
+                    paddingRight: 30
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 15
                     }}>
-                    <View>
-                        <LiveStoryViewCard url={'liveStoryView1'}/>
-                    </View>
-                    <View>
-                        <LiveStoryViewCard url={'liveStoryView2'}/>
-                    </View>
+                        <View style={{flexDirection: 'column', justifyContent: 'space-around'}}>
+                            <View style={{flexDirection: 'row',}}>
+                                <Icon name="ios-pin-outline" size={20}
+                                      color="white"/>
+                                <Text style={{color: 'white', fontWeight: 'bold'}}> Nagasaki, Tokyo</Text>
+                            </View>
 
-                </ViewPagerAndroid>
+                            <Text style={{color: 'white',}}>4:00 AM</Text>
+
+                            <Text style={{color: 'white',}}>December 20, 2018</Text>
+
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around'}}>
+
+                            <Text style={{color: 'white', fontSize: 20,}}>2300</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', marginBottom: 10}}>FEET</Text>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around'}}>
+                            <Text style={{color: 'white', fontSize: 20,}}>16</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', marginBottom: 10}}>KMS</Text>
+                        </View>
+
+                    </View>
+                    <View style={{marginBottom: 5, marginTop: 15, flexDirection: 'row', alignItems: 'center',}}>
+                        <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                        end={{x: 1, y: .50}}
+                                        style={{
+                                            marginVertical: 10,
+                                            paddingHorizontal: 20,
+                                            paddingVertical: 5,
+                                            borderRadius: 20,
+                                            alignSelf: 'flex-start',
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                            <Text style={{color: 'white'}}>Contribute</Text>
+                        </LinearGradient>
+                        <View style={{flexDirection: 'column', paddingHorizontal: 10,}}>
+                            <View>
+
+                                <Text style={{color: 'white', fontWeight: 'bold'}}> We need a Pick Axe!</Text>
+                            </View>
+
+                            <View style={{flexDirection: 'row', paddingRight: 20, width: '100%'}}>
+                                <View style={{width: '20%', backgroundColor: '#4D81C2', height: 2}}></View>
+                                <View style={{width: '70%', backgroundColor: 'white', height: 2}}></View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
             </View>
         );
     }
@@ -357,7 +451,7 @@ const
 export default connect(mapStateToProps, mapDispatchToProps)
 
 (
-    LiveJourneyView
+    LiveStoryViewCard
 )
 ;
 //

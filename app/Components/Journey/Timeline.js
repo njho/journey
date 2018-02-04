@@ -76,8 +76,10 @@ const shadowStyle = {
 
 class TimeLine extends React.Component {
     static navigatorStyle = {
-        tabBarHidden: false,
-        navBarHidden: true
+        tabBarHidden: true,
+        navBarHidden: true,
+
+
     };
 
     constructor(props) {
@@ -295,14 +297,68 @@ class TimeLine extends React.Component {
 
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => this.props.navigator.toggleDrawer({
-                    side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
-                    animated: true, // does the toggle have transition animation or does it happen immediately (optional)
-                })}>
-                    <View>
-                        <Text> Dog Cat Dog</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={{
+                    elevation: 5,
+                    width: width,
+                    justifyContent: 'space-around',
+                    backgroundColor: '#4D81C2',
+                    alignItems: 'center',
+                    paddingHorizontal: 20,
+                    flexDirection: 'row',
+
+                }}>
+                    <TouchableOpacity>
+                        <View style={{
+                            borderRadius: 5,
+                            backgroundColor: '#4D81C2',
+                            width: 30,
+                            height: 30,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginVertical: 7
+                        }}>
+                            <Icon name="ios-add-outline" size={40}
+                                  color="white"/>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={{
+                            borderRadius: 5,
+                            backgroundColor: '#4D81C2',
+                            width: 30,
+                            height: 30,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginVertical: 7
+                        }}>
+                            <Icon name="ios-search" size={25}
+                                  color="white"/>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.props.navigator.showLightBox({
+                        screen: 'SideDrawer', // unique ID registered with Navigation.registerScreen
+                        passProps: {}, // simple serializable object that will pass as props to the lightbox (optional)
+                        style: {
+                            backgroundBlur: 'dark', // 'dark' / 'light' / 'xlight' / 'none' - the type of blur on the background
+                            backgroundColor: '#00000080', // tint color for the background, you can specify alpha here (optional)
+                            tapBackgroundToDismiss: true // dismisses LightBox on background taps (optional)
+                        }
+                    })}>
+                        <View style={{
+                            borderRadius: 5,
+                            backgroundColor: '#4D81C2',
+                            width: 30,
+                            height: 30,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginVertical: 7
+                        }}>
+                            <Icon name="ios-person-outline" size={35}
+                                  color="white"/>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
                 <FlatList
                     style={{flex: 1, height: height, width: width, marginBottom: 10}}
                     data={this.state.journeys}
