@@ -11,7 +11,7 @@ import com.reactnativenavigation.controllers.ActivityCallbacks;
 import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
-
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import io.invertase.firebase.RNFirebasePackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
@@ -145,6 +145,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGestureHandlerPackage(),
             new BlurViewPackage(),
             new RNDeviceInfo(),
             new ImageResizerPackage(),
@@ -221,9 +222,11 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new SvgPackage(),
                 new RNBackgroundGeolocation(),
                 new RNDeviceInfo(),
-                new BlurViewPackage()
+                new BlurViewPackage(),
+                new RNGestureHandlerPackage()
 
-        );
+
+                );
     }
 
     @Override

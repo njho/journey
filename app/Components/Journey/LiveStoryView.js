@@ -215,7 +215,8 @@ class LiveJourneyView extends React.Component {
                     ]
                 ]
             },
-            svgHeight: 60
+            svgHeight: 60,
+            translateViewUp: new Animated.Value(0)
         }
         this._deltaY = new Animated.Value(height - 100);
 
@@ -262,11 +263,66 @@ class LiveJourneyView extends React.Component {
         })
     }
 
+    toggleAnimation(visibility) {
+
+        switch (visibility) {
+            case 'minimized':
+                Animated.parallel([
+                    Animated.timing(
+                        this.state.translateViewUp,
+                        {
+                            toValue: 1,
+                            duration: 200,
+                            delay: 0,
+                        }
+                    ),
+                ]).start(() => this.setState({
+                    ...this.state,
+                }));
+                break;
+            case 'visible':
+                Animated.parallel([
+                    Animated.timing(
+                        this.state.translateViewUp,
+                        {
+                            toValue: 0,
+                            duration: 350,
+                            delay: 0,
+                        }
+                    ),
+                ]).start(() => this.setState({
+                    ...this.state,
+                }));
+                break;
+
+
+        }
+
+
+    }
+
 
     render() {
         console.log('svgHeight: ' + this.state.svgHeight);
         const projection = geoMercator().fitExtent([[0, 0], [60, this.state.svgHeight]], this.state.geojson);
         const pathGenerator = geoPath().projection(projection)
+
+        const translateViewUp = this.state.translateViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, height * 0.3]
+        })
+        const translateViewOpacity = this.state.translateViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0]
+        })
+        const translateViewUpInverse = this.state.translateViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [height * 0.3, 0]
+        })
+        const translateViewOpacityInverse = this.state.translateViewUp.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+        })
 
 
         return (
@@ -296,6 +352,186 @@ class LiveJourneyView extends React.Component {
                     </View>
 
                 </ViewPagerAndroid>
+                <Animated.View style={{
+                    position: 'absolute',
+                    right: 20,
+                    top: 50,
+                    opacity: translateViewOpacity
+                }}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigator.push({screen: 'LiveStoryMapView'})}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                                width: 80,
+                                borderRadius: 80,
+                                height: 80
+                            }}>
+                            <Svg
+                                style={{marginVertical: 10}}
+                                height={this.state.svgHeight}
+                                width={60}
+                            >
+                                <Path
+                                    d={pathGenerator(this.state.geojson)}
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth={2}
+                                />
+                            </Svg>
+
+                        </View>
+                    </TouchableOpacity>
+                </Animated.View>
+
+                <Animated.View style={{
+                    position: 'absolute',
+                    width: width,
+                    bottom: 0,
+                    paddingHorizontal: 10,
+                    opacity: translateViewOpacity,
+                    paddingRight: 30,
+                    transform: [{translateY: translateViewUp}]
+                }}>
+                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 20}}> .NAGASAKI KAWASAKI</Text>
+                    <TouchableWithoutFeedback
+                        onPress={() => this.toggleAnimation('minimized')}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            marginTop: 15,
+
+                        }}>
+                            <View style={{
+                                flexDirection: 'column',
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                                borderRadius: 5,
+                                padding: 5,
+                                marginRight: 10,
+                            }}>
+                                <View style={{flexDirection: 'row',}}>
+                                    <Icon name="ios-pin-outline" size={20}
+                                          color="white"/>
+                                    <Text style={{color: 'white', fontWeight: 'bold'}}> Nagasaki, Tokyo</Text>
+                                </View>
+
+                                <Text style={{color: 'white',}}>4:00 AM</Text>
+
+                                <Text style={{color: 'white',}}>December 20, 2018</Text>
+
+                            </View>
+                            <View style={{
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'space-around',
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                                borderRadius: 5,
+                                padding: 5,
+                                marginRight: 10,
+                            }}>
+
+                                <Text style={{color: 'white', fontSize: 20,}}>2300</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', marginBottom: 10}}>FEET</Text>
+                            </View>
+                            <View style={{
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'space-around',
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                                borderRadius: 5,
+                                padding: 5
+                            }}>
+                                <Text style={{color: 'white', fontSize: 20,}}>16</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', marginBottom: 10}}>KMS</Text>
+                            </View>
+
+                        </View>
+                    </TouchableWithoutFeedback>
+                    <View style={{marginBottom: 10, marginTop: 5, flexDirection: 'row', alignItems: 'center',}}>
+                        <TouchableOpacity>
+                            <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                            end={{x: 1, y: .50}}
+                                            style={{
+                                                marginVertical: 10,
+                                                paddingHorizontal: 20,
+                                                paddingVertical: 5,
+                                                borderRadius: 20,
+                                                alignSelf: 'flex-start',
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                <Text style={{color: 'white'}}>Contribute</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                        <View style={{flexDirection: 'column', paddingHorizontal: 10,}}>
+                            <View>
+
+                                <Text style={{color: 'white', fontWeight: 'bold'}}> We need a Pick Axe!</Text>
+                            </View>
+
+                            <View style={{flexDirection: 'row', paddingRight: 20, width: '100%'}}>
+                                <View style={{width: '20%', backgroundColor: '#4D81C2', height: 2}}></View>
+                                <View style={{width: '65%', backgroundColor: 'white', height: 2}}></View>
+                            </View>
+                        </View>
+                    </View>
+                </Animated.View>
+
+                <Animated.View style={{
+                    position: 'absolute',
+                    width: width,
+                    bottom: 0,
+                    opacity: translateViewOpacityInverse,
+                    transform: [{translateY: translateViewUpInverse}]
+                }}>
+                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 20}}> .NAGASAKI KAWASAKI</Text>
+                    <TouchableWithoutFeedback
+                        onPress={() => this.toggleAnimation('visible')}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+
+                        }}>
+
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-around',
+                                backgroundColor: 'rgba(0,0,0,0.25)',
+                                padding: 5,
+                                width: width,
+                                marginRight: 10,
+                            }}>
+
+                                <View style={{flexDirection: 'row',}}>
+                                    <Icon name="ios-pin-outline" size={20}
+                                          color="white"/>
+                                    <Text style={{color: 'white', fontWeight: 'bold'}}> Nagasaki, Tokyo</Text>
+                                </View>
+                                <Text style={{color: 'white', fontSize: 12,}}>2300 FT</Text>
+                                <Text style={{color: 'white', fontSize: 12, marginLeft: 5}}>16 kms</Text>
+
+                                <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                                end={{x: 1, y: .50}}
+                                                style={{
+                                                    width: 20, height: 20,
+                                                    borderRadius: 20,
+                                                    alignSelf: 'flex-start',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                </LinearGradient>
+
+                            </View>
+
+                        </View>
+                    </TouchableWithoutFeedback>
+                </Animated.View>
             </View>
         );
     }

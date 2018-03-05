@@ -26,6 +26,7 @@ import aggregator from './aggregator';*/
 let token = null;
 
 const database = firebase.database();
+const storage = firebase.storage();
 const geoFireRef = new GeoFire(database.ref('geoFireCommunities'));
 
 
@@ -98,9 +99,8 @@ const query = `
 `
 
 
-
 const Streamer = {
-    generateToken: (sessionId ) => {
+    generateToken: (sessionId) => {
         console.log('this is the sessionID: ' + sessionId)
         const query = `{ requestToken(session_id: "${sessionId}", user_id: "Jason Ho", journey_id: "1238apsfnp98", name: "Jason Ho" ) }`
         return fetch('https://us-central1-journeyapp91.cloudfunctions.net/graphql/', {
@@ -211,6 +211,20 @@ const FirebaseQuery = {
             });
 
         }
+    },
+    uploadImage: () => {
+        storage.ref('/files/1234.jpg')
+            .putFile('file:////storage/emulated/0/Android/data/com.google.android.cameraview.demo/files/Pictures/picture.jpg')
+            .then(uploadedFile => {
+                console.log('uploaded file');
+                console.log(uploadedFile);
+                //success
+            })
+            .catch(err => {
+                console.log('there was an error');
+                console.log(err)
+                //Error
+            });
     },
     updateGifty: (key1, dashboard, editGifty) => {
         return dispatch => {

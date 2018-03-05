@@ -56,7 +56,9 @@ const CONTACTS = [
     { name: 'Vincent Sandoval', number: 2606111495 },
 ];
 
-export default class Contacts extends React.Component<{}> {
+export default class Contacts extends React.Component {
+
+
     _renderItem = ({ item }) => (
         <View style={styles.item}>
             <View style={styles.avatar}>
@@ -73,7 +75,7 @@ export default class Contacts extends React.Component<{}> {
 
     render() {
         return (
-            <AnimatedFlatList
+            <FlatList
                 data={CONTACTS}
                 keyExtractor={(item, i) => String(i)}
                 renderItem={this._renderItem}

@@ -20,7 +20,7 @@
     "react-native": "0.48.4",
     "react-native-action-button": "^2.8.1",
     "react-native-animatable": "^1.2.4",
-    "react-native-background-geolocation": "^2.10.1",
+    "react-native-background-geolocation": "^2.11.0",
     "react-native-blur": "^3.2.2",
     "react-native-dash": "^0.0.8",
     "react-native-device-info": "^0.13.0",

@@ -30,6 +30,7 @@ import ContactsList from './ContactsList';
 import {NativeModules} from 'react-native';
 
 
+
 import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../helpers/agent';
 
@@ -40,7 +41,7 @@ import OpenTok from 'react-native-opentok';
 import Animation from 'lottie-react-native';
 import MyWeb from '../helpers/MyWeb';
 
-import { TabViewAnimated, TabBar } from 'react-native-tab-view'; // 0.0.74
+import {TabViewAnimated, TabBar,  TabViewPagerExperimental} from 'react-native-tab-view'; // 0.0.74
 
 
 import Chat from '../Chat/Chat';
@@ -82,7 +83,7 @@ const initialLayout = {
 };
 
 const HEADER_HEIGHT = 240;
-const COLLAPSED_HEIGHT = 52 ;
+const COLLAPSED_HEIGHT = 52;
 const SCROLLABLE_HEIGHT = HEADER_HEIGHT - COLLAPSED_HEIGHT;
 
 class Profile extends React.Component {
@@ -98,9 +99,9 @@ class Profile extends React.Component {
         this.state = {
             index: 0,
             routes: [
-                { key: '1', title: 'First' },
-                { key: '2', title: 'Second' },
-                { key: '3', title: 'Third' },
+                {key: '1',},
+                {key: '2',},
+                {key: '3',},
             ],
             scroll: new Animated.Value(0),
         };
@@ -108,7 +109,11 @@ class Profile extends React.Component {
     }
 
     _handleIndexChange = index => {
-        this.setState({ index });
+        this.setState({index});
+    };
+
+    _renderIcon = ({route}: any) => {
+        return <Icon name={'ios-add'} size={24} color={'white'}/>;
     };
 
     _renderHeader = props => {
@@ -119,9 +124,56 @@ class Profile extends React.Component {
         });
 
         return (
-            <Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-                <View style={styles.overlay} />
-                <TabBar {...props} style={styles.tabbar} />
+            <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
+                <View style={{flex: 1, backgroundColor: 'white', height: (240 - 52), alignItems: 'center'}}>
+                    <Image
+                        style={{position: 'absolute', width: width, height: height * 0.4,}}
+                        source={{uri: 'http://image.boomsbeat.com/data/images/full/759/1-jpg'}}/>
+                    <LinearGradient colors={["transparent", "#16171C", "#16171C"]} locations={[0.5, 0.9, 1.0]}
+                                    style={styles.linearGradient}>
+                    </LinearGradient>
+                    <Image style={styles.userPhoto} source={require('../../../app/Assets/images/elon_musk.jpeg')}/>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        position: 'absolute',
+                        bottom: 30,
+                        width: width,
+                        paddingHorizontal: 35
+                    }}>
+                        <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                            <Text>
+                                3
+                            </Text>
+                            <Text>
+                                Journeys
+                            </Text>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                            <Text>
+                                18
+                            </Text>
+                            <Text>
+                                Contributions
+                            </Text>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                            <Text>
+                                3
+                            </Text>
+                            <Text>
+                                Journeys
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+                <TabBar
+                    {...props}
+                    style={styles.tabbar}
+                    renderIcon={this._renderIcon}
+
+
+                />
             </Animated.View>
         );
     };
@@ -132,11 +184,14 @@ class Profile extends React.Component {
                 scrollEventThrottle={1}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: this.state.scroll } } }],
-                    { useNativeDriver: true }
+
                 )}
                 contentContainerStyle={{ paddingTop: HEADER_HEIGHT }}
-            />        );
+            />
+
+            );
     };
+
 
 
     render() {
@@ -149,6 +204,7 @@ class Profile extends React.Component {
                 renderHeader={this._renderHeader}
                 onIndexChange={this._handleIndexChange}
                 initialLayout={initialLayout}
+                useNativeDriver
             />
 
         )
@@ -157,28 +213,42 @@ class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, .32)',
-    },
-    cover: {
-        height: HEADER_HEIGHT,
-    },
-    header: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1,
-    },
-    tabbar: {
-        backgroundColor: 'rgba(0, 0, 0, .32)',
-        elevation: 0,
-        shadowOpacity: 0,
-    },
+        container: {
+            flex: 1
+        },
+        overlay: {
+            flex: 1,
+            backgroundColor: 'black',
+        },
+        cover: {
+            height: HEADER_HEIGHT,
+        },
+        header: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+        },
+        tabbar: {
+            backgroundColor: 'black',
+            elevation: 0,
+            shadowOpacity: 0,
+        },
+
+        userPhoto: {
+            width: width * 0.2,
+            height: width * 0.2,
+            borderRadius: width * 0.2,
+        },
+        linearGradient: {
+            backgroundColor: "transparent",
+            flex: 1,
+            position: "absolute",
+            width: width,
+            height: height * 0.42,
+
+        }
 
     })
 ;

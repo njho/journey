@@ -61,6 +61,7 @@ import JourneyPicker from '../../Generic/ListComponents/JourneyPicker';
 
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
+const TRACKER_HOST_TWO = 'https://us-central1-journeyapp91.cloudfunctions.net/graphql/locationUpdate';
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -120,7 +121,10 @@ class JourneyStart extends React.Component {
         };
     }
 
+
     componentDidMount() {
+
+
         // this.marker.play();
 
         // Step 1:  Listen to events:
@@ -134,32 +138,51 @@ class JourneyStart extends React.Component {
 
         // Step 2:  #configure:
         BackgroundGeolocation.configure({
-            distanceFilter: 10,
-            stopOnTerminate: false,
-            startOnBoot: true,
-            foregroundService: true,
-            url: TRACKER_HOST + this.state.username,
-            params: {
-                // Required for tracker.transistorsoft.com
-                device: {
-                    uuid: DeviceInfo.getUniqueID(),
-                    model: DeviceInfo.getModel(),
-                    platform: DeviceInfo.getSystemName(),
-                    manufacturer: DeviceInfo.getManufacturer(),
-                    version: DeviceInfo.getSystemVersion(),
-                    framework: 'ReactNative'
-                }
+                disableElasticity: true,
+                distanceFilter: 10,
+                stopOnTerminate: false,
+                enableHeadless: true,
+                startOnBoot: true,
+                foregroundService: true,
+                url: TRACKER_HOST_TWO,
+                extras: {
+                    date: this.getDate(),
+                    journey_id: 'test_journey'
+                },
+                params: {
+                    // Required for tracker.transistorsoft.com
+                    device: {
+                        uuid: DeviceInfo.getUniqueID(),
+                        model: DeviceInfo.getModel(),
+                        platform: DeviceInfo.getSystemName(),
+                        manufacturer: DeviceInfo.getManufacturer(),
+                        version: DeviceInfo.getSystemVersion(),
+                        framework: 'ReactNative',
+                        date: this.getDate()
+                    },
+                },
+                autoSync: true,
+                debug:
+                    true,
+                logLevel:
+                BackgroundGeolocation.LOG_LEVEL_VERBOSE
             },
-            autoSync: true,
-            debug: true,
-            logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE
-        }, (state) => {
-            console.log('- Configure success: ', state);
-            this.setState({
-                enabled: state.enabled,
-                isMoving: state.isMoving
-            });
-        });
+            (state) => {
+                console.log('- Configure success: ', state);
+                this.setState({
+                    enabled: state.enabled,
+                    isMoving: state.isMoving
+                });
+            }
+        )
+        ;
+    }
+
+    getDate = () => {
+        let d = new Date().toString();
+        console.log('this is the tiestamp: ' + d);
+
+        return d
     }
 
     /**
@@ -168,6 +191,7 @@ class JourneyStart extends React.Component {
     onLocation(location) {
         console.log('[event] location: ', location);
         this.addEvent('location', new Date(location.timestamp), location);
+        // agent.FirebaseQuery.uploadImage();
     }
 
     /**
@@ -211,6 +235,7 @@ class JourneyStart extends React.Component {
     onHttp(response) {
         console.log('[event] http: ', response);
         this.addEvent('http', new Date(), response);
+        agent.FirebaseQuery.uploadImage();
     }
 
     /**
@@ -493,7 +518,8 @@ class JourneyStart extends React.Component {
                                     </View>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{alignSelf: 'center'}}>
+                                <TouchableOpacity style={{alignSelf: 'center'}}
+                                                  onPress={() => agent.FirebaseQuery.uploadImage()}>
                                     <View style={{
                                         borderColor: 'white',
                                         borderWidth: 1,
@@ -506,7 +532,7 @@ class JourneyStart extends React.Component {
                                             paddingHorizontal: 20,
                                             paddingVertical: 20,
                                             textAlign: 'center'
-                                        }}>+ New Journey</Text>
+                                        }}>Upload Image</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -538,8 +564,8 @@ class JourneyStart extends React.Component {
                     }]}
                                    contentContainerStyle={{flexGrow: 1,}}>
                         <TouchableWithoutFeedback
-                        onPress={()=>this.navigate()}>
-                            <View  style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            onPress={() => this.navigate()}>
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                 <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>Posting to </Text>
                                 <Text style={{
                                     color: 'white',
@@ -549,7 +575,7 @@ class JourneyStart extends React.Component {
                                     textAlign: 'center'
                                 }}> {this.props.selected.length} </Text>
                                 <Text style={{color: 'white', marginBottom: 15, textAlign: 'center'}}>
-                                    Journey{this.props.selected.length > 1 ? 's' : null }</Text>
+                                    Journey{this.props.selected.length > 1 ? 's' : null}</Text>
                             </View>
                         </TouchableWithoutFeedback>
 
@@ -772,4 +798,3 @@ export default connect(mapStateToProps, mapDispatchToProps)
 //                 onPress={this.onClickChangePace.bind(this)}/>
 //     </View>
 // </View>
-

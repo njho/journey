@@ -59,7 +59,6 @@ import MapDocumentCard from './MapDocumentCard';
 import MapBumpCard from "./MapBumpCard";
 import MapJourneyCard from './MapJourneyCard';
 
-import BackgroundGeolocation from "react-native-background-geolocation";
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 
