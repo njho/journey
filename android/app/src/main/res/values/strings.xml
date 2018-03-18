@@ -2,4 +2,5 @@
     <string name="app_name">Journey</string>
     <string name="facebook_app_id">1697025047229310</string>
     <string name="fb_login_protocol_scheme">fb1697025047229310</string>
+    <string name="picture_taken">Picture Taken</string>
 </resources>

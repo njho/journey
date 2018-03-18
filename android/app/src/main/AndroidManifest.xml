@@ -7,8 +7,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>         <!-- for Device Name -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>  <!-- for Phone Number -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />         <!-- for Device Name -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- for Phone Number -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="26" />
 
 
     <uses-sdk
@@ -27,7 +28,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCoEAttl4BDgkexd1W7zX1KoLm-MoaBfa8" />
-        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
+        <meta-data
+            android:name="com.transistorsoft.locationmanager.license"
+            android:value="YOUR_LICENCE_KEY_HERE" />
 
         <activity
             android:name=".MainActivity"
@@ -43,10 +46,11 @@
 
 
             <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
 
-            <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
 
             <intent-filter>
@@ -86,6 +90,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <service android:name=".ExampleService" />
+
     </application>
 
 

@@ -12,6 +12,7 @@ import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+
 import io.invertase.firebase.RNFirebasePackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
@@ -218,12 +219,14 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNFirebaseStoragePackage(),
                 new MapsPackage(),
                 new RNOpenTokPackage(),
-                new WebUrlPackage(),
                 new SvgPackage(),
                 new RNBackgroundGeolocation(),
                 new RNDeviceInfo(),
                 new BlurViewPackage(),
-                new RNGestureHandlerPackage()
+                new RNGestureHandlerPackage(),
+                //Custom Packages
+                new WebUrlPackage(),
+                new PicturePackage()
 
 
                 );

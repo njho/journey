@@ -25,24 +25,6 @@ import {
 import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
-import Interactable from 'react-native-interactable';
-import ImageResizer from 'react-native-image-resizer';
-import {geoPath, geoMercator} from 'd3-geo';
-import Svg, {
-    Circle,
-    Ellipse,
-    G,
-    RadialGradient,
-    Line,
-    Path,
-    Polygon,
-    Polyline,
-    Rect,
-    Symbol,
-    Use,
-    Defs,
-    Stop
-} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {connect} from 'react-redux';
@@ -62,6 +44,9 @@ import JourneyPicker from '../../Generic/ListComponents/JourneyPicker';
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 const TRACKER_HOST_TWO = 'https://us-central1-journeyapp91.cloudfunctions.net/graphql/locationUpdate';
+
+import {NativeModules} from 'react-native';
+
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -198,7 +183,7 @@ class JourneyStart extends React.Component {
      * @event motionchange
      */
     onMotionChange(event) {
-        console.log('[event] motionchange: ', event.isMovign, event.location);
+        console.log('[event] motionchange: ', event.isMoving, event.location);
         this.setState({
             isMoving: event.isMoving
         });
@@ -519,7 +504,7 @@ class JourneyStart extends React.Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{alignSelf: 'center'}}
-                                                  onPress={() => agent.FirebaseQuery.uploadImage()}>
+                                                  onPress={() => NativeModules.picturePackage.takePicture()}>
                                     <View style={{
                                         borderColor: 'white',
                                         borderWidth: 1,

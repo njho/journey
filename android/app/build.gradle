@@ -206,6 +206,7 @@ dependencies {
     compile project(':react-native-device-info')
     compile 'com.android.support:multidex:1.0.1'
 
+    compile project(':library')
 
     // From node_modules
 }
