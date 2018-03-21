@@ -1,9 +1,13 @@
 package com.journey;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.cmcewen.blurview.BlurViewPackage;
@@ -12,6 +16,8 @@ import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import io.realm.react.RealmReactPackage; // add this import
+
 
 import io.invertase.firebase.RNFirebasePackage;
 
@@ -41,6 +47,22 @@ import java.util.List;
 import com.journey.WebUrlSingleton;
 
 public class MainApplication extends NavigationApplication /*implements ReactApplication */ {
+
+    WebUrlSingleton pictureSingleton = WebUrlSingleton.get();
+
+
+    //This is for handling event broadcasts from the pictureJavaModule and associated Service
+
+    private BroadcastReceiver BReceiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //put here whaterver you want your activity to do with the intent received
+            Log.d("cameraPackage", "BroadcastReceived");
+            pictureSingleton.INVOKE_CALLBACK();
+        }
+    };
+
 
 
     private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
@@ -105,11 +127,17 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 
             @Override
             public void onActivityResumed(Activity activity) {
+                //This is for handling the broadcast receiver
+                LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(BReceiver, new IntentFilter("message"));
+
 
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
+                //This is for handling the broadcast receiver
+                LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(BReceiver);
+
 
             }
 
@@ -146,6 +174,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RealmReactPackage(),
             new RNGestureHandlerPackage(),
             new BlurViewPackage(),
             new RNDeviceInfo(),
@@ -226,7 +255,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNGestureHandlerPackage(),
                 //Custom Packages
                 new WebUrlPackage(),
-                new PicturePackage()
+                new PicturePackage(),
+                new RealmReactPackage()
 
 
                 );

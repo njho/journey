@@ -14,6 +14,8 @@ import com.facebook.react.bridge.ReactMethod;
 
 public class PictureJavaModule extends ReactContextBaseJavaModule {
 
+    WebUrlSingleton pictureSingleton = WebUrlSingleton.get();
+
 
     public PictureJavaModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -25,8 +27,10 @@ public class PictureJavaModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void takePicture() {
+    public void takePicture(Callback callback) {
         Intent i = ExampleService.newIntent(getReactApplicationContext());
+        pictureSingleton.SET_CALLBACK(callback);
+
         getReactApplicationContext().startService(i);
         Log.i("cameraPackage", "picture Module called");
 

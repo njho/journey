@@ -107,11 +107,11 @@ public class CameraView /*extends FrameLayout*/ {
             mImpl = new Camera1(mCallbacks, preview);
 */
         } else if (Build.VERSION.SDK_INT < 23) {
-            Log.d("TAG", "SDK 23");
+            Log.d("cameraPackage", "SDK 23");
             //TODO: Determine if this is for the view, camera2 OR BOTH
             mImpl = new Camera2(mCallbacks, /*preview,*/ context);
         } else {
-            Log.d("TAG", "CAMERA2API23");
+            Log.d("cameraPackage", "CAMERA2API23");
             mImpl = new Camera2Api23(mCallbacks,/* preview,*/ context);
         }
 /*        // Attributes
@@ -489,6 +489,10 @@ public class CameraView /*extends FrameLayout*/ {
             for (Callback callback : mCallbacks) {
                 callback.onPictureTaken(CameraView.this, data);
             }
+
+
+            //Close the Camera Pipeline Hopefully
+            mImpl.stop();
         }
 
         public void reserveRequestLayoutOnOpen() {

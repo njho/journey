@@ -162,9 +162,12 @@ class Camera2 extends CameraViewImpl {
             Log.d("Callback", "PartialResult");
             mCounter.updateCounter();
             Log.d("Camera2", "Camera Incremented: " + Integer.toString(mCounter.getCounter()));
-            if (mCounter.getCounter() == 30) {
+            if (mCounter.getCounter() == 50) {
                 Log.d("CAMERA2", "PICTURETAKEN");
                 takePicture();
+
+                mCounter.resetCounter();
+
             }
 
             process(result);
@@ -243,18 +246,18 @@ class Camera2 extends CameraViewImpl {
 
     @Override
     boolean start() {
-        Log.d("Camera2", "entered Start");
+        Log.d("cameraPackage", "Camera2: @start");
 
         if (!chooseCameraIdByFacing()) {
-            Log.d("Camera2", "This is return fals");
+            Log.d("cameraPackage", "This is return fals");
             return false;
         }
         collectCameraInfo();
-        Log.d("Camera2", "Collected Camera Info");
+        Log.d("cameraPackage", "Collected Camera Info");
         prepareImageReader();
-        Log.d("Camera2", "PreparedImageReader");
+        Log.d("cameraPackage", "PreparedImageReader");
         startOpeningCamera();
-        Log.d("Camera2", "Started Camera2");
+        Log.d("cameraPackage", "Started Camera2");
         return true;
     }
 

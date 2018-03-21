@@ -41,12 +41,13 @@ import HeaderTitle from '../../Generic/ListComponents/HeaderTitle';
 import ListItem from '../../Generic/ListComponents/ListItem';
 import JourneyPicker from '../../Generic/ListComponents/JourneyPicker';
 
+import realm from '../../helpers/realm';
+
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 const TRACKER_HOST_TWO = 'https://us-central1-journeyapp91.cloudfunctions.net/graphql/locationUpdate';
 
 import {NativeModules} from 'react-native';
-
 
 
 const widthFactor = Dimensions.get('window').width / 375;
@@ -100,6 +101,7 @@ class JourneyStart extends React.Component {
             isMoving: false,
             username: 'njho28',
             events: [],
+            journeyId: null,
             translateContainerUp: new Animated.Value(0),
             translateAvatarUp: new Animated.Value(0),
             translateScrollViewUp: new Animated.Value(0)
@@ -174,9 +176,123 @@ class JourneyStart extends React.Component {
      * @event location
      */
     onLocation(location) {
+
+        console.log('================================> LOCATION')
+
         console.log('[event] location: ', location);
         this.addEvent('location', new Date(location.timestamp), location);
+
+        //Check and delete if there's an existing location
+        realm.write(() => {
+            let lastLocation = realm.objects('LastLocation');
+            console.log(lastLocation);
+            if (lastLocation.length === 0) {
+
+            } else {
+                console.log('This is the last Location: ' + lastLocation)
+                console.log(lastLocation[0].uuid);
+                realm.delete(lastLocation);
+            }
+        })
+        let lastLocation = realm.objects('LastLocation');
+
+
+        console.log('this is after deleted:' + lastLocation)
+
+        //Persist the last location for standard practice.
+        realm.write(() => {
+            realm.create('LastLocation', {uuid: location.uuid});
+        })
+
+
         // agent.FirebaseQuery.uploadImage();
+    }
+
+    /**
+     * @event heartbeat
+     */
+    onHttp(response) {
+
+        console.log('================================> HTTP')
+        console.log('[event] http: ', response);
+        this.addEvent('http', new Date(), response);
+        // agent.FirebaseQuery.uploadImage();
+
+
+        //Retrieve ALL the failed persists and determine if this SUCCESSFUL HTTP is a previously failed attempt
+        let failedPersists = realm.objects('FailedPersists');
+        let failedPersist = failedPersists.filtered('uuid = \'' + response.responseText.replace(/"/g, "") + '\'');
+        console.log('this is the failed persist: ' + failedPersist);
+        console.log(failedPersist);
+
+        console.log('Failed Persists: ');
+        if (failedPersists.length > 0) {
+            console.log(failedPersists);
+            failedPersists.forEach(function (element, index, array) {
+                console.log(element.uuid);
+            })
+        }
+        // console.log('Failed Persist: ' + failedPersist);
+        console.log(response.status);
+
+        if (failedPersist.length === 0) {
+            if (response.status !== 200) {
+                console.log('Not a successful upload. Take a picture and persist as one to upload later with a 200 okay HTTP');
+
+                let lastLocationUuid = realm.objects('LastLocation');
+
+                console.log('this is the lastLocationUuid: ' + lastLocationUuid[0].uuid);
+                // NativeModules.picturePackage.takePicture(lastLocationUuid,
+                //     () => {
+                //         console.log('takePicture Callback invoked');
+                //     })
+
+                realm.write(() => {
+                    realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timeStamp: 'placeholder'})
+                });
+
+                //Log the current failed persists
+                let FailedPersists = realm.objects('FailedPersists');
+                console.log('Failed Persists');
+                if (FailedPersists.length > 0) {
+                    console.log(FailedPersists);
+                    FailedPersists.forEach(function (element, index, array) {
+                        console.log(element.uuid);
+                    })
+                }
+
+            } else if (response.status === 200) {
+                //Take picture and upload
+                console.log('response 200 okay, take a picture & upload');
+
+                // NativeModules.picturePackage.takePicture(response.responseText.uuid,
+                //     () => {
+                //         console.log('takePicture Callback invoked');
+                //          agent.FirebaseQuery.uploadImage(response.responseText.uuid);
+                //     })
+            }
+
+        } else {
+            if (response.status === 200 && failedPersist[0].uuid === response.responseText.replace(/"/g, "")) {
+                console.log('http success, but this was a previously failed event, so only Upload Photo');
+                // agent.FirebaseQuery.uploadImage(response.responseText.uuid);
+
+                console.log('delete the successfully uploaded photo from realm');
+                realm.write(() => {
+                    realm.delete(failedPersist);
+                })
+
+                console.log('this is the FAILED PERSISTS with unit removed');
+                if (failedPersists.length > 0) {
+                    console.log(failedPersists);
+                    failedPersists.forEach(function (element, index, array) {
+                        console.log(element.uuid);
+                    })
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -214,21 +330,16 @@ class JourneyStart extends React.Component {
         this.addEvent('powersavechange', new Date(), {isPowerSaveMode: isPowerSaveMode});
     }
 
-    /**
-     * @event heartbeat
-     */
-    onHttp(response) {
-        console.log('[event] http: ', response);
-        this.addEvent('http', new Date(), response);
-        agent.FirebaseQuery.uploadImage();
-    }
 
     /**
      * @event heartbeat
      */
     onHeartbeat(event) {
         console.log('[event] heartbeat: ', event);
+        let timestamp = event.timestamp;
         this.addEvent('heartbeat', new Date(), event);
+
+        // NativeModules.picturePackage.takePicture(timestamp);
     }
 
     onToggleEnabled(value) {
@@ -264,7 +375,13 @@ class JourneyStart extends React.Component {
     }
 
     onClickClear() {
-        this.setState({events: []});
+
+        realm.write(() => {
+            realm.deleteAll();
+            console.log('cleared')
+        })
+
+
     }
 
     switchToggled(item, value) {
@@ -484,8 +601,8 @@ class JourneyStart extends React.Component {
                             }}>
 
                                 <TouchableOpacity style={{alignSelf: 'center',}}
-                                                  onPress={() => this.navigate()}
-
+                                                  onPress={() => this.onToggleEnabled()}
+                                    //this.navigate()
                                 >
                                     <View style={{
                                         borderColor: 'white',
@@ -504,7 +621,16 @@ class JourneyStart extends React.Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{alignSelf: 'center'}}
-                                                  onPress={() => NativeModules.picturePackage.takePicture()}>
+                                                  onPress={
+                                                      () => this.onClickClear()
+
+                                                      //       () => NativeModules.picturePackage.takePicture(() => {
+                                                      //     console.log('takePicture Callback invoked');
+                                                      //
+                                                      // })
+                                                  }>
+
+
                                     <View style={{
                                         borderColor: 'white',
                                         borderWidth: 1,

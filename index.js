@@ -18,6 +18,9 @@ import store from './app/store.js';
 import {bootstrap} from './app/Components/config/bootstrap';
 import {registerScreens} from './screens';
 
+import {NativeModules} from 'react-native';
+
+
 
 bootstrap();
 registerScreens(store, Provider);
@@ -304,13 +307,19 @@ let HeadlessTask = async (event) => {
         case 'heartbeat':
             // Use await for async tasks
             let location = await getCurrentPosition();
+            let date = event.timestamp;
             console.log('[BackgroundGeolocation HeadlessTask] - getCurrentPosition:', location);
+
+            //Take a picture with the current location data.
+            // NativeModules.picturePackage.takePicture(timestamp);
+
+
             break;
         case 'http':
             // Use await for async tasks
             let dog = await getCurrentPosition();
             console.log('[BackgroundGeolocation HeadlessTask] - http:', dog);
-            agent.FirebaseQuery.uploadImage();
+            // agent.FirebaseQuery.uploadImage();
 
             break;
         case 'location':

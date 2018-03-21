@@ -3,10 +3,13 @@ package com.journey;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,17 +40,22 @@ public class ExampleService extends IntentService {
         super(TAG);
     }
 
+
     @Override
     protected void onHandleIntent(Intent intent) {
+//        Log.d(TAG, "This has started");
+//        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//
         Log.d(TAG, "This has started");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
         mCameraView.start();
         return START_STICKY;
+
     }
 
     private CameraView.Callback mCallback
@@ -85,6 +93,17 @@ public class ExampleService extends IntentService {
                         os = new FileOutputStream(file);
                         os.write(data);
                         os.close();
+
+                        // Tell the media scanner about the new file so that it is
+                        // immediately available to the user.
+                        MediaScannerConnection.scanFile(getApplicationContext(), new String[] { file.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.i(TAG, "Scanned " + path + ":");
+                                Log.i(TAG, "-> uri=" + uri);
+                            }
+                        });
+
+                        stopSelf();
                     } catch (IOException e) {
                         Log.w(TAG, "Cannot write to " + file, e);
                     } finally {
@@ -113,6 +132,7 @@ public class ExampleService extends IntentService {
 
     @Override
     public void onCreate() {
+        super.onCreate();
 
         mCameraView = new CameraView(getApplicationContext());
         if (mCameraView != null) {
@@ -123,7 +143,10 @@ public class ExampleService extends IntentService {
 
     @Override
     public void onDestroy() {
+        Log.d("cameraPackage", "intent Destroyed");
         mCameraView.stop();
+
+
         if (mBackgroundHandler != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 mBackgroundHandler.getLooper().quitSafely();
@@ -132,6 +155,13 @@ public class ExampleService extends IntentService {
             }
             mBackgroundHandler = null;
         }
+
+
+
+        //Broadcast that the service is complete
+        Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
+        intent.putExtra("pictureComplete", true);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
 }
