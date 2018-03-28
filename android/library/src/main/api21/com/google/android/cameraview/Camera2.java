@@ -259,6 +259,8 @@ class Camera2 extends CameraViewImpl {
         startOpeningCamera();
         Log.d("cameraPackage", "Started Camera2");
         return true;
+
+
     }
 
     @Override
@@ -407,6 +409,7 @@ class Camera2 extends CameraViewImpl {
     @Override
     void setDisplayOrientation(int displayOrientation) {
         mDisplayOrientation = displayOrientation;
+        Log.d("CameraPackage", "SetDisplayOrientation: " + Integer.toString(mDisplayOrientation));
 /*
         mPreview.setDisplayOrientation(mDisplayOrientation);
 */
@@ -700,14 +703,20 @@ class Camera2 extends CameraViewImpl {
                             CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
                     break;
             }
+
+
             // Calculate JPEG orientation.
             @SuppressWarnings("ConstantConditions")
             int sensorOrientation = mCameraCharacteristics.get(
                     CameraCharacteristics.SENSOR_ORIENTATION);
+            Log.d("CameraPackage", "This is the Camera Orientation: " + Integer.toString(sensorOrientation));
+            Log.d("CameraPackage", "This is the display orientation: " + Integer.toString(mDisplayOrientation));
+
             captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION,
                     (sensorOrientation +
                             mDisplayOrientation * (mFacing == Constants.FACING_FRONT ? 1 : -1) +
                             360) % 360);
+
             // Stop preview and capture a still picture.
             mCaptureSession.stopRepeating();
             mCaptureSession.capture(captureRequestBuilder.build(),

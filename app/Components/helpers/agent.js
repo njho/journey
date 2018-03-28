@@ -2,6 +2,9 @@ import React from 'react';
 import firebase from 'react-native-firebase';
 import GeoFire from 'geofire';
 
+import realm from './realm';
+
+
 /*import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';*/
 
@@ -212,11 +215,14 @@ const FirebaseQuery = {
 
         }
     },
-    uploadImage: () => {
-        storage.ref('/files/1234.jpg')
-            .putFile('file:////storage/emulated/0/Android/data/com.google.android.cameraview.demo/files/Pictures/picture.jpg')
+    uploadImage: (journey, uuid) => {
+
+        console.log('upload image called');
+        console.log('file:////storage/emulated/0/Pictures/'+ journey + '/' + uuid + '.jpg');
+        storage.ref(journey + '/' + uuid + '.jpg')
+            .putFile('file:////storage/emulated/0/Pictures/'+  journey + '/' + uuid + '.jpg')
             .then(uploadedFile => {
-                console.log('uploaded file');
+                console.log('uploaded file')
                 console.log(uploadedFile);
                 //success
             })

@@ -30,6 +30,12 @@ public class ExampleService extends IntentService {
     private CameraView mCameraView;
     private Handler mBackgroundHandler;
 
+    private String mFilename;
+    private String mJourneyId;
+
+    private Context mContext;
+
+
     private static final String TAG = "CAMERAPACKAGE";
 
     public static Intent newIntent(Context context) {
@@ -50,6 +56,10 @@ public class ExampleService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mJourneyId = intent.getStringExtra("JOURNEY_ID");
+        mFilename = intent.getStringExtra("FILENAME");
+        mContext = getApplicationContext();
+
 //
         Log.d(TAG, "This has started");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
@@ -74,15 +84,23 @@ public class ExampleService extends IntentService {
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
             Log.d(TAG, "onPictureTaken " + data.length);
-            Toast.makeText(getApplicationContext(), R.string.picture_taken, Toast.LENGTH_SHORT)
+            Toast.makeText(getApplicationContext(), R.string.picture_taken + mJourneyId + "/" + mFilename, Toast.LENGTH_SHORT)
                     .show();
+
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
 
                     Log.d(TAG, "in the run cycle");
-                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                            "picture.jpg");
+//                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+//                            mJourneyId + "/" + mFilename + ".jpg");
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/" + mJourneyId );
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+
+                    file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/"+ mJourneyId + "/" + mFilename + ".jpg");
 
                     Log.d(TAG, file.getPath());
                     Log.d(TAG, file.getAbsolutePath());
@@ -96,25 +114,32 @@ public class ExampleService extends IntentService {
 
                         // Tell the media scanner about the new file so that it is
                         // immediately available to the user.
-                        MediaScannerConnection.scanFile(getApplicationContext(), new String[] { file.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        // This does not work
+
+                        Log.i(TAG, file.getAbsolutePath());
+
+                    } catch (IOException e) {
+                        Log.w(TAG, "Cannot write to " + file, e);
+                    } finally {
+
+                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(file)));
+                        MediaScannerConnection.scanFile(mContext, new String[] { file.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
                             public void onScanCompleted(String path, Uri uri) {
                                 Log.i(TAG, "Scanned " + path + ":");
                                 Log.i(TAG, "-> uri=" + uri);
                             }
                         });
-
-                        stopSelf();
-                    } catch (IOException e) {
-                        Log.w(TAG, "Cannot write to " + file, e);
-                    } finally {
                         if (os != null) {
                             try {
                                 os.close();
+                                stopSelf();
+
                             } catch (IOException e) {
                                 // Ignore
                             }
                         }
                     }
+
                 }
             });
         }
@@ -146,6 +171,10 @@ public class ExampleService extends IntentService {
         Log.d("cameraPackage", "intent Destroyed");
         mCameraView.stop();
 
+
+        //Reset the string as the Strings may retain their value in memory
+        mFilename = "";
+        mJourneyId = "";
 
         if (mBackgroundHandler != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

@@ -17,10 +17,12 @@
 package com.google.android.cameraview;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.Surface;
+import android.view.WindowManager;
 
 
 /**
@@ -30,7 +32,9 @@ abstract class DisplayOrientationDetector {
 
     private final OrientationEventListener mOrientationEventListener;
 
-    /** Mapping from Surface.Rotation_n to degrees. */
+    /**
+     * Mapping from Surface.Rotation_n to degrees.
+     */
     static final SparseIntArray DISPLAY_ORIENTATIONS = new SparseIntArray();
 
     static {
@@ -45,18 +49,32 @@ abstract class DisplayOrientationDetector {
     private int mLastKnownDisplayOrientation = 0;
 
     public DisplayOrientationDetector(Context context) {
-        mOrientationEventListener = new OrientationEventListener(context) {
 
+        Log.d("CameraPackage", "DisplayOrientationDetector Initialized");
+
+        final Context mContext = context;
+
+
+        mOrientationEventListener = new OrientationEventListener(context) {
             /** This is either Surface.Rotation_0, _90, _180, _270, or -1 (invalid). */
             private int mLastKnownRotation = -1;
 
             @Override
             public void onOrientationChanged(int orientation) {
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN ||
-                        mDisplay == null) {
+                Log.d("CameraPackage", "DisplayOrientationDetector.java: Orientation Changed callback: " + Integer.toString(orientation));
+                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN ) {
+//                    || mDisplay == null;
                     return;
                 }
+
+                //   These lines added to for service hack on getting display parameters ================>
+                WindowManager window = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                Display mDisplay = window.getDefaultDisplay();
+                //   ====================================================================================>
+
                 final int rotation = mDisplay.getRotation();
+                Log.d("CameraPackage", "mDisplay.getRotation() : " + Integer.toString(rotation));
+
                 if (mLastKnownRotation != rotation) {
                     mLastKnownRotation = rotation;
                     dispatchOnDisplayOrientationChanged(DISPLAY_ORIENTATIONS.get(rotation));
@@ -65,11 +83,11 @@ abstract class DisplayOrientationDetector {
         };
     }
 
-    public void enable(Display display) {
-        mDisplay = display;
+    public void enable() {//Display display removed
+//        mDisplay = display;
         mOrientationEventListener.enable();
         // Immediately dispatch the first callback
-        dispatchOnDisplayOrientationChanged(DISPLAY_ORIENTATIONS.get(display.getRotation()));
+//        dispatchOnDisplayOrientationChanged(DISPLAY_ORIENTATIONS.get(display.getRotation()));
     }
 
     public void disable() {
@@ -82,6 +100,9 @@ abstract class DisplayOrientationDetector {
     }
 
     void dispatchOnDisplayOrientationChanged(int displayOrientation) {
+        Log.d("CameraPackage", "DOGACAT");
+
+        Log.d("CameraPackage", Integer.toString(displayOrientation));
         mLastKnownDisplayOrientation = displayOrientation;
         onDisplayOrientationChanged(displayOrientation);
     }

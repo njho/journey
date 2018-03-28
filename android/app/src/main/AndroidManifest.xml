@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.BLUETOOTH" />         <!-- for Device Name -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- for Phone Number -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="26" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 
     <uses-sdk

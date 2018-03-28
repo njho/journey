@@ -39,34 +39,52 @@ import java.util.Set;
 
 public class CameraView /*extends FrameLayout*/ {
 
-    /** The camera device faces the opposite direction as the device's screen. */
+    /**
+     * The camera device faces the opposite direction as the device's screen.
+     */
     public static final int FACING_BACK = Constants.FACING_BACK;
 
-    /** The camera device faces the same direction as the device's screen. */
+    /**
+     * The camera device faces the same direction as the device's screen.
+     */
     public static final int FACING_FRONT = Constants.FACING_FRONT;
 
-    /** Direction the camera faces relative to device screen. */
+    /**
+     * Direction the camera faces relative to device screen.
+     */
     @IntDef({FACING_BACK, FACING_FRONT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Facing {
     }
 
-    /** Flash will not be fired. */
+    /**
+     * Flash will not be fired.
+     */
     public static final int FLASH_OFF = Constants.FLASH_OFF;
 
-    /** Flash will always be fired during snapshot. */
+    /**
+     * Flash will always be fired during snapshot.
+     */
     public static final int FLASH_ON = Constants.FLASH_ON;
 
-    /** Constant emission of light during preview, auto-focus and snapshot. */
+    /**
+     * Constant emission of light during preview, auto-focus and snapshot.
+     */
     public static final int FLASH_TORCH = Constants.FLASH_TORCH;
 
-    /** Flash will be fired automatically when required. */
+    /**
+     * Flash will be fired automatically when required.
+     */
     public static final int FLASH_AUTO = Constants.FLASH_AUTO;
 
-    /** Flash will be fired in red-eye reduction mode. */
+    /**
+     * Flash will be fired in red-eye reduction mode.
+     */
     public static final int FLASH_RED_EYE = Constants.FLASH_RED_EYE;
 
-    /** The mode for for the camera device's flash control */
+    /**
+     * The mode for for the camera device's flash control
+     */
     @IntDef({FLASH_OFF, FLASH_ON, FLASH_TORCH, FLASH_AUTO, FLASH_RED_EYE})
     public @interface Flash {
     }
@@ -78,6 +96,7 @@ public class CameraView /*extends FrameLayout*/ {
     private boolean mAdjustViewBounds;
 
     private final DisplayOrientationDetector mDisplayOrientationDetector;
+    private final Context mContext;
 
     public CameraView(Context context) {
         this(context, null);
@@ -100,6 +119,7 @@ public class CameraView /*extends FrameLayout*/ {
 /*
         final PreviewImpl preview = createPreviewImpl(context);
 */
+        mContext = context;
         mCallbacks = new CallbackBridge();
 
         if (Build.VERSION.SDK_INT < 21) {
@@ -127,7 +147,8 @@ public class CameraView /*extends FrameLayout*/ {
         mAdjustViewBounds = true; /*a.getBoolean(R.styleable.CameraView_android_adjustViewBounds, false);*/
         /*TODO: setFacing is what starts the camera*/
         setFacing(0/*a.getInt(R.styleable.CameraView_facing, FACING_BACK)*/);
-        String aspectRatio = "4:3";/*a.getString(R.styleable.CameraView_aspectRatio)*/;
+        String aspectRatio = "4:3";/*a.getString(R.styleable.CameraView_aspectRatio)*/
+        ;
         if (aspectRatio != null) {
             setAspectRatio(AspectRatio.parse(aspectRatio));
         } else {
@@ -138,10 +159,15 @@ public class CameraView /*extends FrameLayout*/ {
         Log.d("CameraView", "setFlash");
         setFlash(3/*a.getInt(R.styleable.CameraView_flash, Constants.FLASH_AUTO)*/);
        /* a.recycle();*/
+
+        //AUDITED: March 26, 2014 - Determined how to set DisplayOrientationDetector
+
         // Display orientation detector
-        mDisplayOrientationDetector = new DisplayOrientationDetector(context) {
+        mDisplayOrientationDetector = new DisplayOrientationDetector(mContext) {
             @Override
             public void onDisplayOrientationChanged(int displayOrientation) {
+
+                Log.d("CameraPackage: ", "Display Orientation Changed: " + Integer.toString(displayOrientation));
                 mImpl.setDisplayOrientation(displayOrientation);
             }
         };
@@ -466,6 +492,10 @@ public class CameraView /*extends FrameLayout*/ {
 
         @Override
         public void onCameraOpened() {
+            Log.d("CameraPackage", "Is this onCameraOpened 1123123called?");
+            //Custom Added mDisplayOrientationDetector
+            mDisplayOrientationDetector.enable();
+
             if (mRequestLayoutOnOpen) {
                 mRequestLayoutOnOpen = false;
 /*
@@ -479,6 +509,10 @@ public class CameraView /*extends FrameLayout*/ {
 
         @Override
         public void onCameraClosed() {
+
+            //Custom Added
+            mDisplayOrientationDetector.disable();
+
             for (Callback callback : mCallbacks) {
                 callback.onCameraClosed(CameraView.this);
             }
@@ -563,7 +597,9 @@ public class CameraView /*extends FrameLayout*/ {
          * @param cameraView The associated {@link CameraView}.
          */
         public void onCameraOpened(CameraView cameraView) {
+            Log.d("CameraPackage", "Is this onCameraOpened called?");
         }
+
 
         /**
          * Called when camera is closed.

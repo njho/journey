@@ -27,10 +27,12 @@ public class PictureJavaModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void takePicture(Callback callback) {
+    public void takePicture(String journeyId, String fileName, Callback callback) {
         Intent i = ExampleService.newIntent(getReactApplicationContext());
-        pictureSingleton.SET_CALLBACK(callback);
+        i.putExtra("JOURNEY_ID", journeyId);
+        i.putExtra("FILENAME", fileName);
 
+        pictureSingleton.SET_CALLBACK(callback);
         getReactApplicationContext().startService(i);
         Log.i("cameraPackage", "picture Module called");
 
