@@ -216,11 +216,17 @@ const FirebaseQuery = {
         }
     },
     uploadImage: (journey, uuid) => {
+        let metadata = {
+            contentType: 'image/jpeg',
+            customMetadata: {
+                uid: uuid
+            }
+        };
 
         console.log('upload image called');
-        console.log('file:////storage/emulated/0/Pictures/'+ journey + '/' + uuid + '.jpg');
+        console.log('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.jpg');
         storage.ref(journey + '/' + uuid + '.jpg')
-            .putFile('file:////storage/emulated/0/Pictures/'+  journey + '/' + uuid + '.jpg')
+            .putFile('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.jpg', metadata)
             .then(uploadedFile => {
                 console.log('uploaded file')
                 console.log(uploadedFile);
