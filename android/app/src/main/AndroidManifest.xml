@@ -11,10 +11,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- for Phone Number -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="21"
         android:targetSdkVersion="22" />
 
     <application
@@ -93,6 +96,7 @@
         </activity>
 
         <service android:name=".ExampleService" />
+        <service android:name=".VideoService" />
 
     </application>
 

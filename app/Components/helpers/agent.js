@@ -238,6 +238,28 @@ const FirebaseQuery = {
                 //Error
             });
     },
+    uploadVideo: (journey, uuid) => {
+        let metadata = {
+            customMetadata: {
+                uid: uuid
+            }
+        };
+
+        console.log('upload video called');
+        console.log('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.mp4');
+        storage.ref(journey + '/' + uuid + '.jpg')
+            .putFile('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.mp4', metadata)
+            .then(uploadedFile => {
+                console.log('uploaded file')
+                console.log(uploadedFile);
+                //success
+            })
+            .catch(err => {
+                console.log('there was an error');
+                console.log(err)
+                //Error
+            });
+    },
     updateGifty: (key1, dashboard, editGifty) => {
         return dispatch => {
             var Gifty = database.ref('consoles/' + dashboard + '/giftys/' + key1);

@@ -376,11 +376,17 @@ class JourneyStart extends React.Component {
                 //Take picture and upload
                 console.log('response 200 okay, take a picture & upload');
 
-                NativeModules.picturePackage.takePicture(this.state.journeyId, response.responseText.replace(/"/g, ""),
+                NativeModules.videoPackage.takeVideo(this.state.journeyId, response.responseText.replace(/"/g, ""),
                     () => {
                         console.log('takePicture Callback invoked');
-                        agent.FirebaseQuery.uploadImage(this.state.journeyId, response.responseText.replace(/"/g, ""));
+                        agent.FirebaseQuery.uploadVideo(this.state.journeyId, response.responseText.replace(/"/g, ""));
                     })
+
+                // NativeModules.picturePackage.takePicture(this.state.journeyId, response.responseText.replace(/"/g, ""),
+                //     () => {
+                //         console.log('takePicture Callback invoked');
+                //         agent.FirebaseQuery.uploadImage(this.state.journeyId, response.responseText.replace(/"/g, ""));
+                //     })
             }
 
         } else {

@@ -254,10 +254,12 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new RNDeviceInfo(),
                 new BlurViewPackage(),
                 new RNGestureHandlerPackage(),
+                new RealmReactPackage(),
+
                 //Custom Packages
                 new WebUrlPackage(),
                 new PicturePackage(),
-                new RealmReactPackage()
+                new VideoPackage()
 
 
                 );
