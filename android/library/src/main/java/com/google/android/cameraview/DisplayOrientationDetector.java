@@ -62,18 +62,33 @@ abstract class DisplayOrientationDetector {
             @Override
             public void onOrientationChanged(int orientation) {
                 Log.d("CameraPackage", "DisplayOrientationDetector.java: Orientation Changed callback: " + Integer.toString(orientation));
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN ) {
+                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
 //                    || mDisplay == null;
                     return;
                 }
 
-                //   These lines added to for service hack on getting display parameters ================>
-                WindowManager window = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-                Display mDisplay = window.getDefaultDisplay();
+                //  REMOVED APRIL 12, 2018 in Favor of Using get Resource
+                //  These lines added to for service hack on getting display parameters ================>
+                //  WindowManager window = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                //  Display mDisplay = window.getDefaultDisplay();
+                //  final int rotation = mDisplay.getRotation();
+                //  Log.d("CameraPackage", "mDisplay.getRotation() : " + Integer.toString(rotation));
                 //   ====================================================================================>
 
-                final int rotation = mDisplay.getRotation();
-                Log.d("CameraPackage", "mDisplay.getRotation() : " + Integer.toString(rotation));
+
+                //APRIL 12, 2018. THE DEVICE ORIENTATION AND THE DISPLAY ORIENTATION ARE OPPOSITE INTEGERS
+                int rotation = 0;
+                if (orientation >= 0 && orientation <= 45) {
+                    rotation = 0;
+                } else if (orientation > 45 && orientation <= 135) {
+                    rotation = 3;
+                } else if (orientation > 225 && orientation <= 315) {
+                    rotation = 1;
+                } else if (orientation > 315 && orientation <= 360) {
+                    rotation = 2;
+                }
+
+                Log.d("CameraPackage", "mContext.getResource()" + rotation);
 
                 if (mLastKnownRotation != rotation) {
                     mLastKnownRotation = rotation;

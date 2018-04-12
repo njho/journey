@@ -186,11 +186,14 @@ public class ExampleService extends IntentService {
         }
 
 
+        WebUrlSingleton pictureSingleton = WebUrlSingleton.get();
+        pictureSingleton.INVOKE_CALLBACK();
 
-        //Broadcast that the service is complete
-        Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
-        intent.putExtra("pictureComplete", true);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//
+//        //Broadcast that the service is complete
+//        Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
+//        intent.putExtra("pictureComplete", true);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
 }

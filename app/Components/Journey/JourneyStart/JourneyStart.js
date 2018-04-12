@@ -98,7 +98,8 @@ class JourneyStart extends React.Component {
 
         this.state = {
             enabled: false,
-            isMoving: false,
+            isMoving: 'false',
+            isMovingtwo: 'false',
             username: 'njho28',
             events: [],
             journeyId: 'test_journey',
@@ -238,6 +239,7 @@ class JourneyStart extends React.Component {
                 distanceFilter: 10,
                 stopOnTerminate: false,
                 enableHeadless: true,
+                heartbeatInterval: 60,
                 startOnBoot: true,
                 foregroundService: true,
                 url: TRACKER_HOST_TWO,
@@ -377,7 +379,7 @@ class JourneyStart extends React.Component {
                 NativeModules.picturePackage.takePicture(this.state.journeyId, response.responseText.replace(/"/g, ""),
                     () => {
                         console.log('takePicture Callback invoked');
-                         agent.FirebaseQuery.uploadImage(this.state.journeyId, response.responseText.replace(/"/g, ""));
+                        agent.FirebaseQuery.uploadImage(this.state.journeyId, response.responseText.replace(/"/g, ""));
                     })
             }
 
@@ -485,10 +487,10 @@ class JourneyStart extends React.Component {
 
     onClickClear() {
 
-        realm.write(() => {
-            realm.deleteAll();
-            console.log('cleared')
-        })
+        // realm.write(() => {
+        //     realm.deleteAll();
+        //     console.log('cleared')
+        // })
 
 
     }
@@ -683,6 +685,7 @@ class JourneyStart extends React.Component {
                         <View style={{alignSelf: 'flex-end', marginRight: 0.1 * width,}}>
                             <Text style={{color: 'white'}}>-1.012231, 2.2449141</Text>
                             <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>December 28, 2017</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold'}}>{this.state.isMoving.toString()}</Text>
                         </View>
                     </View>
 
@@ -731,7 +734,7 @@ class JourneyStart extends React.Component {
 
                                 <TouchableOpacity style={{alignSelf: 'center'}}
                                                   onPress={
-                                                      () => this.onClickClear()
+                                                      () => this.onClickChangePace()
 
                                                       //       () => NativeModules.picturePackage.takePicture(() => {
                                                       //     console.log('takePicture Callback invoked');

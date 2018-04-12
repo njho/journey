@@ -19,6 +19,8 @@ import {bootstrap} from './app/Components/config/bootstrap';
 import {registerScreens} from './screens';
 
 import {NativeModules} from 'react-native';
+import realm from './app/Components/helpers/realm';
+
 
 
 
@@ -317,9 +319,91 @@ let HeadlessTask = async (event) => {
             break;
         case 'http':
             // Use await for async tasks
-            let dog = await getCurrentPosition();
-            console.log('[BackgroundGeolocation HeadlessTask] - http:', dog);
+            // let dog = await getCurrentPosition();
+            //console.log('[BackgroundGeolocation HeadlessTask] - http:', dog);
             // agent.FirebaseQuery.uploadImage();
+
+            let response = params;
+
+
+            console.log('================================> HTTP')
+            console.log('[event] http: ', response);
+            // this.addEvent('http', new Date(), response);
+            // agent.FirebaseQuery.uploadImage();
+
+
+            //Retrieve ALL the failed persists and determine if this SUCCESSFUL HTTP is a previously failed attempt
+            let failedPersists = realm.objects('FailedPersists');
+            let failedPersist = failedPersists.filtered('uuid = \'' + response.responseText.replace(/"/g, "") + '\'');
+            console.log('this is the failed persist: ' + failedPersist);
+            console.log(failedPersist);
+
+            console.log('Failed Persists: ');
+            if (failedPersists.length > 0) {
+                console.log(failedPersists);
+                failedPersists.forEach(function (element, index, array) {
+                    console.log(element.uuid);
+                })
+            }
+            // console.log('Failed Persist: ' + failedPersist);
+            console.log(response.status);
+
+            if (failedPersist.length === 0) {
+                if (response.status !== 200) {
+                    console.log('Not a successful upload. Take a picture and persist as one to upload later with a 200 okay HTTP');
+
+                    let lastLocationUuid = realm.objects('LastLocation');
+
+                    console.log('this is the lastLocationUuid: ' + lastLocationUuid[0].uuid);
+                    // NativeModules.picturePackage.takePicture(lastLocationUuid,
+                    //     () => {
+                    //         console.log('takePicture Callback invoked');
+                    //     })
+
+                    realm.write(() => {
+                        realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timeStamp: 'placeholder'})
+                    });
+
+                    //Log the current failed persists
+                    let FailedPersists = realm.objects('FailedPersists');
+                    console.log('Failed Persists');
+                    if (FailedPersists.length > 0) {
+                        console.log(FailedPersists);
+                        FailedPersists.forEach(function (element, index, array) {
+                            console.log(element.uuid);
+                        })
+                    }
+
+                } else if (response.status === 200) {
+                    //Take picture and upload
+                    console.log('response 200 okay, take a picture & upload');
+
+                    NativeModules.picturePackage.takePicture('test_journey', response.responseText.replace(/"/g, ""),
+                        () => {
+                            console.log('takePicture Callback invoked');
+                            agent.FirebaseQuery.uploadImage('test_journey', response.responseText.replace(/"/g, ""));
+                        })
+                }
+
+            } else {
+                if (response.status === 200 && failedPersist[0].uuid === response.responseText.replace(/"/g, "")) {
+                    console.log('http success, but this was a previously failed event, so only Upload Photo');
+                    // agent.FirebaseQuery.uploadImage(response.responseText.uuid);
+
+                    console.log('delete the successfully uploaded photo from realm');
+                    realm.write(() => {
+                        realm.delete(failedPersist);
+                    })
+
+                    console.log('this is the FAILED PERSISTS with unit removed');
+                    if (failedPersists.length > 0) {
+                        console.log(failedPersists);
+                        failedPersists.forEach(function (element, index, array) {
+                            console.log(element.uuid);
+                        })
+                    }
+                }
+            }
 
             break;
         case 'location':

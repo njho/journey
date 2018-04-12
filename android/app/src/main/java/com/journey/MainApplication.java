@@ -128,7 +128,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             @Override
             public void onActivityResumed(Activity activity) {
                 //This is for handling the broadcast receiver
-                LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(BReceiver, new IntentFilter("message"));
+                //APRIL 12 2018. REMOVED IN FAVOR OF USING PICTURE CALLBACK SINGLETON
+                //LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(BReceiver, new IntentFilter("message"));
 
 
             }
@@ -136,7 +137,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             @Override
             public void onActivityPaused(Activity activity) {
                 //This is for handling the broadcast receiver
-                LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(BReceiver);
+                //LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(BReceiver);
 
 
             }
