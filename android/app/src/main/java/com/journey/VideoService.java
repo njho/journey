@@ -24,9 +24,10 @@ import java.io.OutputStream;
  * Created by Machinatron on 2017-07-14.
  */
 
- interface VideoCompleteListener {
+interface VideoCompleteListener {
 
     void captureCompleted();
+
     void setFile(File file);
 }
 
@@ -78,6 +79,7 @@ public class VideoService extends IntentService implements VideoCompleteListener
         Log.d(TAG, "onCreate Service");
 
     }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "This has started");
@@ -86,25 +88,30 @@ public class VideoService extends IntentService implements VideoCompleteListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mJourneyId = intent.getStringExtra("JOURNEY_ID");
-        mFilename = intent.getStringExtra("FILENAME");
-        mContext = getApplicationContext();
+        if (intent.hasExtra("JOURNEY_ID") && intent.hasExtra("FILENAME")) {
+            mJourneyId = intent.getStringExtra("JOURNEY_ID");
+            mFilename = intent.getStringExtra("FILENAME");
+            mContext = getApplicationContext();
 
-        //No callbacks like in ExampleService for PhotoCapture, therefore pass all information into the constructor.
+            //No callbacks like in ExampleService for PhotoCapture, therefore pass all information into the constructor.
 
-        Log.d(TAG, mJourneyId);
-        Log.d(TAG, mFilename);
-        mCamera2Video = new Camera2Video(this, mJourneyId, mFilename);
-        //mCamera2Video.newInstance(this);
-        mCamera2Video.startBackgroundThread();
-        mCamera2Video.openCamera(1, 1);
+            Log.d(TAG, mJourneyId);
+            Log.d(TAG, mFilename);
+            mCamera2Video = new Camera2Video(this, mJourneyId, mFilename);
+            //mCamera2Video.newInstance(this);
+            mCamera2Video.startBackgroundThread();
+            mCamera2Video.openCamera(1, 1);
 
-        Log.d(TAG, "This has started");
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "This has started");
+            Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+        } else {
+            stopSelf();
+        }
+        ;
+
         return START_STICKY;
 
     }
-
 
 
     @Override

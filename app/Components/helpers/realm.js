@@ -31,7 +31,7 @@ LastDataCollect.schema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
-        timeStamp: 'string'
+        timestamp: 'string'
     }
 }
 

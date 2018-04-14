@@ -289,27 +289,27 @@ class JourneyStart extends React.Component {
      */
     onLocation(location) {
 
-        console.log('================================> LOCATION')
-
-        console.log('[event] location: ', location);
+        // console.log('================================> LOCATION')
+        //
+        // console.log('[event] location: ', location);
         this.addEvent('location', new Date(location.timestamp), location);
 
         //Check and delete if there's an existing location
         realm.write(() => {
             let lastLocation = realm.objects('LastLocation');
-            console.log(lastLocation);
+            // console.log(lastLocation);
             if (lastLocation.length === 0) {
 
             } else {
-                console.log('This is the last Location: ' + lastLocation)
-                console.log(lastLocation[0].uuid);
+                // console.log('This is the last Location: ' + lastLocation)
+                // console.log(lastLocation[0].uuid);
                 realm.delete(lastLocation);
             }
         })
         let lastLocation = realm.objects('LastLocation');
 
 
-        console.log('this is after deleted:' + lastLocation)
+        // console.log('this is after deleted:' + lastLocation)
 
         //Persist the last location for standard practice.
         realm.write(() => {
@@ -329,20 +329,20 @@ class JourneyStart extends React.Component {
         console.log('[event] http: ', response);
         let responseText = response.responseText;
         let res = JSON.parse(responseText);
-
+        console.log(res);
         console.log(res.uid);
+        console.log(res.timestamp);
         this.addEvent('http', new Date(), response);
         // agent.FirebaseQuery.uploadImage();
 
 
         //Retrieve ALL the failed persists and determine if this SUCCESSFUL HTTP is a previously failed attempt
         let failedPersists = realm.objects('FailedPersists');
-        console.log(failedPersists);
+        // console.log(failedPersists);
         let failedPersist = failedPersists.filtered('uuid = \'' + res.uid.replace(/"/g, "") + '\'');
-        console.log('this is the failed persist: ' + failedPersist);
-        console.log(failedPersist);
+        // console.log('this is the failed persist: ' + failedPersist);
+        // console.log(failedPersist);
 
-        console.log('Failed Persists: ');
         if (failedPersists.length > 0) {
             console.log(failedPersists);
             failedPersists.forEach(function (element, index, array) {
@@ -356,9 +356,6 @@ class JourneyStart extends React.Component {
         let LastDataCollect = realm.objects('LastDataCollect');
         console.log('this is the last Data Collect');
         console.log(LastDataCollect);
-        realm.write(() => {
-            realm.create('LastDataCollect', {id: 0, timeStamp: moment(-res.timeStamp).format('X')}, true);
-        })
 
 
         console.log(response.status);
@@ -375,7 +372,7 @@ class JourneyStart extends React.Component {
                 //     })
 
                 realm.write(() => {
-                    realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timeStamp: 'placeholder'})
+                    realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timestamp: 'placeholder'})
                 });
 
                 //Log the current failed persists
@@ -390,24 +387,44 @@ class JourneyStart extends React.Component {
 
             } else if (response.status === 200) {
                 //Take picture and upload
-                console.log('response 200 okay, take a picture & upload');
+                console.log('response 200');
+                console.log(LastDataCollect.length);
+                console.log(LastDataCollect[0]);
+                console.log(res.timestamp)
 
-                if(LastDataCollect.length > 0 && (LastDataCollect[0].timeStamp - res.timestamp) > 60000) {
+                if (LastDataCollect.length > 0 && (res.timestamp-LastDataCollect[0].timestamp) > 60000) {
+                    console.log('response 200 okay, takeVideoCalled.');
+                    console.log('This was the time Difference: '+ (res.timestamp-LastDataCollect[0].timestamp)/1000 + 's');
+
+                    realm.write(() => {
+                        realm.create('LastDataCollect', {id: 0, timestamp: moment(res.timestamp).format('x')}, true);
+                    })
+
+
                     NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
                         () => {
                             console.log('takeVideo Callback invoked');
                             agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
                         })
-                } else if (LastDataCollect.length > 0 && (LastDataCollect[0].timeStamp - res.timestamp) <= 60000) {
+                } else if (LastDataCollect.length > 0 && (res.timestamp-LastDataCollect[0].timestamp) <= 60000) {
+                    console.log('response 200 okay, too little time between events. Do not call.');
+                    console.log('PREVENTING COLLISION CITY');
+                    console.log('This was the time Difference: '+ (res.timestamp-LastDataCollect[0].timestamp)/1000 + 's');
+
+
 
                 } else {
+                    console.log('in the else');
+                    realm.write(() => {
+                        realm.create('LastDataCollect', {id: 0, timestamp: moment(res.timestamp).format('x')}, true);
+                    })
+
                     NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
                         () => {
                             console.log('takeVideo Callback invoked');
                             agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
                         })
                 }
-
 
 
                 // NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
@@ -444,19 +461,19 @@ class JourneyStart extends React.Component {
      * @event motionchange
      */
     onMotionChange(event) {
-        console.log('[event] motionchange: ', event.isMoving, event.location);
-        this.setState({
-            isMoving: event.isMoving
-        });
-        this.addEvent('motionchange', new Date(event.location.timestamp), event.location);
+        // console.log('[event] motionchange: ', event.isMoving, event.location);
+        // this.setState({
+        //     isMoving: event.isMoving
+        // });
+        // this.addEvent('motionchange', new Date(event.location.timestamp), event.location);
     }
 
     /**
      * @event activitychange
      */
     onActivityChange(event) {
-        console.log('[event] activitychange: ', event);
-        this.addEvent('activitychange', new Date(), event);
+        // console.log('[event] activitychange: ', event);
+        // this.addEvent('activitychange', new Date(), event);
     }
 
     /**
@@ -495,7 +512,7 @@ class JourneyStart extends React.Component {
             isMoving: false
         });
         if (enabled) {
-                BackgroundGeolocation.start();
+            BackgroundGeolocation.start();
 
             // NativeModules.videoPackage.takeVideo('test_journey', "test",
             //     () => {
@@ -776,7 +793,7 @@ class JourneyStart extends React.Component {
                                 <TouchableOpacity style={{alignSelf: 'center'}}
                                                   onPress={
                                                       // () => this.onClickChangePace()
-                                                      ()=>this.onClickClear()
+                                                      () => this.onClickClear()
                                                       //       () => NativeModules.picturePackage.takePicture(() => {
                                                       //     console.log('takePicture Callback invoked');
                                                       //
