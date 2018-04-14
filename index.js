@@ -30,8 +30,12 @@ registerScreens(store, Provider);
 Navigation.isAppLaunched()
     .then(appLaunched => {
         if (appLaunched) {
+            console.log('App is launched -> show UI')
             startApp(); // App is launched -> show UI
         }
+
+        console.log('App hasn\'t been launched yet -> show the UI only when needed.')
+
         new NativeEventsReceiver().appLaunched(startApp); // App hasn't been launched yet -> show the UI only when needed.
     });
 

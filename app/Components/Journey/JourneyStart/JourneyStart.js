@@ -26,6 +26,7 @@ import {GiftedChat} from 'react-native-gifted-chat';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
+import moment from 'moment';
 
 import {connect} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
@@ -312,7 +313,7 @@ class JourneyStart extends React.Component {
 
         //Persist the last location for standard practice.
         realm.write(() => {
-            realm.create('LastLocation', {uuid: location.uuid});
+            realm.create('LastLocation', {uuid: location.uuid, timestamp: moment(location.timestamp).format('X')});
         })
 
 
@@ -326,13 +327,18 @@ class JourneyStart extends React.Component {
 
         console.log('================================> HTTP')
         console.log('[event] http: ', response);
+        let responseText = response.responseText;
+        let res = JSON.parse(responseText);
+
+        console.log(res.uid);
         this.addEvent('http', new Date(), response);
         // agent.FirebaseQuery.uploadImage();
 
 
         //Retrieve ALL the failed persists and determine if this SUCCESSFUL HTTP is a previously failed attempt
         let failedPersists = realm.objects('FailedPersists');
-        let failedPersist = failedPersists.filtered('uuid = \'' + response.responseText.replace(/"/g, "") + '\'');
+        console.log(failedPersists);
+        let failedPersist = failedPersists.filtered('uuid = \'' + res.uid.replace(/"/g, "") + '\'');
         console.log('this is the failed persist: ' + failedPersist);
         console.log(failedPersist);
 
@@ -344,6 +350,17 @@ class JourneyStart extends React.Component {
             })
         }
         // console.log('Failed Persist: ' + failedPersist);
+
+
+        //=================== CHECK LAST DATA COLLECT ===================>
+        let LastDataCollect = realm.objects('LastDataCollect');
+        console.log('this is the last Data Collect');
+        console.log(LastDataCollect);
+        realm.write(() => {
+            realm.create('LastDataCollect', {id: 0, timeStamp: moment(-res.timeStamp).format('X')}, true);
+        })
+
+
         console.log(response.status);
 
         if (failedPersist.length === 0) {
@@ -351,7 +368,6 @@ class JourneyStart extends React.Component {
                 console.log('Not a successful upload. Take a picture and persist as one to upload later with a 200 okay HTTP');
 
                 let lastLocationUuid = realm.objects('LastLocation');
-
                 console.log('this is the lastLocationUuid: ' + lastLocationUuid[0].uuid);
                 // NativeModules.picturePackage.takePicture(lastLocationUuid,
                 //     () => {
@@ -376,23 +392,35 @@ class JourneyStart extends React.Component {
                 //Take picture and upload
                 console.log('response 200 okay, take a picture & upload');
 
-                NativeModules.videoPackage.takeVideo(this.state.journeyId, response.responseText.replace(/"/g, ""),
-                    () => {
-                        console.log('takePicture Callback invoked');
-                        agent.FirebaseQuery.uploadVideo(this.state.journeyId, response.responseText.replace(/"/g, ""));
-                    })
+                if(LastDataCollect.length > 0 && (LastDataCollect[0].timeStamp - res.timestamp) > 60000) {
+                    NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                        () => {
+                            console.log('takeVideo Callback invoked');
+                            agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                        })
+                } else if (LastDataCollect.length > 0 && (LastDataCollect[0].timeStamp - res.timestamp) <= 60000) {
 
-                // NativeModules.picturePackage.takePicture(this.state.journeyId, response.responseText.replace(/"/g, ""),
+                } else {
+                    NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                        () => {
+                            console.log('takeVideo Callback invoked');
+                            agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                        })
+                }
+
+
+
+                // NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
                 //     () => {
                 //         console.log('takePicture Callback invoked');
-                //         agent.FirebaseQuery.uploadImage(this.state.journeyId, response.responseText.replace(/"/g, ""));
+                //         agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
                 //     })
             }
 
         } else {
-            if (response.status === 200 && failedPersist[0].uuid === response.responseText.replace(/"/g, "")) {
+            if (response.status === 200 && failedPersist[0].uuid === res.replace(/"/g, "")) {
                 console.log('http success, but this was a previously failed event, so only Upload Photo');
-                // agent.FirebaseQuery.uploadImage(response.responseText.uuid);
+                // agent.FirebaseQuery.uploadImage(res.uid);
 
                 console.log('delete the successfully uploaded photo from realm');
                 realm.write(() => {
@@ -461,12 +489,19 @@ class JourneyStart extends React.Component {
 
     onToggleEnabled(value) {
         let enabled = !this.state.enabled;
+        console.log('is this even clicked');
         this.setState({
             enabled: enabled,
             isMoving: false
         });
         if (enabled) {
-            BackgroundGeolocation.start();
+                BackgroundGeolocation.start();
+
+            // NativeModules.videoPackage.takeVideo('test_journey', "test",
+            //     () => {
+            //         console.log('takeVideo Callback invoked');
+            //         agent.FirebaseQuery.uploadVideo(this.state.journeyId, "test");
+            //     });
         } else {
             BackgroundGeolocation.stop();
         }
@@ -493,10 +528,10 @@ class JourneyStart extends React.Component {
 
     onClickClear() {
 
-        // realm.write(() => {
-        //     realm.deleteAll();
-        //     console.log('cleared')
-        // })
+        realm.write(() => {
+            realm.deleteAll();
+            console.log('cleared')
+        })
 
 
     }
@@ -740,8 +775,8 @@ class JourneyStart extends React.Component {
 
                                 <TouchableOpacity style={{alignSelf: 'center'}}
                                                   onPress={
-                                                      () => this.onClickChangePace()
-
+                                                      // () => this.onClickChangePace()
+                                                      ()=>this.onClickClear()
                                                       //       () => NativeModules.picturePackage.takePicture(() => {
                                                       //     console.log('takePicture Callback invoked');
                                                       //

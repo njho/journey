@@ -16,6 +16,7 @@ import com.rnopentok.RNOpenTokPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+
 import io.realm.react.RealmReactPackage; // add this import
 
 
@@ -40,6 +41,8 @@ import com.facebook.CallbackManager;
 
 import com.reactnativenavigation.NavigationApplication;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.facebook.soloader.SoLoader;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +56,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 
     //This is for handling event broadcasts from the pictureJavaModule and associated Service
 
-    private BroadcastReceiver BReceiver = new BroadcastReceiver(){
+    private BroadcastReceiver BReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -62,7 +65,6 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
             pictureSingleton.INVOKE_CALLBACK();
         }
     };
-
 
 
     private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
@@ -86,6 +88,8 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 
     @Override
     public void startActivity(Intent intent) {
+
+        Log.d("ReactNative", "startActivity");
         String action = intent.getAction();
         String type = intent.getStringExtra("EXTRA_TEXT");
 
@@ -94,16 +98,21 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
 
         } else {
             // Handle other intents, such as being started from the home screen
+            return;
         }
 
         String animationType = intent.getStringExtra("animationType");
         if (animationType != null && animationType.equals("fade")) {
+            Log.d("ReactNative", "startActivityOUtHere");
+
             Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(getApplicationContext(),
                     android.R.anim.fade_in,
                     android.R.anim.fade_out
             ).toBundle();
             super.startActivity(intent, bundle);
         } else {
+            Log.d("ReactNative", "startActivityinHere");
+
             super.startActivity(intent);
         }
 
@@ -112,6 +121,9 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     @Override
     public void onCreate() {
         super.onCreate();
+        SoLoader.init(this, /* native exopackage */ false);
+
+
 
 
         setActivityCallbacks(new ActivityCallbacks() {
@@ -262,7 +274,7 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
                 new VideoPackage()
 
 
-                );
+        );
     }
 
     @Override

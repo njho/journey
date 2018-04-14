@@ -24,15 +24,22 @@ import java.io.OutputStream;
  * Created by Machinatron on 2017-07-14.
  */
 
-public class VideoService extends IntentService {
+ interface VideoCompleteListener {
+
+    void captureCompleted();
+    void setFile(File file);
+}
+
+
+public class VideoService extends IntentService implements VideoCompleteListener {
 
     private static final String TAG = "VIDEOPACKAGE";
 
     private Camera2Video mCamera2Video;
-    private Handler mBackgroundHandler;
 
     private String mFilename;
     private String mJourneyId;
+    private File mFilePath;
 
     private Context mContext;
 
@@ -46,23 +53,35 @@ public class VideoService extends IntentService {
     }
 
     @Override
+    public void captureCompleted() {
+        Log.d(TAG, "captureCompleted() is called");
+
+//        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(mFilePath)));
+//        MediaScannerConnection.scanFile(mContext, new String[] { mFilePath.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
+//            public void onScanCompleted(String path, Uri uri) {
+//                Log.i(TAG, "Scanned " + path + ":");
+//                Log.i(TAG, "-> uri=" + uri);
+//            }
+//        });
+        stopSelf();
+    }
+
+    @Override
+    public void setFile(File file) {
+        mFilePath = file;
+    }
+
+
+    @Override
     public void onCreate() {
         super.onCreate();
-
         Log.d(TAG, "onCreate Service");
-
-        mCamera2Video = new Camera2Video();
-
-        mCamera2Video.newInstance(this);
-        mCamera2Video.startBackgroundThread();
-        mCamera2Video.openCamera(1, 1);
 
     }
     @Override
     protected void onHandleIntent(Intent intent) {
-//        Log.d(TAG, "This has started");
+        Log.d(TAG, "This has started");
 //        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -71,7 +90,15 @@ public class VideoService extends IntentService {
         mFilename = intent.getStringExtra("FILENAME");
         mContext = getApplicationContext();
 
-//
+        //No callbacks like in ExampleService for PhotoCapture, therefore pass all information into the constructor.
+
+        Log.d(TAG, mJourneyId);
+        Log.d(TAG, mFilename);
+        mCamera2Video = new Camera2Video(this, mJourneyId, mFilename);
+        //mCamera2Video.newInstance(this);
+        mCamera2Video.startBackgroundThread();
+        mCamera2Video.openCamera(1, 1);
+
         Log.d(TAG, "This has started");
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
         return START_STICKY;
@@ -83,12 +110,6 @@ public class VideoService extends IntentService {
     @Override
     public void onDestroy() {
         Log.d(TAG, "intent Destroyed");
-
-        mCamera2Video.closeCamera();
-        mCamera2Video.stopBackgroundThread();
-
-
-
 
 //        mCameraView.stop();
 //

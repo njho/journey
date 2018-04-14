@@ -240,6 +240,8 @@ const FirebaseQuery = {
     },
     uploadVideo: (journey, uuid) => {
         let metadata = {
+            contentType: 'video/mp4',
+
             customMetadata: {
                 uid: uuid
             }
@@ -247,7 +249,7 @@ const FirebaseQuery = {
 
         console.log('upload video called');
         console.log('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.mp4');
-        storage.ref(journey + '/' + uuid + '.jpg')
+        storage.ref(journey + '/' + uuid + '.mp4')
             .putFile('file:////storage/emulated/0/Pictures/' + journey + '/' + uuid + '.mp4', metadata)
             .then(uploadedFile => {
                 console.log('uploaded file')

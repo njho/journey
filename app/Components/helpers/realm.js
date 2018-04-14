@@ -23,5 +23,17 @@ FailedPersists.schema = {
     },
 };
 
+class LastDataCollect extends Realm.Object {
+}
 
-export default new Realm({schema: [LastLocation, FailedPersists]});
+LastDataCollect.schema = {
+    name: 'LastDataCollect',
+    primaryKey: 'id',
+    properties: {
+        id: 'int',
+        timeStamp: 'string'
+    }
+}
+
+
+export default new Realm({schema: [LastLocation, FailedPersists, LastDataCollect]});

@@ -62,10 +62,15 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+
 public class Camera2Video
         implements MediaRecorder.OnInfoListener {
 
     //        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback, MediaRecorder.OnInfoListener {
+
+    private String mJourneyId;
+    private String mFileName;
+
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -76,7 +81,7 @@ public class Camera2Video
     private static final int REQUEST_VIDEO_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
-    private Context mContext;
+    private VideoService mContext;
 
     private static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -105,7 +110,7 @@ public class Camera2Video
     /**
      * A reference to the opened {@link android.hardware.camera2.CameraDevice}.
      */
-    private CameraDevice mCameraDevice;
+    public CameraDevice mCameraDevice;
 
     /**
      * A reference to the current {@link android.hardware.camera2.CameraCaptureSession} for
@@ -176,11 +181,13 @@ public class Camera2Video
     /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
      */
-    private Semaphore mCameraOpenCloseLock = new Semaphore(1);
+    public Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its status.
      */
+
+
     private CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
         @Override
@@ -206,6 +213,11 @@ public class Camera2Video
         }
 
         @Override
+        public void onClosed(@NonNull CameraDevice cameraDevice) {
+            Log.d(TAG, "Camera onClosed");
+        }
+
+        @Override
         public void onError(@NonNull CameraDevice cameraDevice, int error) {
             Log.d(TAG, "ONERROR");
 
@@ -223,9 +235,17 @@ public class Camera2Video
     private String mNextVideoAbsolutePath;
     private CaptureRequest.Builder mPreviewBuilder;
 
-    public Camera2Video newInstance(Context context) {
-        mContext = context;
-        return new Camera2Video();
+//    public Camera2Video newInstance(Context context) {
+////        mVideoCompleteListener = onCompleteListener;
+//        mContext = context;
+//        return new Camera2Video();
+//    }
+
+    public Camera2Video(VideoService mClass, String journeyId, String fileName) {
+//        mVideoCompleteListener = videoCompleteListener;
+        mJourneyId = journeyId;
+        mFileName = fileName;
+        mContext = mClass;
     }
 
     /**
@@ -382,6 +402,7 @@ public class Camera2Video
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
+
             String cameraId = manager.getCameraIdList()[0];
 
             // Choose the sizes for camera preview and video recording
@@ -426,11 +447,18 @@ public class Camera2Video
 
     public void closeCamera() {
         Log.d(TAG, "CLOSECAMERA");
+        stopBackgroundThread();
+
 
         try {
             mCameraOpenCloseLock.acquire();
+
+            Log.d(TAG, "CLOSECAMERA");
+
             closePreviewSession();
             if (null != mCameraDevice) {
+                Log.d(TAG, "Tried to close Camera");
+
                 mCameraDevice.close();
                 mCameraDevice = null;
             }
@@ -475,7 +503,7 @@ public class Camera2Video
                         @Override
                         public void onConfigured(@NonNull CameraCaptureSession session) {
                             mPreviewSession = session;
-                            //updatePreview();
+//                            updatePreview();
                         }
 
                         @Override
@@ -557,9 +585,20 @@ public class Camera2Video
     }
 
     private String getVideoFilePath() {
-        final File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
+
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mJourneyId);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mJourneyId + "/" + mFileName + ".mp4");
+
+        mContext.setFile(file);
+        return file.getAbsolutePath();
+
+//        final File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
+//                + System.currentTimeMillis() + ".mp4";
     }
 
     public void startRecordingVideo() {
@@ -638,7 +677,7 @@ public class Camera2Video
         mIsRecordingVideo = false;
 //        mButtonVideo.setText(R.string.record);
         // Stop recording
-//        mMediaRecorder.stop();
+    //        mMediaRecorder.stop();
         mMediaRecorder.reset();
         ;
         if (null != mContext) {
@@ -648,6 +687,10 @@ public class Camera2Video
         }
         mNextVideoAbsolutePath = null;
 //        startPreview();
+
+        //This has been moved here to see if it will make it more reliable....
+        closeCamera();
+        mContext.captureCompleted();
     }
 
     /**

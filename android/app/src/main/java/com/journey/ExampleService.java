@@ -35,7 +35,6 @@ public class ExampleService extends IntentService {
 
     private Context mContext;
 
-
     private static final String TAG = "CAMERAPACKAGE";
 
     public static Intent newIntent(Context context) {

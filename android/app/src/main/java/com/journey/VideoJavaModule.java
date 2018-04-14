@@ -32,9 +32,9 @@ public class VideoJavaModule extends ReactContextBaseJavaModule {
         i.putExtra("JOURNEY_ID", journeyId);
         i.putExtra("FILENAME", fileName);
 
-        mVideoSingleton.SET_CALLBACK(callback);
+        mVideoSingleton.SET_VIDEO_CALLBACK(callback);
         getReactApplicationContext().startService(i);
-        Log.i("picturePackage", "picture Module called");
+        Log.i("videoPackage", "videoPackage Module called //VideoJavaModule.java");
 
     }
 }
