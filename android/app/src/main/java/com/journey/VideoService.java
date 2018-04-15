@@ -57,13 +57,13 @@ public class VideoService extends IntentService implements VideoCompleteListener
     public void captureCompleted() {
         Log.d(TAG, "captureCompleted() is called");
 
-//        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(mFilePath)));
-//        MediaScannerConnection.scanFile(mContext, new String[] { mFilePath.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
-//            public void onScanCompleted(String path, Uri uri) {
-//                Log.i(TAG, "Scanned " + path + ":");
-//                Log.i(TAG, "-> uri=" + uri);
-//            }
-//        });
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(mFilePath)));
+        MediaScannerConnection.scanFile(mContext, new String[] { mFilePath.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
+            public void onScanCompleted(String path, Uri uri) {
+                Log.i(TAG, "Scanned " + path + ":");
+                Log.i(TAG, "-> uri=" + uri);
+            }
+        });
         stopSelf();
     }
 
@@ -103,7 +103,7 @@ public class VideoService extends IntentService implements VideoCompleteListener
             mCamera2Video.openCamera(1, 1);
 
             Log.d(TAG, "This has started");
-            Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Video Capture Starting! 10 Seconds", Toast.LENGTH_SHORT).show();
         } else {
             stopSelf();
         }
@@ -117,6 +117,8 @@ public class VideoService extends IntentService implements VideoCompleteListener
     @Override
     public void onDestroy() {
         Log.d(TAG, "intent Destroyed");
+        Toast.makeText(this, "Video Capture Completed!", Toast.LENGTH_SHORT).show();
+
 
 //        mCameraView.stop();
 //

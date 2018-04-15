@@ -21,7 +21,7 @@ import {registerScreens} from './screens';
 import {NativeModules} from 'react-native';
 import realm from './app/Components/helpers/realm';
 
-
+import helperFunctions from './app/Components/helpers/helperFunctions';
 
 
 bootstrap();
@@ -290,7 +290,8 @@ function startApp() {
         },
         tabsStyle: {
             topBarShadowColor: 'red',
-            statusBarColor: '#221B36',    },
+            statusBarColor: '#221B36',
+        },
         appStyle: {
             topBarShadowColor: 'red',
             statusBarColor: '#221B36',
@@ -327,22 +328,24 @@ let HeadlessTask = async (event) => {
             //console.log('[BackgroundGeolocation HeadlessTask] - http:', dog);
             // agent.FirebaseQuery.uploadImage();
 
+            console.log('===================HEADLESS HTTP =======================>');
             let response = params;
-
-
-            console.log('================================> HTTP')
-            console.log('[event] http: ', response);
-            // this.addEvent('http', new Date(), response);
+            let responseText = response.responseText;
+            let res = JSON.parse(responseText);
+            console.log(res);
+            console.log(res.uid);
+            console.log(res.timestamp);
+            this.addEvent('http', new Date(), response);
             // agent.FirebaseQuery.uploadImage();
 
 
             //Retrieve ALL the failed persists and determine if this SUCCESSFUL HTTP is a previously failed attempt
             let failedPersists = realm.objects('FailedPersists');
-            let failedPersist = failedPersists.filtered('uuid = \'' + response.responseText.replace(/"/g, "") + '\'');
-            console.log('this is the failed persist: ' + failedPersist);
-            console.log(failedPersist);
+            // console.log(failedPersists);
+            let failedPersist = failedPersists.filtered('uuid = \'' + res.uid.replace(/"/g, "") + '\'');
+            // console.log('this is the failed persist: ' + failedPersist);
+            // console.log(failedPersist);
 
-            console.log('Failed Persists: ');
             if (failedPersists.length > 0) {
                 console.log(failedPersists);
                 failedPersists.forEach(function (element, index, array) {
@@ -350,14 +353,29 @@ let HeadlessTask = async (event) => {
                 })
             }
             // console.log('Failed Persist: ' + failedPersist);
+
+
+            //=================== CHECK LAST DATA COLLECT ===================>
+            let LastDataCollect = realm.objects('LastDataCollect');
+            console.log('this is the last Data Collect');
+            console.log(LastDataCollect);
+
+            //=================== PICTURE OR VIDEO? BASED ON USER PARAMETERS ===================>
+            //=================== 0: Picture, 1: Video  ===================>
+            console.log(helperFunctions.weightedRand());
+            let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
+            let number = rand012();
+            console.log('This is the random distribution: ' + rand012());
+            console.log('This is the random distribution1: ' + number);
+
+
             console.log(response.status);
 
             if (failedPersist.length === 0) {
                 if (response.status !== 200) {
-                    console.log('Not a successful upload. Take a picture and persist as one to upload later with a 200 okay HTTP');
+                    console.log('Not a successful HTTP Request. Take a picture and persist as one to upload later with a 200 okay HTTP');
 
                     let lastLocationUuid = realm.objects('LastLocation');
-
                     console.log('this is the lastLocationUuid: ' + lastLocationUuid[0].uuid);
                     // NativeModules.picturePackage.takePicture(lastLocationUuid,
                     //     () => {
@@ -365,7 +383,7 @@ let HeadlessTask = async (event) => {
                     //     })
 
                     realm.write(() => {
-                        realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timeStamp: 'placeholder'})
+                        realm.create('FailedPersists', {uuid: lastLocationUuid[0].uuid, timestamp: 'placeholder'})
                     });
 
                     //Log the current failed persists
@@ -380,19 +398,75 @@ let HeadlessTask = async (event) => {
 
                 } else if (response.status === 200) {
                     //Take picture and upload
-                    console.log('response 200 okay, take a picture & upload');
+                    console.log('response 200');
+                    console.log(LastDataCollect.length);
+                    console.log(LastDataCollect[0]);
+                    console.log(res.timestamp)
 
-                    NativeModules.picturePackage.takePicture('test_journey', response.responseText.replace(/"/g, ""),
-                        () => {
-                            console.log('takePicture Callback invoked');
-                            agent.FirebaseQuery.uploadImage('test_journey', response.responseText.replace(/"/g, ""));
+                    if (LastDataCollect.length > 0 && (res.timestamp - LastDataCollect[0].timestamp) > 60000) {
+                        console.log('This was the time Difference: ' + (res.timestamp - LastDataCollect[0].timestamp) / 1000 + 's');
+
+                        realm.write(() => {
+                            realm.create('LastDataCollect', {
+                                id: 0,
+                                timestamp: moment(res.timestamp).format('x')
+                            }, true);
                         })
+
+                        if (number == 0) {
+                            console.log('======================> Take a Video')
+                            NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                                () => {
+                                    console.log('takeVideo Callback invoked');
+                                    agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                })
+                        } else {
+                            console.log('======================> Take a Picture')
+                            NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                                () => {
+                                    console.log('takePicture Callback invoked');
+                                    agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                })
+                        }
+
+                    } else if (LastDataCollect.length > 0 && (res.timestamp - LastDataCollect[0].timestamp) <= 60000) {
+                        console.log('response 200 okay, too little time between events. Do not call.');
+                        console.log('PREVENTING COLLISION CITY');
+                        console.log('This was the time Difference: ' + (res.timestamp - LastDataCollect[0].timestamp) / 1000 + 's');
+
+                    } else {
+                        console.log('in the else');
+                        realm.write(() => {
+                            realm.create('LastDataCollect', {
+                                id: 0,
+                                timestamp: moment(res.timestamp).format('x')
+                            }, true);
+                        });
+
+                        if (number == 0) {
+                            console.log('======================> Take a Video')
+
+                            NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                                () => {
+                                    console.log('takeVideo Callback invoked');
+                                    agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                })
+                        } else {
+                            console.log('======================> Take a Picture')
+
+                            NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                                () => {
+                                    console.log('takePicture Callback invoked');
+                                    agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                })
+                        }
+                    }
                 }
 
             } else {
-                if (response.status === 200 && failedPersist[0].uuid === response.responseText.replace(/"/g, "")) {
+                if (response.status === 200 && failedPersist[0].uuid === res.replace(/"/g, "")) {
                     console.log('http success, but this was a previously failed event, so only Upload Photo');
-                    // agent.FirebaseQuery.uploadImage(response.responseText.uuid);
+                    // agent.FirebaseQuery.uploadImage(res.uid);
 
                     console.log('delete the successfully uploaded photo from realm');
                     realm.write(() => {

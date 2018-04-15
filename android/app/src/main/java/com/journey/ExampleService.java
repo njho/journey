@@ -55,14 +55,19 @@ public class ExampleService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mJourneyId = intent.getStringExtra("JOURNEY_ID");
-        mFilename = intent.getStringExtra("FILENAME");
-        mContext = getApplicationContext();
 
-//
-        Log.d(TAG, "This has started");
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-        mCameraView.start();
+        if (intent.hasExtra("JOURNEY_ID") && intent.hasExtra("FILENAME")) {
+            mJourneyId = intent.getStringExtra("JOURNEY_ID");
+            mFilename = intent.getStringExtra("FILENAME");
+            mContext = getApplicationContext();
+            Log.d(TAG, "This has started");
+            Toast.makeText(this, "Picture Capture", Toast.LENGTH_SHORT).show();
+            mCameraView.start();
+            
+        } else {
+            stopSelf();
+        }
+
         return START_STICKY;
 
     }
@@ -94,12 +99,12 @@ public class ExampleService extends IntentService {
 //                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
 //                            mJourneyId + "/" + mFilename + ".jpg");
 
-                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/" + mJourneyId );
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mJourneyId);
                     if (!file.exists()) {
                         file.mkdirs();
                     }
 
-                    file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/"+ mJourneyId + "/" + mFilename + ".jpg");
+                    file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + mJourneyId + "/" + mFilename + ".jpg");
 
                     Log.d(TAG, file.getPath());
                     Log.d(TAG, file.getAbsolutePath());
@@ -121,8 +126,8 @@ public class ExampleService extends IntentService {
                         Log.w(TAG, "Cannot write to " + file, e);
                     } finally {
 
-                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(file)));
-                        MediaScannerConnection.scanFile(mContext, new String[] { file.getAbsolutePath() }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                        MediaScannerConnection.scanFile(mContext, new String[]{file.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
                             public void onScanCompleted(String path, Uri uri) {
                                 Log.i(TAG, "Scanned " + path + ":");
                                 Log.i(TAG, "-> uri=" + uri);
@@ -168,6 +173,8 @@ public class ExampleService extends IntentService {
     @Override
     public void onDestroy() {
         Log.d("cameraPackage", "intent Destroyed");
+        Toast.makeText(this, "Picture Capture Completed!", Toast.LENGTH_SHORT).show();
+
         mCameraView.stop();
 
 

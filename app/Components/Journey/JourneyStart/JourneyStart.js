@@ -27,6 +27,8 @@ import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
+import realm from '../../helpers/realm';
+
 
 import {connect} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
@@ -41,8 +43,7 @@ import DeviceInfo from 'react-native-device-info';
 import HeaderTitle from '../../Generic/ListComponents/HeaderTitle';
 import ListItem from '../../Generic/ListComponents/ListItem';
 import JourneyPicker from '../../Generic/ListComponents/JourneyPicker';
-
-import realm from '../../helpers/realm';
+import helperFunctions from '../../helpers/helperFunctions'
 
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
@@ -357,12 +358,21 @@ class JourneyStart extends React.Component {
         console.log('this is the last Data Collect');
         console.log(LastDataCollect);
 
+        //=================== PICTURE OR VIDEO? BASED ON USER PARAMETERS ===================>
+        //=================== 0: Picture, 1: Video  ===================>
+        console.log(helperFunctions.weightedRand());
+        let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
+        let number = rand012();
+        console.log('This is the random distribution: ' + rand012());
+        console.log('This is the random distribution1: ' +  number);
+
+
 
         console.log(response.status);
 
         if (failedPersist.length === 0) {
             if (response.status !== 200) {
-                console.log('Not a successful upload. Take a picture and persist as one to upload later with a 200 okay HTTP');
+                console.log('Not a successful HTTP Request. Take a picture and persist as one to upload later with a 200 okay HTTP');
 
                 let lastLocationUuid = realm.objects('LastLocation');
                 console.log('this is the lastLocationUuid: ' + lastLocationUuid[0].uuid);
@@ -392,46 +402,58 @@ class JourneyStart extends React.Component {
                 console.log(LastDataCollect[0]);
                 console.log(res.timestamp)
 
-                if (LastDataCollect.length > 0 && (res.timestamp-LastDataCollect[0].timestamp) > 60000) {
-                    console.log('response 200 okay, takeVideoCalled.');
-                    console.log('This was the time Difference: '+ (res.timestamp-LastDataCollect[0].timestamp)/1000 + 's');
+                if (LastDataCollect.length > 0 && (res.timestamp - LastDataCollect[0].timestamp) > 60000) {
+                    console.log('This was the time Difference: ' + (res.timestamp - LastDataCollect[0].timestamp) / 1000 + 's');
 
                     realm.write(() => {
                         realm.create('LastDataCollect', {id: 0, timestamp: moment(res.timestamp).format('x')}, true);
                     })
 
+                    if (number == 0) {
+                        console.log('======================> Take a Video')
+                        NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takeVideo Callback invoked');
+                                agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                            })
+                    } else {
+                        console.log('======================> Take a Picture')
+                        NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takePicture Callback invoked');
+                                agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                            })
+                    }
 
-                    NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
-                        () => {
-                            console.log('takeVideo Callback invoked');
-                            agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
-                        })
-                } else if (LastDataCollect.length > 0 && (res.timestamp-LastDataCollect[0].timestamp) <= 60000) {
+                } else if (LastDataCollect.length > 0 && (res.timestamp - LastDataCollect[0].timestamp) <= 60000) {
                     console.log('response 200 okay, too little time between events. Do not call.');
                     console.log('PREVENTING COLLISION CITY');
-                    console.log('This was the time Difference: '+ (res.timestamp-LastDataCollect[0].timestamp)/1000 + 's');
-
-
+                    console.log('This was the time Difference: ' + (res.timestamp - LastDataCollect[0].timestamp) / 1000 + 's');
 
                 } else {
                     console.log('in the else');
                     realm.write(() => {
                         realm.create('LastDataCollect', {id: 0, timestamp: moment(res.timestamp).format('x')}, true);
-                    })
+                    });
 
-                    NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
-                        () => {
-                            console.log('takeVideo Callback invoked');
-                            agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
-                        })
+                    if (number == 0) {
+                        console.log('======================> Take a Video')
+
+                        NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takeVideo Callback invoked');
+                                agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                            })
+                    } else {
+                        console.log('======================> Take a Picture')
+
+                        NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takePicture Callback invoked');
+                                agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                            })
+                    }
                 }
-
-
-                // NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
-                //     () => {
-                //         console.log('takePicture Callback invoked');
-                //         agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
-                //     })
             }
 
         } else {
