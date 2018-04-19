@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Animation from 'lottie-react-native';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 
 
@@ -68,9 +68,9 @@ const facebookLogin = () => {
             if (data) {
                 console.log('create new firebase cred');
                 // create a new firebase credential with the token
-                const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken)
-                // login with credential
-                return firebase.auth().signInWithCredential(credential)
+                // const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken)
+                // // login with credential
+                // return firebase.auth().signInWithCredential(credential)
             }
         })
         .then((currentUser) => {
@@ -194,17 +194,17 @@ class NeighborhoodDetected extends React.Component {
     digitsAuth = () => {
         console.log(this.state.digits);
         console.log('in digitsAuth');
-        firebase.auth().signInWithPhoneNumber(this.state.digits)
-            .then(confirmResult => {
-                this.setState({
-                    ...this.state,
-                    confirmResult,
-                    farthestBeen: 2
-                })
-                console.log(confirmResult);
-                console.log('It should confirm the result');
-            })
-            .catch(error => this.setState({message: `Sign In With Phone Number Error: ${error.message}`}));
+        // firebase.auth().signInWithPhoneNumber(this.state.digits)
+        //     .then(confirmResult => {
+        //         this.setState({
+        //             ...this.state,
+        //             confirmResult,
+        //             farthestBeen: 2
+        //         })
+        //         console.log(confirmResult);
+        //         console.log('It should confirm the result');
+        //     })
+        //     .catch(error => this.setState({message: `Sign In With Phone Number Error: ${error.message}`}));
     };
 
     confirmDigits = () => {
@@ -219,17 +219,17 @@ class NeighborhoodDetected extends React.Component {
     };
 
     componentWillMount() {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                this.props.login(user.toJSON());
-                this.props.navigator.resetTo({screen: 'Timeline'})
-            } else {
-                this.setState({
-                    ...this.state,
-                    loading: false
-                })
-            }
-        });
+        // firebase.auth().onAuthStateChanged((user) => {
+        //     if (user) {
+        //         this.props.login(user.toJSON());
+        //         this.props.navigator.resetTo({screen: 'Timeline'})
+        //     } else {
+        //         this.setState({
+        //             ...this.state,
+        //             loading: false
+        //         })
+        //     }
+        // });
     }
 
     componentDidMount() {

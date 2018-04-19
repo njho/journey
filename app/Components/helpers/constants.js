@@ -225,7 +225,6 @@ const dayColorPack = {
         backgroundColor: 'white',
     }
 }
-
 const nightColorPack = {
     locationConfirmation: {
         mapBackgroundColor: '#3E474F', //3E474F #212C39
@@ -399,9 +398,7 @@ const nightMap = [
         ]
     }
 ];
-
 var hr = (new Date()).getHours();
-
 const markerColors = {
     blue: "#588FC2",
     yellow: '#E5D591',
@@ -409,8 +406,6 @@ const markerColors = {
     white: '#FFFFFF',
     rose: '#F96D69'
 }
-
-
 let theme = {};
 
 if (hr > 7 && hr < 20) {
@@ -420,7 +415,6 @@ if (hr > 7 && hr < 20) {
     theme.map = nightMap;
     theme.colorMap = nightColorPack;
 }
-
 theme.markerColors = markerColors;
 
 export {theme}

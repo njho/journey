@@ -14,17 +14,7 @@ import history from './history';
 /*import flattener from './jsonFlattener';
 import aggregator from './aggregator';*/
 
-// Firebase.initializeApp({
-//     apiKey: "AIzaSyCTZX0lG1JyIBUphH7m5SDoPCpRamPNm24",
-//     authDomain: "journeyapp91.firebaseapp.com",
-//     databaseURL: "https://journeyapp91.firebaseio.com",
-//     projectId: "journeyapp91",
-//     storageBucket: "journeyapp91.appspot.com",
-//     messagingSenderId: "515548202082"
-// });
-//
-// var authService = Firebase.auth();
-// var database = Firebase.database();
+var authService = firebase.auth();
 
 let token = null;
 
@@ -37,50 +27,50 @@ const locationService = {
     addCommunity: (value) => {
         var key = database.ref('communities/').push().key;
 
-        database.ref('communities/' + key).set(value).then(function () {
-
-                geoFireRef.set(key, [value.region.latitude, value.region.longitude]).then(function () {
-                    console.log("Provided key has been added to GeoFire");
-                }, function (error) {
-                    console.log("Error: " + error);
-                });
-            }
-        )
+        // database.ref('communities/' + key).set(value).then(function () {
+        //
+        //         geoFireRef.set(key, [value.region.latitude, value.region.longitude]).then(function () {
+        //             console.log("Provided key has been added to GeoFire");
+        //         }, function (error) {
+        //             console.log("Error: " + error);
+        //         });
+        //     }
+        // )
 
 
     },
     queryCommunities: (latitude, longitude) => {
         return dispatch => {
-            var geoQuery = geoFireRef.query({
-                center: [latitude, longitude],
-                radius: 0.5
-            });
-            geoQuery.on("ready", function (key, location, distance) {
-                onKeyEnteredRegistration.cancel();
-
-            });
-
-            var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
-                console.log(key + " entered query at " + location + " (" + distance + " km from center)");
-            });
-
-            dispatch({type: 'COMMUNITIES_DETECTED', communities: geoQuery});
+            // var geoQuery = geoFireRef.query({
+            //     center: [latitude, longitude],
+            //     radius: 0.5
+            // });
+            // geoQuery.on("ready", function (key, location, distance) {
+            //     onKeyEnteredRegistration.cancel();
+            //
+            // });
+            //
+            // var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location, distance) {
+            //     console.log(key + " entered query at " + location + " (" + distance + " km from center)");
+            // });
+            //
+            // dispatch({type: 'COMMUNITIES_DETECTED', communities: geoQuery});
         }
 
     },
     two: (id) => {
-        return dispatch => {
-            var linkWatcher = database.ref('api/v1/responses/' + id);
-            linkWatcher.on('value', function (snapshot) {
-
-                if (snapshot.val()) {
-                }
-                dispatch({type: 'LINK', link: 'https://gifty.link/' + id});
-            });
-            linkWatcher.off();
-        }
+        // return dispatch => {
+        //     var linkWatcher = database.ref('api/v1/responses/' + id);
+        //     linkWatcher.on('value', function (snapshot) {
+        //
+        //         if (snapshot.val()) {
+        //         }
+        //         dispatch({type: 'LINK', link: 'https://gifty.link/' + id});
+        //     });
+        //     linkWatcher.off();
+        // }
     },
-}
+};
 
 /*
  const requests = {

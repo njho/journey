@@ -74,14 +74,21 @@ import com.android.build.OutputFile
  * /Users/machinatron/Documents/Programming/journey/android/app/build.gradle
  */
 
-/*<<<<<<< ours
+//<<<<<<< ours
+///*<<<<<<< ours
+//project.ext.react = [
+//        entryFile: "index.js"
+//]
+//
+//=======
+//>>>>>>> theirs*/
+//=======
 project.ext.react = [
-        entryFile: "index.js"
+    entryFile: "index.js"
 ]
-
-=======
->>>>>>> theirs*/
-apply from: "../../node_modules/react-native/react.gradle"
+//
+//>>>>>>> theirs
+//apply from: "../../node_modules/react-native/react.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -167,32 +174,34 @@ dependencies {
 
     compile project(':react-native-linear-gradient')
     compile project(':react-native-vector-icons')
-    compile(project(':react-native-firebase')) {
-        transitive = false
-    }
 
-//    All for react-native-firebase
-    // RNFirebase required dependencies
-    compile "com.google.firebase:firebase-core:11.4.2"
+
     compile(project(':react-native-maps')) {
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
     }
-    compile 'com.google.android.gms:play-services-base:11.4.2'
-    compile 'com.google.android.gms:play-services-maps:11.4.2'
+
+
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    implementation "com.google.android.gms:play-services-base:12.0.0"
+    compile 'com.google.android.gms:play-services-maps:12.0.0'
+
+    implementation "com.google.firebase:firebase-core:12.0.0"
 
     //11.4.2
 
     // RNFirebase optional dependencies
-    compile "com.google.firebase:firebase-ads:11.4.2"
-    compile "com.google.firebase:firebase-auth:11.4.2"
-    compile "com.google.firebase:firebase-config:11.4.2"
-    compile "com.google.firebase:firebase-crash:11.4.2"
-    compile "com.google.firebase:firebase-database:11.4.2"
-    compile "com.google.firebase:firebase-firestore:11.4.2"
-    compile "com.google.firebase:firebase-messaging:11.4.2"
-    compile "com.google.firebase:firebase-perf:11.4.2"
-    compile "com.google.firebase:firebase-storage:11.4.2"
+    compile "com.google.firebase:firebase-ads:12.0.0"
+    compile "com.google.firebase:firebase-auth:12.0.0"
+    compile "com.google.firebase:firebase-config:12.0.0"
+    compile "com.google.firebase:firebase-crash:12.0.0"
+    compile "com.google.firebase:firebase-database:12.0.0"
+    compile "com.google.firebase:firebase-firestore:12.0.0"
+    compile "com.google.firebase:firebase-messaging:12.0.0"
+    compile "com.google.firebase:firebase-perf:12.0.0"
+    compile "com.google.firebase:firebase-storage:12.0.0"
     compile(name: 'tslocationmanager', ext: 'aar')
 
     compile project(':react-native-interactable')

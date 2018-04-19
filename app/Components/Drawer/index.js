@@ -25,7 +25,7 @@ import {
 import {GiftedChat} from 'react-native-gifted-chat';
 import * as Animatable from 'react-native-animatable';
 import Interactable from 'react-native-interactable';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
 
 import {connect} from 'react-redux';
@@ -66,7 +66,7 @@ class SideDrawer extends Component {
 
     logout = async () => {
         try {
-            await firebase.auth().signOut();
+            // await firebase.auth().signOut();
             this.props.navigator.toggleDrawer({
                 side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
                 animated: false, // does the toggle have transition animation or does it happen immediately (optional)

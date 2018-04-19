@@ -10,7 +10,11 @@ import {
 } from 'react-native';
 import {Navigation, NativeEventsReceiver} from 'react-native-navigation';
 import BackgroundGeolocation from "react-native-background-geolocation";
+import firebase from 'react-native-firebase';
+import moment from 'moment';
+
 import agent from './app/Components/helpers/agent';
+
 
 import {Provider} from 'react-redux';
 import store from './app/store.js';
@@ -22,6 +26,8 @@ import {NativeModules} from 'react-native';
 import realm from './app/Components/helpers/realm';
 
 import helperFunctions from './app/Components/helpers/helperFunctions';
+
+const TRACKER_HOST_TWO = 'https://us-central1-journeyapp91.cloudfunctions.net/graphql/locationUpdate';
 
 
 bootstrap();
@@ -37,6 +43,38 @@ Navigation.isAppLaunched()
         console.log('App hasn\'t been launched yet -> show the UI only when needed.')
 
         new NativeEventsReceiver().appLaunched(startApp); // App hasn't been launched yet -> show the UI only when needed.
+    });
+
+firebase.messaging().getToken()
+    .then(fcmToken => {
+        if (fcmToken) {
+            // user has a device token
+            console.log('This is the token: ' + fcmToken);
+        } else {
+            // user doesn't have a device token yet
+            console.log('user does not have a token yet')
+        }
+    });
+
+firebase.messaging().hasPermission()
+    .then(enabled => {
+        if (enabled) {
+            // user has permissions
+            console.log('The user has Permissions');
+        } else {
+            // user doesn't have permission
+            console.log('The user does not have Permissions');
+            firebase.messaging().requestPermission()
+                .then(() => {
+                    // User has authorised
+                    console.log('The User has authorized google cloud messaging');
+                })
+                .catch(error => {
+                    // User has rejected permissions
+                    console.log('The User has not authorized google cloud messaging');
+
+                });
+        }
     });
 
 function startApp() {
@@ -335,7 +373,6 @@ let HeadlessTask = async (event) => {
             console.log(res);
             console.log(res.uid);
             console.log(res.timestamp);
-            this.addEvent('http', new Date(), response);
             // agent.FirebaseQuery.uploadImage();
 
 
@@ -411,23 +448,26 @@ let HeadlessTask = async (event) => {
                                 id: 0,
                                 timestamp: moment(res.timestamp).format('x')
                             }, true);
-                        })
+                        });
 
                         if (number == 0) {
                             console.log('======================> Take a Video')
-                            NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
                                 () => {
                                     console.log('takeVideo Callback invoked');
-                                    agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                    agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
                                 })
                         } else {
                             console.log('======================> Take a Picture')
-                            NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            NativeModules.picturePackage.takePicture('test_journey', res.uid.replace(/"/g, ""),
                                 () => {
                                     console.log('takePicture Callback invoked');
-                                    agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                    agent.FirebaseQuery.uploadImage('test_journey', res.uid.replace(/"/g, ""));
                                 })
                         }
+
+                        let rand012 = 0;
+                        let number = 0;
 
                     } else if (LastDataCollect.length > 0 && (res.timestamp - LastDataCollect[0].timestamp) <= 60000) {
                         console.log('response 200 okay, too little time between events. Do not call.');
@@ -446,18 +486,18 @@ let HeadlessTask = async (event) => {
                         if (number == 0) {
                             console.log('======================> Take a Video')
 
-                            NativeModules.videoPackage.takeVideo(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
                                 () => {
                                     console.log('takeVideo Callback invoked');
-                                    agent.FirebaseQuery.uploadVideo(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                    agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
                                 })
                         } else {
                             console.log('======================> Take a Picture')
 
-                            NativeModules.picturePackage.takePicture(this.state.journeyId, res.uid.replace(/"/g, ""),
+                            NativeModules.picturePackage.takePicture('test_journey', res.uid.replace(/"/g, ""),
                                 () => {
                                     console.log('takePicture Callback invoked');
-                                    agent.FirebaseQuery.uploadImage(this.state.journeyId, res.uid.replace(/"/g, ""));
+                                    agent.FirebaseQuery.uploadImage('test_journey', res.uid.replace(/"/g, ""));
                                 })
                         }
                     }
@@ -486,33 +526,53 @@ let HeadlessTask = async (event) => {
             break;
         case 'location':
             // Use await for async tasks
-            let cat = await getCurrentPosition();
+            // let cat = await getCurrentPosition();
             console.log('[BackgroundGeolocation HeadlessTask] - location:', location);
             break;
     }
 }
 
 ////
-// You're free to execute any API method upon BackgroundGeolocation in your HeadlessTask.
-// Just be sure to wrap them in a Promise and "await" their completion.
-//
-let getCurrentPosition = () => {
-    return new Promise((resolve) => {
-        BackgroundGeolocation.getCurrentPosition((location) => {
-            resolve(location);
-        }, (error) => {
-            resolve(error);
-        }, {
-            samples: 1,
-            persist: false
-        });
-    });
-};
-
-////
 // Register your HeadlessTask with BackgroundGeolocation plugin.
 //
 BackgroundGeolocation.registerHeadlessTask(HeadlessTask);
 
+AppRegistry.registerHeadlessTask('RNFirebaseBackgroundMessage', () => handleBackgroundMessage()); // <-- Add this line
+
+const handleBackgroundMessage = async (message) => {
+
+    console.log('message received in the background');
+    console.log(message);
+    //Step 4. Reconfigure BackgroundGeolocation to
+    BackgroundGeolocation.configure({
+            disableElasticity: true,
+            distanceFilter: 10,
+            stopOnTerminate: false,
+            stopAfterElapsedMinutes: 1,
+            enableHeadless: true,
+            heartbeatInterval: 60,
+            startOnBoot: true,
+            foregroundService: true,
+            url: TRACKER_HOST_TWO,
+            extras: {
+                journey_id: 'test_journey'
+            },
+            autoSync: true,
+            debug:
+                true,
+            logLevel:
+            BackgroundGeolocation.LOG_LEVEL_VERBOSE
+        },
+        (state) => {
+            console.log('Background Geolocation configured');
+            console.log('Starting Background Geolocation');
+            BackgroundGeolocation.start();
+        })
+
+    return Promise.resolve();
+};
+
 
 AppRegistry.registerComponent('Journey', () => Journey);
+
+

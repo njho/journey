@@ -21,7 +21,7 @@ import io.realm.react.RealmReactPackage; // add this import
 
 
 import io.invertase.firebase.RNFirebasePackage;
-
+//
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
 import io.invertase.firebase.database.RNFirebaseDatabasePackage; // Firebase Realtime Database
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage; // Firebase Firestore
@@ -124,8 +124,6 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
         SoLoader.init(this, /* native exopackage */ false);
 
 
-
-
         setActivityCallbacks(new ActivityCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -208,12 +206,18 @@ public class MainApplication extends NavigationApplication /*implements ReactApp
     }
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
 =======
+=======
+>>>>>>> theirs
 
     @Override
     protected String getJSMainModuleName() {
       return "index";
     }
+<<<<<<< ours
+=======
+>>>>>>> theirs
 =======
 >>>>>>> theirs
   };

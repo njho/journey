@@ -23,6 +23,7 @@ import {
     StatusBar
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
+import firebase from 'react-native-firebase';
 import agent from '../../helpers/agent';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -223,9 +224,6 @@ class JourneyStart extends React.Component {
 
     componentDidMount() {
 
-
-        // this.marker.play();
-
         // Step 1:  Listen to events:
         BackgroundGeolocation.on('location', this.onLocation.bind(this));
         BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
@@ -246,7 +244,6 @@ class JourneyStart extends React.Component {
                 foregroundService: true,
                 url: TRACKER_HOST_TWO,
                 extras: {
-                    date: this.getDate(),
                     journey_id: this.state.journeyId
                 },
                 params: {
@@ -273,9 +270,35 @@ class JourneyStart extends React.Component {
                     enabled: state.enabled,
                     isMoving: state.isMoving
                 });
+
             }
-        )
-        ;
+        );
+
+        //Step 3 Listen for Firebase Persists...
+        this.messageListener = firebase.messaging().onMessage((RemoteMessage) => {
+            console.log('Remote Message Received');
+            console.log(RemoteMessage);
+
+            //Step 4. Reconfigure BackgroundGeolocation to
+            BackgroundGeolocation.setConfig({
+                    stopAfterElapsedMinutes: 1,
+                    extras: {
+                        journey_id: this.state.journeyId
+                    },
+                },
+                (state) => {
+                    console.log('- Configure success from remote Call: ', state);
+                    this.setState({
+                        enabled: state.enabled,
+                        isMoving: state.isMoving
+                    });
+                    console.log('Starting Background Geolocation');
+                    BackgroundGeolocation.start();
+                })
+
+
+        });
+
     }
 
     getDate = () => {
@@ -284,6 +307,7 @@ class JourneyStart extends React.Component {
 
         return d
     }
+
 
     /**
      * @event location
@@ -364,8 +388,7 @@ class JourneyStart extends React.Component {
         let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
         let number = rand012();
         console.log('This is the random distribution: ' + rand012());
-        console.log('This is the random distribution1: ' +  number);
-
+        console.log('This is the random distribution1: ' + number);
 
 
         console.log(response.status);
