@@ -85,7 +85,7 @@ abstract class DisplayOrientationDetector {
                 } else if (orientation > 225 && orientation <= 315) {
                     rotation = 1;
                 } else if (orientation > 315 && orientation <= 360) {
-                    rotation = 2;
+                    rotation = 0;
                 }
 
                 Log.d("CameraPackage", "mContext.getResource()" + rotation);

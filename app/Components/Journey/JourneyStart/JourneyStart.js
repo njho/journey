@@ -223,6 +223,13 @@ class JourneyStart extends React.Component {
 
 
     componentDidMount() {
+        //===============> FIREBASE TOKEN GENERATION ===================>
+        this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+            // Process your token as required
+
+        });
+
+
 
         // Step 1:  Listen to events:
         BackgroundGeolocation.on('location', this.onLocation.bind(this));
@@ -384,11 +391,13 @@ class JourneyStart extends React.Component {
 
         //=================== PICTURE OR VIDEO? BASED ON USER PARAMETERS ===================>
         //=================== 0: Picture, 1: Video  ===================>
-        console.log(helperFunctions.weightedRand());
-        let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
-        let number = rand012();
-        console.log('This is the random distribution: ' + rand012());
-        console.log('This is the random distribution1: ' + number);
+        // console.log(helperFunctions.weightedRand());
+        // let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
+        // let number = rand012();
+        // console.log('This is the random distribution: ' + rand012());
+        // console.log('This is the random distribution1: ' + number);
+
+        let number = 1;
 
 
         console.log(response.status);

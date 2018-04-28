@@ -22,10 +22,10 @@ public class MainActivity extends SplashActivity {
         Log.d("ReactNative", "onCreate Splash Screen ==================>");
         Log.d("ReactNative", Boolean.toString(isTaskRoot()));
 
-        if (!isTaskRoot()) {
-            finish();
-            return;
-        }
+//        if (!isTaskRoot()) {
+//            finish();
+//            return;
+//        }
     }
 
     @Override

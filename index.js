@@ -36,25 +36,39 @@ registerScreens(store, Provider);
 Navigation.isAppLaunched()
     .then(appLaunched => {
         if (appLaunched) {
-            console.log('App is launched -> show UI')
+            console.log('App is launched -> show UI');
             startApp(); // App is launched -> show UI
         }
 
-        console.log('App hasn\'t been launched yet -> show the UI only when needed.')
+        console.log('App hasn\'t been launched yet -> show the UI only when needed.');
 
         new NativeEventsReceiver().appLaunched(startApp); // App hasn't been launched yet -> show the UI only when needed.
     });
 
-firebase.messaging().getToken()
-    .then(fcmToken => {
-        if (fcmToken) {
-            // user has a device token
-            console.log('This is the token: ' + fcmToken);
-        } else {
-            // user doesn't have a device token yet
-            console.log('user does not have a token yet')
-        }
-    });
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log('User Logged In - Check for FCM Token');
+
+        console.log(user._auth._user.uid);
+
+        firebase.messaging().getToken()
+            .then(fcmToken => {
+                if (fcmToken) {
+                    // user has a device token
+                    console.log('This is the token: ' + fcmToken);
+
+                    firebase.firestore().collection('users').doc(user._auth._user.uid).update({fcm_token: fcmToken});
+                } else {
+                    // user doesn't have a device token yet
+                    console.log('user does not have a token yet')
+                }
+            });
+    } else {
+        console.log('No user logged in')
+    }
+});
+
 
 firebase.messaging().hasPermission()
     .then(enabled => {
@@ -72,7 +86,6 @@ firebase.messaging().hasPermission()
                 .catch(error => {
                     // User has rejected permissions
                     console.log('The User has not authorized google cloud messaging');
-
                 });
         }
     });
@@ -100,7 +113,7 @@ function startApp() {
             //     title: 'Screen One',
             //     tabBarHidden: true
             // },
-
+            //
             // {
             //     label: 'two',
             //     screen: 'neighbors', // this is a registered name for a screen
@@ -261,7 +274,7 @@ function startApp() {
             //     tabBarHidden: false,
             // },
 
-
+            //
             // {
             //     label: 'two',
             //     screen: 'personalJourneyStart', // this is a registered name for a screen
@@ -272,8 +285,8 @@ function startApp() {
             //     title: 'neighborhood Detected',
             //     tabBarHidden: false,
             // },
-
             //
+
             // {
             //     label: 'two',
             //     screen: 'neighborhoodDetected', // this is a registered name for a screen
@@ -398,12 +411,14 @@ let HeadlessTask = async (event) => {
             console.log(LastDataCollect);
 
             //=================== PICTURE OR VIDEO? BASED ON USER PARAMETERS ===================>
-            //=================== 0: Picture, 1: Video  ===================>
-            console.log(helperFunctions.weightedRand());
-            let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
-            let number = rand012();
-            console.log('This is the random distribution: ' + rand012());
-            console.log('This is the random distribution1: ' + number);
+            //=================== 1: Picture, 0: Video  ===================>
+            // console.log(helperFunctions.weightedRand());
+            // let rand012 = helperFunctions.weightedRand({0: 0.5, 1: 0.5});
+            // let number = rand012();
+            // console.log('This is the random distribution: ' + rand012());
+            // console.log('This is the random distribution1: ' + number);
+            //=================== DEFAULT TO VIDEO ALWAYS ===================>
+            var number = 0;
 
 
             console.log(response.status);
@@ -450,21 +465,14 @@ let HeadlessTask = async (event) => {
                             }, true);
                         });
 
-                        if (number == 0) {
-                            console.log('======================> Take a Video')
-                            NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
-                                () => {
-                                    console.log('takeVideo Callback invoked');
-                                    agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
-                                })
-                        } else {
-                            console.log('======================> Take a Picture')
-                            NativeModules.picturePackage.takePicture('test_journey', res.uid.replace(/"/g, ""),
-                                () => {
-                                    console.log('takePicture Callback invoked');
-                                    agent.FirebaseQuery.uploadImage('test_journey', res.uid.replace(/"/g, ""));
-                                })
-                        }
+                        console.log('======================> Take a Video')
+
+
+                        NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takeVideo Callback invoked');
+                                agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
+                            })
 
                         let rand012 = 0;
                         let number = 0;
@@ -483,23 +491,14 @@ let HeadlessTask = async (event) => {
                             }, true);
                         });
 
-                        if (number == 0) {
-                            console.log('======================> Take a Video')
+                        console.log('======================> Take a Video')
 
-                            NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
-                                () => {
-                                    console.log('takeVideo Callback invoked');
-                                    agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
-                                })
-                        } else {
-                            console.log('======================> Take a Picture')
+                        NativeModules.videoPackage.takeVideo('test_journey', res.uid.replace(/"/g, ""),
+                            () => {
+                                console.log('takeVideo Callback invoked');
+                                agent.FirebaseQuery.uploadVideo('test_journey', res.uid.replace(/"/g, ""));
+                            })
 
-                            NativeModules.picturePackage.takePicture('test_journey', res.uid.replace(/"/g, ""),
-                                () => {
-                                    console.log('takePicture Callback invoked');
-                                    agent.FirebaseQuery.uploadImage('test_journey', res.uid.replace(/"/g, ""));
-                                })
-                        }
                     }
                 }
 

@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Animation from 'lottie-react-native';
-// import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 
 
@@ -48,44 +48,11 @@ const mapDispatchToProps = dispatch => ({
         dispatch({type: 'REDIRECT'});
     },
     login: (user) => {
+        console.log('props login called');
         dispatch({type: 'LOGIN', user: user})
     }
 });
 
-
-const facebookLogin = () => {
-    console.log('facebook login');
-    return LoginManager
-        .logInWithReadPermissions(['public_profile', 'email'])
-        .then((result) => {
-            if (!result.isCancelled) {
-                console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`)
-                // get the access token
-                return AccessToken.getCurrentAccessToken()
-            }
-        })
-        .then(data => {
-            if (data) {
-                console.log('create new firebase cred');
-                // create a new firebase credential with the token
-                // const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken)
-                // // login with credential
-                // return firebase.auth().signInWithCredential(credential)
-            }
-        })
-        .then((currentUser) => {
-            console.log('currentUser');
-            if (currentUser) {
-
-                this.props.login(currentUser.toJSON());
-
-                console.info(JSON.stringify(currentUser.toJSON()))
-            }
-        })
-        .catch((error) => {
-            console.log(`Login fail with error: ${error}`)
-        })
-}
 
 class NeighborhoodDetected extends React.Component {
     static navigatorStyle = {
@@ -97,7 +64,7 @@ class NeighborhoodDetected extends React.Component {
         super(props);
 
         this.state = {
-            loading: true,
+            loading: false,
             closeNeighborSelected: false,
             farNeighborSelected: false,
             slide: 1,
@@ -194,17 +161,18 @@ class NeighborhoodDetected extends React.Component {
     digitsAuth = () => {
         console.log(this.state.digits);
         console.log('in digitsAuth');
-        // firebase.auth().signInWithPhoneNumber(this.state.digits)
-        //     .then(confirmResult => {
-        //         this.setState({
-        //             ...this.state,
-        //             confirmResult,
-        //             farthestBeen: 2
-        //         })
-        //         console.log(confirmResult);
-        //         console.log('It should confirm the result');
-        //     })
-        //     .catch(error => this.setState({message: `Sign In With Phone Number Error: ${error.message}`}));
+        firebase.auth().signInWithPhoneNumber('+14035893536')
+            .then(confirmResult => {
+                console.log('did this confirm');
+                console.log(confirmResult);
+                this.setState({
+                    ...this.state,
+                    confirmResult,
+                    farthestBeen: 2
+                })
+                console.log('It should confirm the result');
+            })
+            .catch(error => this.setState({message: `Sign In With Phone Number Error: ${error.message}`}));
     };
 
     confirmDigits = () => {
@@ -218,9 +186,42 @@ class NeighborhoodDetected extends React.Component {
         }
     };
 
+    facebookLogin = async () => {
+        try {
+            const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
+
+            if (result.isCancelled) {
+                throw new Error('User cancelled request'); // Handle this however fits the flow of your app
+            }
+
+            console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+
+            // get the access token
+            const data = await AccessToken.getCurrentAccessToken();
+
+            if (!data) {
+                throw new Error('Something went wrong obtaining the users access token'); // Handle this however fits the flow of your app
+            }
+
+            // create a new firebase credential with the token
+            const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+            // login with credential
+            const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+
+            // this.props.login(currentUser.toJSON());
+
+            console.info(JSON.stringify(currentUser.user.toJSON()))
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     componentWillMount() {
         // firebase.auth().onAuthStateChanged((user) => {
         //     if (user) {
+        //         console.log('user signed in');
+        //         console.log(user);
         //         this.props.login(user.toJSON());
         //         this.props.navigator.resetTo({screen: 'Timeline'})
         //     } else {
@@ -313,63 +314,63 @@ class NeighborhoodDetected extends React.Component {
                         Century</Animated.Text>
                 </Animated.View>
                 {!this.state.loading ?
-                <Animated.View style={{
-                    flexDirection: 'column',
-                    position: 'absolute',
-                    bottom: height * 0.07,
-                    alignItems: 'center',
-                    opacity: logoSubText
-                }}>
-                    <View>
-                        <TouchableOpacity onPress={() => this.buttonPress('digits')}>
-                            <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
-                                            end={{x: 1, y: .50}}
-                                            style={{
-                                                borderRadius: 30,
-                                                alignSelf: 'flex-start',
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                width: width * 0.7,
-                                                marginVertical: 15
-                                            }}>
+                    <Animated.View style={{
+                        flexDirection: 'column',
+                        position: 'absolute',
+                        bottom: height * 0.07,
+                        alignItems: 'center',
+                        opacity: logoSubText
+                    }}>
+                        <View>
+                            <TouchableOpacity onPress={() => this.buttonPress('digits')}>
+                                <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                                end={{x: 1, y: .50}}
+                                                style={{
+                                                    borderRadius: 30,
+                                                    alignSelf: 'flex-start',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: width * 0.7,
+                                                    marginVertical: 15
+                                                }}>
 
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginVertical: 12,
-                                        fontSize: 15
-                                    }}>
-                                    P H O N E S I G N I N</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => facebookLogin()}>
-                            <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
-                                            end={{x: 1, y: .50}}
-                                            style={{
-                                                borderRadius: 40,
-                                                alignSelf: 'flex-start',
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                width: width * 0.7,
-                                            }}>
+                                    <Text
+                                        style={{
+                                            color: 'white',
+                                            marginVertical: 12,
+                                            fontSize: 15
+                                        }}>
+                                        Phone Sign In</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.facebookLogin()}>
+                                <LinearGradient colors={['#4D81C2', '#00BDF2']} start={{x: 0, y: .50}}
+                                                end={{x: 1, y: .50}}
+                                                style={{
+                                                    borderRadius: 40,
+                                                    alignSelf: 'flex-start',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: width * 0.7,
+                                                }}>
 
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        marginVertical: 12,
-                                        fontSize: 15
-                                    }}>
-                                    F A C E B O O K S I G N I N</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
-                    <View>
+                                    <Text
+                                        style={{
+                                            color: 'white',
+                                            marginVertical: 12,
+                                            fontSize: 15
+                                        }}>
+                                        Facebook Sign In</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
 
-                    </View>
+                        </View>
 
-                </Animated.View>
+                    </Animated.View>
                     : null}
                 {this.state.farthestBeen === 1 ? <Animated.View style={{
                     flexDirection: 'column',
